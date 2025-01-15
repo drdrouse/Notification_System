@@ -2,6 +2,74 @@
     --background-gradient: linear-gradient(to top, #004D40, #0e0e0e);
 }
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
 body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100vh;
     background: var(--background-gradient);
+}
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 60px; /* Ширина меню */
+    background-color: #333;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+}
+
+/* Сайдбар */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 60px; /* Ширина меню */
+    background-color: #333;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Это позволяет кнопкам быть прижатыми к верху и низу */
+    align-items: stretch; /* Чтобы кнопки занимали всю ширину */
+    padding: 20px 0;
+}
+
+.menu-item {
+    background-color: #444;
+    color: white;
+    height: 50px; /* Высота кнопки */
+    border: none;
+    border-radius: 5px;
+    margin: 5px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    width: 100%; /* Кнопки занимают всю ширину сайдбара */
+    transition: background-color 0.3s;
+}
+
+    .menu-item:hover {
+        background-color: #666;
+    }
+
+.top-item {
+    margin-bottom: 10px; /* Отступ между верхними кнопками */
+}
+
+.bottom-item {
+    margin-top: auto; /* Эта кнопка прижмётся к низу */
 }
