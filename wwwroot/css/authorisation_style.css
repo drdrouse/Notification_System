@@ -2,7 +2,7 @@
 :root {
     --primary-color: #148f2b;
     --hover-color: #63dd64;
-    --background-gradient: linear-gradient(to top, #148f2b, #000000);
+    --background-gradient: linear-gradient(to top, #004D40, #0e0e0e);
     --input-border-color: #148f2b;
     --input-focus-border-color: #63dd64;
     --text-color: #FFFFFF;
