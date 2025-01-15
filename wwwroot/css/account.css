@@ -1,5 +1,7 @@
 ﻿:root {
-    --background-gradient: linear-gradient(to top, #004D40, #0e0e0e);
+    --background-account: #0e0e0e;
+    --background-item: #212020;
+    --radius-item: 5px;
 }
 
 * {
@@ -10,49 +12,37 @@
 
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: Roboto, sans-serif;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     height: 100vh;
-    background: var(--background-gradient);
+    background: var(--background-account);
 }
 
-.sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 60px; /* Ширина меню */
-    background-color: #333;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 0;
-}
 
 /* Сайдбар */
 .sidebar {
     position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 60px; /* Ширина меню */
-    background-color: #333;
+    left: 30px;
+    top: 20px;
+    bottom: 20px;
+    width: 85px; /* Ширина меню */
+    border-radius: var(--radius-item);
+    background-color: var(--background-item);
     display: flex;
     flex-direction: column;
     justify-content: space-between; /* Это позволяет кнопкам быть прижатыми к верху и низу */
     align-items: stretch; /* Чтобы кнопки занимали всю ширину */
-    padding: 20px 0;
+    padding: 10px 0;
 }
 
 .menu-item {
-    background-color: #444;
+    background-color: var(--background-item);
     color: white;
-    height: 50px; /* Высота кнопки */
+    height: 70px; /* Высота кнопки */
     border: none;
-    border-radius: 5px;
+    border-radius: var(--radius-item);
     margin: 5px 0;
     display: flex;
     justify-content: center;
@@ -67,7 +57,7 @@ body {
     }
 
 .top-item {
-    margin-bottom: 10px; /* Отступ между верхними кнопками */
+    margin-bottom: 5px; /* Отступ между верхними кнопками */
 }
 
 .bottom-item {
