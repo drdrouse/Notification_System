@@ -1,2 +1,7 @@
-﻿body {
+﻿:root {
+    --background-gradient: linear-gradient(to top, #148f2b, #000000);
+}
+
+body {
+    background: var(--background-gradient);
 }
