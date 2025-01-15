@@ -27,7 +27,7 @@ body {
     left: 30px;
     top: 20px;
     bottom: 20px;
-    width: 85px; /* Ширина меню */
+    width: 48px; /* Ширина меню */
     border-radius: var(--radius-item);
     background-color: var(--background-item);
     display: flex;
@@ -40,7 +40,7 @@ body {
 .menu-item {
     background-color: var(--background-item);
     color: white;
-    height: 70px; /* Высота кнопки */
+    height: 48px; /* Высота кнопки */
     border: none;
     border-radius: var(--radius-item);
     margin: 5px 0;
