@@ -70,6 +70,17 @@ body {
     margin-top: auto; /* Эта кнопка прижмётся к низу */
 }
 
+/* Контейнер для аватарки и прямоугольной области */
+.content {
+    display: flex;
+    flex-direction: row;
+    gap: 20px; /* Расстояние между аватаркой и областью */
+    align-items: flex-start;
+    margin-left: 10px;
+    padding: 20px;
+    flex-grow: 1;
+}
+
 /* Блок с аватаркой */
 .avatar-container {
     margin-left: 20px;
@@ -87,3 +98,18 @@ body {
     object-fit: cover;
     border: 2px solid var(--background-item);
 }
+
+/* Прямоугольная область */
+.main-info {
+    width: 1000px;
+    flex-grow: 1;
+    background-color: var(--background-item);
+    border: none;
+    border-radius: var(--radius-item);
+    padding: 20px;
+}
+
+    .main-info p {
+        font-size: 16px;
+        color: #333;
+    }
