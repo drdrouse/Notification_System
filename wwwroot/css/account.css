@@ -1,7 +1,7 @@
 ﻿:root {
     --background-account: #0e0e0e;
     --background-item: #212020;
-    --radius-item: 5px;
+    --radius-item: 10px;
 }
 
 * {
@@ -10,6 +10,12 @@
     box-sizing: border-box;
 }
 
+/* Контейнер для элементов аккаунта */
+.container {
+    display: flex;
+    height: 100%;
+    padding: 10px;
+}
 
 body {
     font-family: Roboto, sans-serif;
@@ -62,4 +68,22 @@ body {
 
 .bottom-item {
     margin-top: auto; /* Эта кнопка прижмётся к низу */
+}
+
+/* Блок с аватаркой */
+.avatar-container {
+    margin-left: 20px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0px;
+}
+
+.avatar {
+    width: 200px;
+    height: 200px;
+    background-color: var(--background-item);
+    border-radius: var(--radius-item);
+    object-fit: cover;
+    border: 2px solid var(--background-item);
 }
