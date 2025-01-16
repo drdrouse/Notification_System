@@ -4,15 +4,17 @@
     --radius-item: 10px;
     --font: Roboto, sans-serif;
     --shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+    --margin-size: 10px;
 }
 
+/* Сброс стилей */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-
+/* Основной стиль для body */
 body {
     font-family: var(--font);
     display: flex;
@@ -22,32 +24,34 @@ body {
     background: var(--background-account);
 }
 
+/* Контейнер для сайдбара и контента */
 .container {
     display: flex;
     height: 100%;
-    justify-content: flex-start;
-    padding-left:40px;
+    padding-left: 40px;
 }
+
 /* Сайдбар */
 .sidebar {
     position: fixed;
     left: 20px;
     top: 10px;
     bottom: 10px;
-    width: 150px; /* Ширина меню */
+    width: 150px;
     background-color: var(--background-item);
     border-radius: var(--radius-item);
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Это позволяет кнопкам быть прижатыми к верху и низу */
-    align-items: stretch; /* Чтобы кнопки занимали всю ширину */
+    justify-content: space-between;
     box-shadow: var(--shadow);
+    padding: 10px 0; /* Убираем лишний padding, чтобы кнопки не вылезали за пределы */
 }
 
+/* Кнопки в сайдбаре */
 .menu-item {
     background-color: var(--background-item);
     color: white;
-    height: 50px; /* Высота кнопки */
+    height: 50px;
     border: none;
     border-radius: var(--radius-item);
     margin: 5px 0;
@@ -55,43 +59,46 @@ body {
     justify-content: flex-start;
     align-items: center;
     cursor: pointer;
-    width: 100%; /* Кнопки занимают всю ширину сайдбара */
+    width: 100%;
     transition: background-color 0.3s;
 }
 
     .menu-item:hover {
         background-color: #666;
     }
-.sidebar p {
-    font-size: 18px;
-    margin: 0px;
-    padding-left: 10px;
 
-}
-
-.sidebar img {
-    margin-left: auto;
-    padding-right: 10px;
-    width: 30px; 
-    height: auto; /* Сохраняем пропорции */
-}
 .top-item {
-    margin-bottom: 1px ; /* Отступ между верхними кнопками */
+    margin-bottom: 1px;
 }
 
 .bottom-item {
-    margin-top: auto; /* Эта кнопка прижмётся к низу */
+    margin-top: auto;
 }
 
+/* Текст в сайдбаре */
+.sidebar p {
+    font-size: 18px;
+    padding-left: 10px;
+}
+
+/* Изображения в сайдбаре */
+.sidebar img {
+    margin-left: auto;
+    padding-right: 10px;
+    width: 30px;
+    height: auto;
+}
+
+/* Контейнер для аватарки */
 .avatar-container {
     margin-left: 50px;
     display: flex;
-    
     justify-content: flex-start;
     align-items: flex-start;
-    padding: 10px;
+    padding: var(--margin-size);;
 }
 
+/* Аватарка */
 .avatar {
     width: 200px;
     height: 200px;
@@ -100,3 +107,17 @@ body {
     background: var(--background-item);
     box-shadow: var(--shadow);
 }
+
+/* Прямоугольная область */
+.info-box {
+    background-color: var(--background-item);
+    border-radius: var(--radius-item);
+    box-shadow: var(--shadow);
+    margin-top: var(--margin-size);
+    margin-left: var(--margin-size);
+}
+
+    .info-box p {         
+        font-size: 16px;
+        color: #ffffff;
+    }
