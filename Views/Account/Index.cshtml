@@ -7,27 +7,38 @@
 </head>
 <body>
     <div class="container">
+        @*Боковое меню*@
         <div class="sidebar">
             <button class="menu-item top-item" alt="account"><p>Аккаунт</p> <img src="~/content/images/account/account.png" alt="account" /></button>
             <button class="menu-item top-item" alt="settings"><p>Настройки</p><img src="~/content/images/account/setting.png" alt="setting" /></button>
             <button class="menu-item bottom-item" alt="exite"><p>Выход</p><img src="~/content/images/account/exite.png" alt="exite" /></button>
         </div>
-        <div class="avatar-container">
-            <img src="/content/images/account/avatar-placeholder.png" alt="photo" class="avatar">
-        </div>
-
-        <div class="info-box">
-            <p id="name">Кто-то здесь будет</p>
-            <div class="text-container">
-                <span class="text-1">Табельный номер:</span>
-                <span class="text-2" id="tabnum">XXXXXX</span>
+        <div class="main-data">
+            <div class="top-part">
+                @*Аватарка пользователя*@
+                <div class="avatar-container">
+                    <img src="/content/images/account/avatar-placeholder.png" alt="photo" class="avatar">
+                </div>
+                @*Плашка с данными*@
+                <div class="info-box">
+                    @*ФИО*@
+                    <p id="name">ФИО</p>
+                    @*Табльный номер*@
+                    <div class="text-container">
+                        <span class="text-1">Табельный номер:</span>
+                        <span class="text-2" id="tabnum">XXXXXX</span>
+                    </div>
+                    @*Место работы*@
+                    <div class="text-container">
+                        <span class="text-1">Место работы:</span>
+                        <span class="text-2" id="tabnum">ПАО СБЕРБАНК/ДВ/Компетенции по защите данных</span>
+                    </div>
+                </div>
             </div>
-            <div class="text-container">
-                <span class="text-1">Место работы:</span>
-                <span class="text-2" id="tabnum">ПАО СБЕРБАНК/ДВ/Компетенции по защите данных</span>
+            <div class="bottom-part">
+
             </div>
         </div>
-
     </div>
 </body>
 </html>
