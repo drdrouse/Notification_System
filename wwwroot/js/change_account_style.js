@@ -5,11 +5,11 @@ function toggleTheme() {
     // Переключаем класс dark-mode для изменения темы
     body.classList.toggle('light-mode');
 
-    const image = document.getElementById('setting');
+    const settingImage = document.querySelector('#settings img');
     if (body.classList.contains('light-mode')) {
-        image.src = '~/content/images/account/setting-lite.png?' + new Date().getTime(); // Путь к изображению для светлой темы
+        settingImage.src = '/content/images/account/setting-lite.png'; // Путь к изображению для светлой темы
     } else {
-        image.src = '~/content/images/account/setting.png?' + new Date().getTime(); // Путь к изображению для тёмной темы
+        settingImage.src = '/content/images/account/setting.png'; // Путь к изображению для тёмной темы
     }
 
     // Запоминаем выбранную тему в localStorage
