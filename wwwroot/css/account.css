@@ -4,6 +4,7 @@
     --background-item: #212020;
     --text-color: white;
     --shadow: 4px 4px 10px #08a652;
+    --line-color: #08a652;
     /*Постоянная часть стилей*/
     --radius-item: 10px;
     --font: Roboto, sans-serif;
@@ -11,8 +12,9 @@
     /*Стили для тёмной темы*/
     --background-account-light: linear-gradient(to top, white, #21ba72);
     --background-item-light: #f2f2f3;
-    --text-color-light: #0e0e0e;
-    --shadow-light: 4px 4px 10px #0e0e0e;
+    --text-color-light: #000000;
+    --shadow-light: 4px 4px 10px #808080;
+    --line-color-light: #808080;
 }
 
 /* Основной стиль для body */
@@ -51,9 +53,21 @@ body {
     box-shadow: var(--shadow);
 }
 
+    .sidebar hr {
+        border: 0;
+        border-top: 2px solid;
+        border-color: var(--line-color);
+        width: 100%;
+        margin: 0px 0; /* Отступы сверху и снизу */
+    }
+
     body.light-mode .sidebar {
         background-color: var(--background-item-light);
         box-shadow: var(--shadow-light);
+    }
+
+    body.light-mode .sidebar hr{
+        border-color: var(--line-color-light);
     }
 
 .bottom-button {
@@ -74,7 +88,7 @@ top-button {
     height: 50px;
     border: none;
     border-radius: var(--radius-item);
-    margin: 5px 0;
+    margin: 2px 0;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -86,6 +100,15 @@ top-button {
     .menu-item:hover {
         background-color: #666;
     }
+
+    body.light-mode .menu-item{
+        background-color: var(--background-item-light);
+        color: var(--text-color-light);
+    }
+
+        body.light-mode .menu-item:hover {
+            background-color: #c2c2c2;
+        }
 
 .top-item {
     margin-bottom: 1px;
@@ -132,6 +155,11 @@ top-button {
     margin-top: 10px;
 }
 
+body.light-mode .bottom-part {
+    background: var(--background-item-light);
+    box-shadow: var(--shadow-light);
+}
+
 /* Контейнер для аватарки */
 .avatar-container {
 
@@ -164,7 +192,7 @@ top-button {
 
     #name{
         font-size: 35px;
-        color: #ffffff;
+        color: var(--text-color);
         padding: 10px;
         font-weight: bold;
     }
