@@ -88,7 +88,6 @@ top-button {
     height: 50px;
     border: none;
     border-radius: var(--radius-item);
-    margin: 2px 0;
     display: flex;
     justify-content: flex-start;
     align-items: center;
