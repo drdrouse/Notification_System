@@ -5,6 +5,7 @@
     --font: Roboto, sans-serif;
     --shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
     --margin-size: 10px;
+    --text-color: white;
 }
 
 /* Сброс стилей */
@@ -51,7 +52,7 @@ body {
 /* Кнопки в сайдбаре */
 .menu-item {
     background-color: var(--background-item);
-    color: white;
+    color: var(--text-color);
     height: 50px;
     border: none;
     border-radius: var(--radius-item);
@@ -159,5 +160,5 @@ body {
 .text-1, .text-2 {
     font-size: 16px;
     font-weight: bold;
-    color: white;
+    color: var(--text-color);
 }
