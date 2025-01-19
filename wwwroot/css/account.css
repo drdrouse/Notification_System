@@ -179,6 +179,12 @@ body.light-mode .bottom-part {
     box-shadow: var(--shadow);
 }
 
+body.light-mode .avatar{
+    border-color: var(--background-item-light);
+    background: var(--background-item-light);
+    box-shadow: var(--shadow-light);
+}
+
 /* Прямоугольная область */
 .info-box {
     background-color: var(--background-item);
@@ -189,7 +195,17 @@ body.light-mode .bottom-part {
     width: 135vh;
     height: 200px;
 }
+    .info-box p {
+        margin-bottom: 0rem;
+    }
 
+    .info-box hr {
+        border: 0;
+        border-top: 2px solid;
+        border-color: var(--line-color);
+        width: 100%;
+        margin: 0px 0; /* Отступы сверху и снизу */
+    }
     #name{
         font-size: 35px;
         color: var(--text-color);
@@ -197,15 +213,36 @@ body.light-mode .bottom-part {
         font-weight: bold;
     }
 
+    body.light-mode .info-box{
+        background-color: var(--background-item-light);
+        box-shadow: var(--shadow-light);
+    }
+
+    body.light-mode #name{
+        color: var(--text-color-light);
+    }
+
+    body.light-mode .info-box hr {
+        border-color: var(--line-color-light);
+    }
 .text-container {
     display: flex; /* Включаем Flexbox */
     gap: 10px; /* Расстояние между текстами */
     padding-left: 10px;
+    padding-top: 10px;
     padding-bottom: 10px;
 }
 .text-1, .text-2 {
     font-size: 16px;
     font-weight: bold;
     color: var(--text-color);
+}
+
+body.light-mode .text-1{
+    color: var(--text-color-light);
+}
+
+body.light-mode .text-2 {
+    color: var(--text-color-light);
 }
 
