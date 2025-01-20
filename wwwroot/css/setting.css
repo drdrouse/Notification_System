@@ -5,6 +5,7 @@
     --text-color: white;
     --shadow: 4px 4px 10px #08a652;
     --line-color: #08a652;
+    --hr-color: #08a652;
     /*Постоянная часть стилей*/
     --radius-item: 10px;
     --font: Roboto, sans-serif;
@@ -15,7 +16,9 @@
     --text-color-light: #000000;
     --shadow-light: 4px 4px 10px #6c6767;
     --line-color-light: #808080;
+    --hr-color-light: #6c6767;
 }
+
 
 a {
     color: inherit; /* Устанавливает цвет текста, наследуя его от родителя */
@@ -142,3 +145,33 @@ body.light-mode .menu-item {
     width: 30px;
     height: auto;
 }
+
+.main-data {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    margin-left: 60px;
+}
+.main-data h1{
+   font-size: 50px;
+   text-align: justify;
+   color:var(--text-color);
+   text-transform: uppercase;
+   font-weight: bold;
+   font-family: var(--font);
+}
+body.light-mode .main-data h1 {
+    color: var(--text-color-light);
+}
+.main-data hr {
+    border: 0;
+    border-top: 2px solid;
+    color: var(--hr-color);
+    width: 150vh;
+    margin: 0px 0; /* Отступы сверху и снизу */
+}
+body.light-mode .main-data hr {
+    color: var(--hr-color-light);
+}
+
+

@@ -144,8 +144,9 @@ top-button {
 
 .main-data {
     display: flex;
-    margin-left: 50px;
     flex-direction: column;
+    margin-top: 10px;
+    margin-left: 60px;
 }
 
 .top-part {
