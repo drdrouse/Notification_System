@@ -1,5 +1,5 @@
 ﻿:root {
-    /*Стили для светлой темы*/
+    /*Стили для тёмной темы*/
     --background-account: linear-gradient(to top, #0e0e0e, #004D40);
     --background-item: #212020;
     --text-color: white;
@@ -9,11 +9,11 @@
     --radius-item: 10px;
     --font: Roboto, sans-serif;
     --margin-size: 10px;
-    /*Стили для тёмной темы*/
-    --background-account-light: linear-gradient(to top, white, #21ba72);
+    /*Стили для светлой темы*/
+    --background-account-light: linear-gradient(to top, white, #08a652);
     --background-item-light: #f2f2f3;
     --text-color-light: #000000;
-    --shadow-light: 4px 4px 10px #808080;
+    --shadow-light: 4px 4px 10px #6c6767;
     --line-color-light: #808080;
 }
 

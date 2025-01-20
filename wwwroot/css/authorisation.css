@@ -1,5 +1,6 @@
 ﻿/* Определим основные переменные для цветов */
 :root {
+    /*Стили для тёмной темы*/
     --primary-color: #148f2b;
     --hover-color: #63dd64;
     --background-gradient: linear-gradient(to top, #004D40, #0e0e0e);
@@ -7,6 +8,14 @@
     --input-focus-border-color: #63dd64;
     --text-color: #FFFFFF;
     --placeholder-color: #CCCCCC;
+    /*Стили для светлой темы*/
+    --background-account-light: linear-gradient(to top, white, #08a652);
+    --text-color-light: #000000;
+    --button-color-lite: #0055ee;
+    --button-hover-color-lite: #5464e6;
+    --placeholder-color-lite: #757575;
+    --input-border-color-lite: #3d3d3d;
+    --input-focus-border-color-lite: #7a7a7a;
 }
 
 * {
@@ -25,6 +34,10 @@ body {
     padding: 0 20px; /* Отступы по бокам */
 }
 
+    body.light-mode {
+        background: var(--background-account-light);
+    }
+
 .authorisation_form {
     display: flex;
     flex-direction: column; /* Элементы располагаются вертикально */
@@ -39,6 +52,9 @@ body {
     font-size: 32px;
     font-weight: bold;
     margin-bottom: 15px;
+}
+body.light-mode .text_logo{
+    color: var(--text-color-light);
 }
 
 input[type="text"], input[type="password"] {
@@ -63,6 +79,24 @@ input::placeholder {
     color: var(--placeholder-color);
 }
 
+body.light-mode input[type="text"] {
+    color: var(--text-color-light);
+    border-color: var(--input-border-color-lite);
+}
+
+body.light-mode input[type="password"] {
+    color: var(--text-color-light);
+    border-color: var(--input-border-color-lite);
+}
+
+body.light-mode input::placeholder{
+    color: var(--placeholder-color-lite);
+}
+
+body.light-mode input:focus{
+    border-color: var(--input-focus-border-color-lite);
+}
+
 button {
     width: 35%; /* Кнопка растягивается на всю ширину формы */
     height: 65px;
@@ -83,4 +117,15 @@ button {
 
     button:active {
         border: 2px solid var(--text-color);
+    }
+
+body.light-mode button {
+    background-color: var(--button-color-lite);
+
+}
+    body.light-mode button:active {
+        background-color: var(--button-hover-color-lite);
+    }
+    body.light-mode button:hover {
+        background-color: var(--button-hover-color-lite);
     }

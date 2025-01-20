@@ -19,14 +19,14 @@
             <div class="bottom-button">
                 <button class="menu-item bottom-item" id="exite"><p>Выход</p><img src="~/content/images/account/exite.png" alt="exite" /></button>
                 <hr />
-                <button class="menu-item bottom-item" alt="change_theme" onclick="toggleTheme()"><p>Тума</p></button>
+                <button class="menu-item bottom-item" alt="change_theme" onclick="toggleTheme()"><p>Сменить тему</p></button>
             </div>
         </div>
         <div class="main-data">
             <div class="top-part">
                 @*Аватарка пользователя*@
                 <div class="avatar-container">
-                    <img src="/content/images/account/avatar-placeholder.png" alt="photo" class="avatar">
+                    <img src="/content/images/account/avatar-placeholder.png" id="photo" class="avatar">
                 </div>
                 @*Плашка с данными*@
             <div class="info-box">
@@ -50,6 +50,6 @@
             </div>
         </div>
     </div>
-    <script src="/js/change_account_style.js"></script>
+    <script src="/js/change_style.js"></script>
 </body>
 </html>
