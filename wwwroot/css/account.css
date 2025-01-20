@@ -17,6 +17,16 @@
     --line-color-light: #808080;
 }
 
+a {
+    color: inherit; /* Устанавливает цвет текста, наследуя его от родителя */
+    text-decoration: none; /* Убирает подчёркивание */
+}
+
+    a:hover, a:focus {
+        color: inherit; /* Можно настроить цвет при наведении */
+        text-decoration: none; /* Убирает подчёркивание при наведении или фокусе */
+    }
+
 /* Основной стиль для body */
 body {
     font-family: var(--font);
