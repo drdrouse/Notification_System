@@ -6,23 +6,7 @@
     <link rel="stylesheet" href="~/css/setting.css" asp-append-version="true" />
 </head>
 <body>
-    <div class="container">
-        @*Боковое меню*@
-        <div class="sidebar">
-            <div class="top-button">
-                <a asp-controller="Account" asp-action="Index"><button class="menu-item top-item" id="account"><p>Аккаунт</p> <img src="~/content/images/account/account.png" alt="account" /></button></a>
-                <hr />
-                <a asp-controller="Setting" asp-action="Index"><button class="menu-item top-item" id="settings"><p>Настройки</p><img src="~/content/images/account/setting.png" alt="setting" /></button></a>
-                <hr />
-            </div>
-
-            <div class="bottom-button">
-                <hr />
-                <button class="menu-item bottom-item" id="exite"><p>Выход</p><img src="~/content/images/account/exite.png" alt="exite" /></button>
-                <hr />
-                <button class="menu-item bottom-item" alt="change_theme" onclick="toggleTheme()"><p>Сменить тему</p></button>
-            </div>
-        </div>
+    <div class="container">        
         <div class="main-data">
             <h1>Настройки</h1>
             <hr />

@@ -6,6 +6,7 @@ namespace Notification_System.Controllers
     {
         public IActionResult Index()
         {
+            ViewData["ShowSideBarBlock"] = false; 
             return View();
         }
     }
