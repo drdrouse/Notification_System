@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/account.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Notification_System.styles.css" asp-append-version="true" />
 </head>
   
-<body>   
+<body>
     <div class="container">
         @if (ViewData["ShowSideBarBlock"] != null && (bool)ViewData["ShowSideBarBlock"])
         {
@@ -30,9 +28,11 @@
                 </div>
             </div>
         }
+        
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
+    <script src="/js/change_style.js"></script>
 </body>
 </html>

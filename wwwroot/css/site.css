@@ -1,22 +1,152 @@
-html {
-  font-size: 14px;
+:root {
+    /*Стили для тёмной темы*/
+    --background-account: linear-gradient(to top, #0e0e0e, #004D40);
+    --background-item: #212020;
+    --text-color: white;
+    --shadow: 4px 4px 10px #08a652;
+    --line-color: #08a652;
+    /*Постоянная часть стилей*/
+    --radius-item: 10px;
+    --font: Roboto, sans-serif;
+    --margin-size: 10px;
+    /*Стили для светлой темы*/
+    --background-account-light: linear-gradient(to top, white, #08a652);
+    --background-item-light: #f2f2f3;
+    --text-color-light: #000000;
+    --shadow-light: 4px 4px 10px #6c6767;
+    --line-color-light: #808080;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+a {
+    color: inherit; /* Устанавливает цвет текста, наследуя его от родителя */
+    text-decoration: none; /* Убирает подчёркивание */
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
+    a:hover, a:focus {
+        color: inherit; /* Можно настроить цвет при наведении */
+        text-decoration: none; /* Убирает подчёркивание при наведении или фокусе */
+    }
 
-html {
-  position: relative;
-  min-height: 100%;
-}
-
+/* Основной стиль для body */
 body {
-  margin-bottom: 60px;
+    font-family: var(--font);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100vh;
+    background: var(--background-account);
+}
+
+    body.light-mode {
+        background: var(--background-account-light);
+    }
+
+/* Контейнер для сайдбара и контента */
+.container {
+    display: flex;
+    height: 100%;
+    padding-left: 40px;
+}
+
+/* Сайдбар */
+.sidebar {
+    position: fixed;
+    left: 20px;
+    top: 10px;
+    bottom: 10px;
+    width: 150px;
+    background-color: var(--background-item);
+    border-radius: var(--radius-item);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: var(--shadow);
+}
+
+    .sidebar hr {
+        border: 0;
+        border-top: 2px solid;
+        border-color: var(--line-color);
+        width: 100%;
+        margin: 0px 0; /* Отступы сверху и снизу */
+    }
+
+body.light-mode .sidebar {
+    background-color: var(--background-item-light);
+    box-shadow: var(--shadow-light);
+}
+
+    body.light-mode .sidebar hr {
+        border-color: var(--line-color-light);
+    }
+
+.bottom-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Прижимает все элементы к низу */
+}
+
+top-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Прижимает все элементы к низу */
+}
+
+/* Кнопки в сайдбаре */
+.menu-item {
+    background-color: var(--background-item);
+    color: var(--text-color);
+    height: 50px;
+    border: none;
+    border-radius: var(--radius-item);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+    .menu-item:hover {
+        background-color: #666;
+    }
+
+body.light-mode .menu-item {
+    background-color: var(--background-item-light);
+    color: var(--text-color-light);
+}
+
+    body.light-mode .menu-item:hover {
+        background-color: #c2c2c2;
+    }
+
+.top-item {
+    margin-bottom: 1px;
+}
+
+.bottom-item {
+    margin-top: auto;
+}
+
+/* Текст в сайдбаре */
+.sidebar p {
+    font-size: 18px;
+    padding-left: 10px;
+    padding-top: 15px;
+}
+
+/* Изображения в сайдбаре */
+.sidebar img {
+    margin-left: auto;
+    padding-right: 10px;
+    width: 30px;
+    height: auto;
+}
+
+.main-data {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    margin-left: 60px;
+    width: 150vh;
 }
