@@ -192,6 +192,7 @@ public partial class NotificationSystemContext : DbContext
 
             entity.HasOne(d => d.Account).WithMany(p => p.Passwords)
                 .HasForeignKey(d => d.AccountId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Password_Account");
         });
 

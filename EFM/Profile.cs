@@ -15,7 +15,7 @@ public partial class Profile
 
     public int ProfileTabNum { get; set; }
 
-    public byte[] ProfilePhoto { get; set; } = null!;
+    public byte[]? ProfilePhoto { get; set; }
 
     public virtual ICollection<Account> Accounts { get; set; } = new List<Account>();
 

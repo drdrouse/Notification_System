@@ -11,9 +11,9 @@ public partial class Password
 
     public DateOnly PasswordStartDate { get; set; }
 
-    public DateOnly PasswordStopDate { get; set; }
+    public DateOnly? PasswordStopDate { get; set; }
 
-    public Guid? AccountId { get; set; }
+    public Guid AccountId { get; set; }
 
-    public virtual Account? Account { get; set; }
+    public virtual Account Account { get; set; } = null!;
 }
