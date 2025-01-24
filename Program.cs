@@ -1,4 +1,10 @@
+using Microsoft.EntityFrameworkCore;
+using DataAccessLibrary.Models;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<NotificationSystemContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
