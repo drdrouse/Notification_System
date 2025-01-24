@@ -6,6 +6,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<NotificationSystemContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Добавьте сервисы аутентификации
+builder.Services.AddAuthentication("CookieAuth")
+    .AddCookie("CookieAuth", options =>
+    {
+        options.LoginPath = "/Authorisation/Index"; // Путь к странице авторизации
+    });
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
