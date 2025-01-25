@@ -78,6 +78,9 @@ input:focus {
 input::placeholder {
     color: var(--placeholder-color);
 }
+input.error {
+    border: 2px solid #f6650a;
+}
 
 body.light-mode input[type="text"] {
     color: var(--text-color-light);
@@ -129,3 +132,8 @@ body.light-mode button {
     body.light-mode button:hover {
         background-color: var(--button-hover-color-lite);
     }
+.error_message {
+    color: #f6650a;
+    font-size: 0.9em;
+    margin-bottom: -5px;
+}

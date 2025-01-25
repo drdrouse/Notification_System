@@ -9,12 +9,19 @@
 <body>
     <div class="authorisation_form">
         <h1 class="text_logo">УВЕДОМЛЕНИЯ</h1>
-        <form action="#" method="post">
-            <input type="text" placeholder="Логин" required>
-            <input type="password" placeholder="Пароль" required>
+        <form action="/Authorisation/Index" method="post">
+            <input type="text" placeholder="Логин" name="login" required
+                   class="@(ViewBag.Error != null ? "error" : "")">
+            <input type="password" placeholder="Пароль" name="password" required
+                   class="@(ViewBag.Error != null ? "error" : "")">
+            @if (ViewBag.Error != null)
+            {
+                <p class="error_message" id="error_message">@ViewBag.Error</p>
+            }
             <button type="submit">Войти</button>
         </form>
     </div>
     <script src="/js/change_style.js"></script>
+
 </body>
 </html>
