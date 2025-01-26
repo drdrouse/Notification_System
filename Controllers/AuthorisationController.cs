@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Notification_System.Controllers
 {
@@ -11,6 +14,24 @@ namespace Notification_System.Controllers
         {
             if (login == "check" && password == "123456")
             {
+
+                var claims = new List<Claim>
+                {
+                new Claim(ClaimTypes.Name, login),
+                //new Claim(ClaimTypes.Role, "Admin") // Можно добавить роли
+                };
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                var authProperties = new AuthenticationProperties
+                {
+                    IsPersistent = true // Запомнить пользователя между сессиями
+                };
+
+                HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                authProperties);
+
                 return RedirectToAction("Index", "Account");
             }
 
@@ -19,9 +40,24 @@ namespace Notification_System.Controllers
 
         }
 
-        [HttpGet]
-        public IActionResult Index()
+        [HttpPost]
+        public async Task<IActionResult> Exite()
         {
+            // Удаляем куки авторизации
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return RedirectToAction("Index", "Authorisation");
+        }
+
+        [HttpGet]
+        public IActionResult Index(string returnUrl = null)
+        {
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                // Если пользователь уже авторизован, перенаправляем его на главную страницу
+                return RedirectToAction("Index", "Account");
+            }
+            ViewData["ReturnUrl"] = returnUrl;
             ViewData["ShowSideBarBlock"] = false; 
             return View();
         }

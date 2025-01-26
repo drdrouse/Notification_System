@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using DataAccessLibrary.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,10 +8,11 @@ builder.Services.AddDbContext<NotificationSystemContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Добавьте сервисы аутентификации
-builder.Services.AddAuthentication("CookieAuth")
-    .AddCookie("CookieAuth", options =>
-    {
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>    {
         options.LoginPath = "/Authorisation/Index"; // Путь к странице авторизации
+        options.AccessDeniedPath = "/Authorisation/Index";
+        options.ExpireTimeSpan = TimeSpan.FromHours(1); // Время действия cookie
     });
 
 // Add services to the container.

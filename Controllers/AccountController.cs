@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Notification_System.Controllers
 {
-    [Authorize]
+   [Authorize]
     public class AccountController : Controller
     {
         public IActionResult Index()

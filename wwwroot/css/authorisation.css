@@ -100,6 +100,10 @@ body.light-mode input:focus{
     border-color: var(--input-focus-border-color-lite);
 }
 
+body.light-mode input.error {
+    border: 2px solid #f6650a;
+}
+
 button {
     width: 35%; /* Кнопка растягивается на всю ширину формы */
     height: 65px;
