@@ -80,5 +80,12 @@ body.light-mode .setting-button{
     height: auto;
 }
 
+body.light-mode .setting-menu {
+    background-color: var(--background-item-light);
+    color: var(--text-color-light);
+}
+    body.light-mode .setting-menu:hover {
+        background-color: #c2c2c2;
+    }
 
 
