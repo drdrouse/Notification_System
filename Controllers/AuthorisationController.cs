@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using DataAccessLibrary;
+using Microsoft.Identity.Client;
 
 namespace Notification_System.Controllers
 {
@@ -18,7 +19,7 @@ namespace Notification_System.Controllers
 
                 var claims = new List<Claim>
                 {
-                new Claim(ClaimTypes.Name, login),
+                new Claim(ClaimTypes.Name, AuthorisationConfirm.ProfileID().ToString()),
                 //new Claim(ClaimTypes.Role, "Admin") // Можно добавить роли
                 };
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

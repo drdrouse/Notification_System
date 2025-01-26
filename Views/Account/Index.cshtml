@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@model DataAccessLibrary.Models.Profile
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -17,12 +18,12 @@
                 @*Плашка с данными*@
             <div class="info-box">
                 @*ФИО*@
-                <p id="name">ФИО</p>
+                <p id="name">@Model.ProfileSurname @Model.ProfileName @Model.ProfilePatronymic</p>
                 <hr />
                 @*Табльный номер*@
                 <div class="text-container">
                     <span class="text-1">Табельный номер:</span>
-                    <span class="text-2" id="tabnum">XXXXXX</span>
+                    <span class="text-2" id="tabnum">@Model.ProfileTabNum</span>
                 </div>
                 <hr />
                 @*Место работы*@
