@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataAccessLibrary\DataAccessLibrary.csproj" />
+    <ProjectReference Include="..\DataHelper\DataHelper.csproj" />
   </ItemGroup>
 
 </Project>

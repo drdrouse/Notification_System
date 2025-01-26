@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using DataAccessLibrary;
 
 namespace Notification_System.Controllers
 {
@@ -12,7 +13,7 @@ namespace Notification_System.Controllers
         [HttpPost]
         public IActionResult Index(string login, string password)
         {
-            if (login == "check" && password == "123456")
+            if (AuthorisationConfirm.LoginPasswordAccept(login, password))
             {
 
                 var claims = new List<Claim>
