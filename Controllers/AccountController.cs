@@ -18,8 +18,9 @@ namespace Notification_System.Controllers
         {
 
             ViewData["ShowSideBarBlock"] = true;
-            Guid profileID = Guid.Parse(User.Identity.Name);
-            var profile = _notificationSystemContext.Profiles.Where(prof => prof.ProfileId == profileID).FirstOrDefault();
+            Guid accountID = Guid.Parse(User.Identity.Name);
+            var account = _notificationSystemContext.Accounts.Where(acc => acc.AccountId == accountID).FirstOrDefault();
+            var profile = _notificationSystemContext.Profiles.Where(prof => prof.ProfileId == account.ProfileId).FirstOrDefault();
             return View(profile);
         }
     }
