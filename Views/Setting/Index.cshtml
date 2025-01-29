@@ -25,22 +25,34 @@
             <div class="modal-content">
                 <span id="closeFormButton" class="close">&times;</span>
                 <h2>Форма смены пароля</h2>
-                <form>
+                <form method="post" asp-controller="Setting" asp-action="ChangePassword">
                     @*Поле для текущего пароля*@
-                    <label for="old_password">Текущий пароль:</label>
-                    <input type="password" id="old_password" name="old_password" placeholder="Введите текущий пароль" required>
+                    <label for="oldPassword">Текущий пароль:</label>
+                    <input type="password" id="oldPassword" name="oldPassword" placeholder="Введите текущий пароль" required
+                           class="@(TempData["OldPasswordValid"] ?? "")">
                     @*Поле для нового пароля*@
-                    <label for="email">Новый пароль:</label>
-                    <input type="new_password" id="new_password" name="new_password" placeholder="Введите новый пароль" required>
+                    <label for="newPassword">Новый пароль:</label>
+                    <input type="password" id="newPassword" name="newPassword" placeholder="Введите новый пароль" required
+                           class="@(TempData["NewPasswordValid"] ?? "")">
                     @*Поле для повтора нового пароля*@
-                    <label for="repeat_password">Повтор пароля:</label>
-                    <input type="password" id="repeat_password" name="repeat_password" placeholder="Повторите новый пароль" required>
-                    @*Кнопка отправки паролей*@ 
+                    <label for="repeatPassword">Повтор пароля:</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Повторите новый пароль" required
+                           class="@(TempData["ConfirmPasswordValid"] ?? "")">
+                    <!-- Область для вывода сообщений -->
+                    <div id="messageArea" class="alert @(ViewBag.MessageType ?? "")">
+                        @TempData["Message"]
+                    </div>
+
+                    @*Кнопка отправки паролей*@
                     <button type="submit" class="btn btn-success">Отправить</button>
                 </form>
             </div>
         </div>
     </div>
+    @if (TempData["OpenModal"] != null && (bool)TempData["OpenModal"])
+    {
+        <script src="~/js/open_change_password_form.js"></script>
+    }
     <script src="~/js/change_password.js"></script>
 </body>
 </html>
