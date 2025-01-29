@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="~/css/setting.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/change_password.css" asp-append-version="true" />
 </head>
 <body>
     <div class="container">
@@ -11,13 +12,35 @@
             <h1>Настройки</h1>
             <hr />
             <div class="setting-button">
+                @*Кнопка смены пароля*@
                 <button class="setting-menu top-button" id="change_password"><p>Изменить пароль</p> <img src="~/content/images/account/password.png" alt="password" /></button>
                 <hr />
+                @*Кнопка смены стиля интерфейса*@
                 <button class="setting-menu top-button" id="change_theme" onclick="toggleTheme()"><p>Сменить стиль</p> <img src="~/content/images/account/change-theme.png" alt="change_theme" /></button>
                 <hr />
             </div>
         </div>
+        @*Форма смены пароля*@
+        <div id="modalForm" class="modal">
+            <div class="modal-content">
+                <span id="closeFormButton" class="close">&times;</span>
+                <h2>Форма смены пароля</h2>
+                <form>
+                    @*Поле для текущего пароля*@
+                    <label for="old_password">Текущий пароль:</label>
+                    <input type="password" id="old_password" name="old_password" placeholder="Введите текущий пароль" required>
+                    @*Поле для нового пароля*@
+                    <label for="email">Новый пароль:</label>
+                    <input type="new_password" id="new_password" name="new_password" placeholder="Введите новый пароль" required>
+                    @*Поле для повтора нового пароля*@
+                    <label for="repeat_password">Повтор пароля:</label>
+                    <input type="password" id="repeat_password" name="repeat_password" placeholder="Повторите новый пароль" required>
+                    @*Кнопка отправки паролей*@ 
+                    <button type="submit" class="btn btn-success">Отправить</button>
+                </form>
+            </div>
+        </div>
     </div>
-    
+    <script src="~/js/change_password.js"></script>
 </body>
 </html>
