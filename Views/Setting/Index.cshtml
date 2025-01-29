@@ -6,15 +6,18 @@
     <link rel="stylesheet" href="~/css/setting.css" asp-append-version="true" />
 </head>
 <body>
-    <div class="container">        
+    <div class="container">
         <div class="main-data">
             <h1>Настройки</h1>
             <hr />
             <div class="setting-button">
                 <button class="setting-menu top-button" id="change_password"><p>Изменить пароль</p> <img src="~/content/images/account/password.png" alt="password" /></button>
                 <hr />
+                <button class="setting-menu top-button" id="change_theme" onclick="toggleTheme()"><p>Сменить стиль</p> <img src="~/content/images/account/change-theme.png" alt="change_theme" /></button>
+                <hr />
             </div>
         </div>
     </div>
+    
 </body>
 </html>
