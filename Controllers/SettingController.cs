@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using DataHelper;
 using DataAccessLibrary;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Notification_System.Controllers
 {
@@ -68,6 +70,13 @@ namespace Notification_System.Controllers
 
             HttpContext.Session.SetString("OpenModal", "true");
             return RedirectToAction("Index", "Setting");
+        }
+
+
+        public IActionResult ClearSession()
+        {
+            HttpContext.Session.Clear(); // Очищаем всю сессию
+            return RedirectToAction("Index", "Setting"); // Редирект на главную страницу настроек
         }
     }
 }

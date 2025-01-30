@@ -12,10 +12,3 @@ openFormButton.addEventListener('click', () => {
 closeFormButton.addEventListener('click', () => {
     modalForm.style.display = 'none';
 });
-
-// Закрываем форму при клике вне её области
-window.addEventListener('click', (event) => {
-    if (event.target === modalForm) {
-        modalForm.style.display = 'none';
-    }
-});

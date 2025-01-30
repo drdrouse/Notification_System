@@ -23,7 +23,9 @@
         @*Форма смены пароля*@
         <div id="modalForm" class="modal">
             <div class="modal-content">
-                <span id="closeFormButton" class="close">&times;</span>
+                <a href="@Url.Action("ClearSession", "Setting")" id="closeFormButton" class="close">&times;</a>
+
+
                 <h2>Форма смены пароля</h2>
                 <form method="post" asp-controller="Setting" asp-action="ChangePassword">
                     @* Поле для текущего пароля *@
