@@ -16,33 +16,25 @@ namespace Notification_System.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangePassword(string oldPassword, string newPassword, string confirmPassword)
         {
-            if (string.IsNullOrEmpty(oldPassword) || string.IsNullOrEmpty(newPassword) || string.IsNullOrEmpty(confirmPassword))
+
+            if (newPassword != confirmPassword)
             {
-                TempData["Message"] = "Все поля обязательны для заполнения.";
-                TempData["MessageType"] = "alert-error";
-                TempData["OldPasswordValid"] = string.IsNullOrEmpty(oldPassword) ? "input-error" : "input-success";
-                TempData["NewPasswordValid"] = string.IsNullOrEmpty(newPassword) ? "input-error" : "input-success";
-                TempData["ConfirmPasswordValid"] = string.IsNullOrEmpty(confirmPassword) ? "input-error" : "input-success";
-            }
-            else if (newPassword != confirmPassword)
-            {
-                TempData["Message"] = "Новый пароль и подтверждение не совпадают.";
-                TempData["MessageType"] = "alert-error";
-                TempData["OldPasswordValid"] = "input-success";
-                TempData["NewPasswordValid"] = "input-error";
-                TempData["ConfirmPasswordValid"] = "input-error";
+                HttpContext.Session.SetString("Message", "Новый пароль и подтверждение не совпадают.");
+                HttpContext.Session.SetString("MessageType", "alert-error");
+                HttpContext.Session.SetString("OldPasswordValid", "input-success");
+                HttpContext.Session.SetString("NewPasswordValid", "input-error");
+                HttpContext.Session.SetString("ConfirmPasswordValid", "input-error");
             }
             else
             {
-                // Логика смены пароля
-                TempData["Message"] = "Пароль успешно изменён!";
-                TempData["MessageType"] = "alert-success";
-                TempData["OldPasswordValid"] = "input-success";
-                TempData["NewPasswordValid"] = "input-success";
-                TempData["ConfirmPasswordValid"] = "input-success";
+                HttpContext.Session.SetString("Message", "Пароль успешно изменён!");
+                HttpContext.Session.SetString("MessageType", "alert-success");
+                HttpContext.Session.SetString("OldPasswordValid", "input-success");
+                HttpContext.Session.SetString("NewPasswordValid", "input-success");
+                HttpContext.Session.SetString("ConfirmPasswordValid", "input-success");
             }
 
-            TempData["OpenModal"] = true;
+            HttpContext.Session.SetString("OpenModal", "true");
             return RedirectToAction("Index", "Setting");
         }
     }

@@ -26,33 +26,36 @@
                 <span id="closeFormButton" class="close">&times;</span>
                 <h2>Форма смены пароля</h2>
                 <form method="post" asp-controller="Setting" asp-action="ChangePassword">
-                    @*Поле для текущего пароля*@
+                    @* Поле для текущего пароля *@
                     <label for="oldPassword">Текущий пароль:</label>
                     <input type="password" id="oldPassword" name="oldPassword" placeholder="Введите текущий пароль" required
-                           class="@(TempData["OldPasswordValid"] ?? "")">
-                    @*Поле для нового пароля*@
+                           class="@Context.Session.GetString("OldPasswordValid")">
+
+                    @* Поле для нового пароля *@
                     <label for="newPassword">Новый пароль:</label>
                     <input type="password" id="newPassword" name="newPassword" placeholder="Введите новый пароль" required
-                           class="@(TempData["NewPasswordValid"] ?? "")">
-                    @*Поле для повтора нового пароля*@
+                           class="@Context.Session.GetString("NewPasswordValid")">
+
+                    @* Поле для повтора нового пароля *@
                     <label for="repeatPassword">Повтор пароля:</label>
                     <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Повторите новый пароль" required
-                           class="@(TempData["ConfirmPasswordValid"] ?? "")">
+                           class="@Context.Session.GetString("ConfirmPasswordValid")">
+
                     <!-- Область для вывода сообщений -->
-                    <div id="messageArea" class="alert @(ViewBag.MessageType ?? "")">
-                        @TempData["Message"]
+                    <div id="messageArea" class="alert @Context.Session.GetString("MessageType")">
+                        @Context.Session.GetString("Message")
                     </div>
 
-                    @*Кнопка отправки паролей*@
+                    @* Кнопка отправки паролей *@
                     <button type="submit" class="btn btn-success">Отправить</button>
                 </form>
             </div>
         </div>
-    </div>
-    @if (TempData["OpenModal"] != null && (bool)TempData["OpenModal"])
-    {
-        <script src="~/js/open_change_password_form.js"></script>
-    }
-    <script src="~/js/change_password.js"></script>
+
+        @if (Context.Session.GetString("OpenModal") == "true")
+        {
+            <script src="~/js/open_change_password_form.js"></script>
+        }
+        <script src="~/js/change_password.js"></script>
 </body>
 </html>
