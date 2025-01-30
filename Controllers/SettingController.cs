@@ -22,7 +22,6 @@ namespace Notification_System.Controllers
         {
             string hash_oldPassword = PasswordHelper.SHA256Convert(oldPassword);
             string hash_newPassword = PasswordHelper.SHA256Convert(newPassword);
-            string hash_confirmPassword = PasswordHelper.SHA256Convert(confirmPassword);
             string result_error = "";
             string result_success = "Пароль успешно изменён.";
 
@@ -61,6 +60,8 @@ namespace Notification_System.Controllers
                 PasswordHelper.CheckPassword(newPassword) &&
                 PasswordHelper.PasswordComparison(newPassword, confirmPassword))
             {
+                Change_Password.CancelOldPassword(hash_oldPassword, Guid.Parse(User.Identity.Name));
+                Change_Password.SaveNewPassword(hash_newPassword, Guid.Parse(User.Identity.Name));
                 HttpContext.Session.SetString("Message", "Пароль успешно изменён!");
                 HttpContext.Session.SetString("MessageType", "alert-success");
                 HttpContext.Session.SetString("OldPasswordValid", "input-success");
