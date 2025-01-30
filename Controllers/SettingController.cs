@@ -21,48 +21,50 @@ namespace Notification_System.Controllers
             string hash_oldPassword = PasswordHelper.SHA256Convert(oldPassword);
             string hash_newPassword = PasswordHelper.SHA256Convert(newPassword);
             string hash_confirmPassword = PasswordHelper.SHA256Convert(confirmPassword);
-            string result = "";
+            string result_error = "";
+            string result_success = "Пароль успешно изменён.";
 
             HttpContext.Session.Clear();
 
             if (!Change_Password.ConfirmOldPassword(hash_oldPassword, Guid.Parse(User.Identity.Name)))
             {
-                result += "Неверно введён текущий пароль.\n";
-                HttpContext.Session.SetString("Message", result);
+                result_error += "Неверно введён текущий пароль.\n";
+                HttpContext.Session.SetString("Message", result_error);
                 HttpContext.Session.SetString("MessageType", "alert-error");
                 HttpContext.Session.SetString("OldPasswordValid", "input-error");
             }
             else
                 HttpContext.Session.SetString("OldPasswordValid", "input-success");
 
+
             if (!PasswordHelper.CheckPassword(newPassword))
             {
-                result += "Пароль не соответствует требованиям:\n" +
-                    "Длина пароля более 10 символов\n" +
-                    "Должен содержать строчные и заглавные буквы латинского алфавита\n" +
-                    "Должен содержать хотя бы одну цифру от 0 до 9\n" +
-                    "Должен содержать один из специальных символов: ! ? _ - . $\n";
-                HttpContext.Session.SetString("Message", result);
+                result_error += "Новый пароль не соответствует требованиям.\n";
+                HttpContext.Session.SetString("Message", result_error);
                 HttpContext.Session.SetString("MessageType", "alert-error");
                 HttpContext.Session.SetString("NewPasswordValid", "input-error");
                 HttpContext.Session.SetString("ConfirmPasswordValid", "input-error");
             }
-            //if (newPassword != confirmPassword)
-            //{
-            //    HttpContext.Session.SetString("Message", "Новый пароль и подтверждение не совпадают.");
-            //    HttpContext.Session.SetString("MessageType", "alert-error");
-            //    HttpContext.Session.SetString("OldPasswordValid", "input-success");
-            //    HttpContext.Session.SetString("NewPasswordValid", "input-error");
-            //    HttpContext.Session.SetString("ConfirmPasswordValid", "input-error");
-            //}
-            //else
-            //{
-            //    HttpContext.Session.SetString("Message", "Пароль успешно изменён!");
-            //    HttpContext.Session.SetString("MessageType", "alert-success");
-            //    HttpContext.Session.SetString("OldPasswordValid", "input-success");
-            //    HttpContext.Session.SetString("NewPasswordValid", "input-success");
-            //    HttpContext.Session.SetString("ConfirmPasswordValid", "input-success");
-            //}
+            
+            if (!PasswordHelper.PasswordComparison(newPassword, confirmPassword))
+            {
+                result_error += "Пароли не совпадают.";
+                HttpContext.Session.SetString("Message", result_error);
+                HttpContext.Session.SetString("MessageType", "alert-error");
+                HttpContext.Session.SetString("NewPasswordValid", "input-error");
+                HttpContext.Session.SetString("ConfirmPasswordValid", "input-error");
+            }
+            
+            if (Change_Password.ConfirmOldPassword(hash_oldPassword, Guid.Parse(User.Identity.Name)) &&
+                PasswordHelper.CheckPassword(newPassword) &&
+                PasswordHelper.PasswordComparison(newPassword, confirmPassword))
+            {
+                HttpContext.Session.SetString("Message", "Пароль успешно изменён!");
+                HttpContext.Session.SetString("MessageType", "alert-success");
+                HttpContext.Session.SetString("OldPasswordValid", "input-success");
+                HttpContext.Session.SetString("NewPasswordValid", "input-success");
+                HttpContext.Session.SetString("ConfirmPasswordValid", "input-success");
+            }
 
             HttpContext.Session.SetString("OpenModal", "true");
             return RedirectToAction("Index", "Setting");

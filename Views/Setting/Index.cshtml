@@ -43,7 +43,7 @@
 
                     <!-- Область для вывода сообщений -->
                     <div id="messageArea" class="alert @Context.Session.GetString("MessageType")">
-                        @Context.Session.GetString("Message")
+                        <pre>@Context.Session.GetString("Message")</pre>
                     </div>
 
                     @* Кнопка отправки паролей *@

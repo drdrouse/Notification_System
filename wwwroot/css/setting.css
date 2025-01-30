@@ -7,7 +7,14 @@
     --hr-color-light: #6c6767;
 }
 
-
+pre {
+    display: block;
+    margin-top: 0;
+    margin-bottom: 0;
+    overflow: auto;
+    font-size: .875em;
+    font-family: Roboto, sans-serif;
+}
 .main-data h1{
    font-size: 50px;
    text-align: justify;
