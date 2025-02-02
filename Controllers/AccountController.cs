@@ -1,6 +1,7 @@
 ﻿using DataAccessLibrary.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Notification_System.Controllers
 {
@@ -20,7 +21,7 @@ namespace Notification_System.Controllers
             ViewData["ShowSideBarBlock"] = true;
             Guid accountID = Guid.Parse(User.Identity.Name);
             var account = _notificationSystemContext.Accounts.Where(acc => acc.AccountId == accountID).FirstOrDefault();
-            var profile = _notificationSystemContext.Profiles.Where(prof => prof.ProfileId == account.ProfileId).FirstOrDefault();
+            var profile = _notificationSystemContext.Profiles.Include(mail => mail.Mail).FirstOrDefault(prof => prof.ProfileId == account.ProfileId);   
             return View(profile);
         }
     }

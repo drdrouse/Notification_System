@@ -39,7 +39,10 @@
                             <div class="button-text">Emails</div>
                         </button>
                         <div id="emailsDrop" class="emailsdrop-content">
-                            <div class="item">Пункт 1</div>
+                            @foreach (var mail in Model.Mail)
+                            {
+                                <div class="item">@mail.MailsName</div>
+                            }
                         </div>
                     </div>
                    
