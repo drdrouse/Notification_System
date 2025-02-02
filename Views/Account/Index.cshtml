@@ -1,4 +1,5 @@
 ﻿@model DataAccessLibrary.Models.Profile
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,15 +34,16 @@
                             <span class="text-2" id="tabnum">ПАО СБЕРБАНК/ДВ/Компетенции по защите данных</span>
                         </div>
                     </div>
-
-                    <button class="add-item">
-                        <div onclick="myFunction()" class="button-text">Emails</div>
-                    </button>
-                    <div id="myDropdown" class="dropdown-content">
-                        <a href="#">Ссылка 1</a>
-                        <a href="#">Ссылка 2</a>
-                        <a href="#">Ссылка 3</a>
+                    <div class="emailsdrop">
+                        <button onclick="myFunction()" class="add-item">
+                            <div class="button-text">Emails</div>
+                        </button>
+                        <div id="emailsDrop" class="emailsdrop-content">
+                            <div class="email">Пункт 1</div>
+                        </div>
                     </div>
+                   
+
                     <button class="add-item">
                         <div class="button-text">Телефоны</div>
                     </button>
@@ -52,6 +54,6 @@
             </div>
         </div>
     </div>
-    
+    <script src="~/js/account_data_lists.js"></script>
 </body>
 </html>
