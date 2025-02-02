@@ -15,25 +15,39 @@
                 <div class="avatar-container">
                     <img src="/content/images/account/avatar-placeholder.png" id="photo" class="avatar">
                 </div>
-                
-                @*Плашка с данными*@
-                <div class="info-box">
-                    @*ФИО*@
-                    <p id="name">@Model.ProfileSurname @Model.ProfileName @Model.ProfilePatronymic</p>
-                    <hr />
-                    @*Табльный номер*@
-                    <div class="text-container">
-                        <span class="text-1">Табельный номер:</span>
-                        <span class="text-2" id="tabnum">@Model.ProfileTabNum</span>
+                <div class="person-data">
+                    @*Плашка с данными*@
+                    <div class="info-box">
+                        @*ФИО*@
+                        <p id="name">@Model.ProfileSurname @Model.ProfileName @Model.ProfilePatronymic</p>
+                        <hr />
+                        @*Табльный номер*@
+                        <div class="text-container">
+                            <span class="text-1">Табельный номер:</span>
+                            <span class="text-2" id="tabnum">@Model.ProfileTabNum</span>
+                        </div>
+                        <hr />
+                        @*Место работы*@
+                        <div class="text-container">
+                            <span class="text-1">Место работы:</span>
+                            <span class="text-2" id="tabnum">ПАО СБЕРБАНК/ДВ/Компетенции по защите данных</span>
+                        </div>
                     </div>
-                    <hr />
-                    @*Место работы*@
-                    <div class="text-container">
-                        <span class="text-1">Место работы:</span>
-                        <span class="text-2" id="tabnum">ПАО СБЕРБАНК/ДВ/Компетенции по защите данных</span>
+
+                    <button class="add-item">
+                        <div onclick="myFunction()" class="button-text">Emails</div>
+                    </button>
+                    <div id="myDropdown" class="dropdown-content">
+                        <a href="#">Ссылка 1</a>
+                        <a href="#">Ссылка 2</a>
+                        <a href="#">Ссылка 3</a>
                     </div>
+                    <button class="add-item">
+                        <div class="button-text">Телефоны</div>
+                    </button>
                 </div>
             </div>
+            @*Нижняя часть информационной области*@
             <div class="bottom-part">
             </div>
         </div>

@@ -46,14 +46,20 @@ body.light-mode .avatar{
     box-shadow: var(--shadow-light);
 }
 
+.person-data {
+    display: flex;
+    flex-direction: column;
+    width: 135vh;
+    margin-left: var(--margin-size);
+}
+
 /* Прямоугольная область */
 .info-box {
     background-color: var(--background-item);
     border-radius: var(--radius-item);
     box-shadow: var(--shadow);
     margin-top: var(--margin-size);
-    margin-left: var(--margin-size);
-    width: 135vh;
+    width: 100%;
     height: 165px;
 }
     .info-box p {
@@ -107,4 +113,36 @@ body.light-mode .text-2 {
     color: var(--text-color-light);
 }
 
+.add-item {
+    width: 100%;
+    height: 57.5px;
+    background: var(--background-item);
+    margin-top: 10px;
+    border-radius: var(--radius-item);
+    box-shadow: var(--shadow);
+    color: var(--text-color);
+    border: none;
+    outline: none;
+}
 
+body.light-mode .add-item {
+    background: var(--background-item-light);
+    color: var(--text-color-light);
+    box-shadow: var(--shadow-light);
+}
+
+.button-text {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: left;
+    padding: 10px;
+}
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+}
