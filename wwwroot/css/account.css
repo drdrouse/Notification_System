@@ -123,7 +123,7 @@ body.light-mode .text-2 {
     color: var(--text-color);
     border: none;
     outline: none;
-    padding-left: 5px;
+    padding-left: 0px;
 }
 
 body.light-mode .add-item {
@@ -153,12 +153,17 @@ body.light-mode .add-item {
     flex-direction: column;
 }
 
-
-.email {
+.item {
     background: var(--background-item);
     margin-top: 10px;
     color: var(--text-color);
     padding: 5px;
     padding-left: 10px;
     border-radius: var(--radius-item);
+    box-shadow: var(--shadow);
+}
+body.light-mode .item {
+    background: var(--background-item-light);
+    color: var(--text-color-light);
+    box-shadow: var(--shadow-light);
 }
