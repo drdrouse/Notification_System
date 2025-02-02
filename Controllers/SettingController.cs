@@ -49,7 +49,16 @@ namespace Notification_System.Controllers
             
             if (!PasswordHelper.PasswordComparison(newPassword, confirmPassword))
             {
-                result_error += "Пароли не совпадают.";
+                result_error += "Пароли не совпадают.\n";
+                HttpContext.Session.SetString("Message", result_error);
+                HttpContext.Session.SetString("MessageType", "alert-error");
+                HttpContext.Session.SetString("NewPasswordValid", "input-error");
+                HttpContext.Session.SetString("ConfirmPasswordValid", "input-error");
+            }
+
+            if (!Change_Password.CheckPasswordRepeat(hash_newPassword, Guid.Parse(User.Identity.Name)))
+            {
+                result_error += "Данный пароль уже использовался раньше.";
                 HttpContext.Session.SetString("Message", result_error);
                 HttpContext.Session.SetString("MessageType", "alert-error");
                 HttpContext.Session.SetString("NewPasswordValid", "input-error");
@@ -58,7 +67,8 @@ namespace Notification_System.Controllers
             
             if (Change_Password.ConfirmOldPassword(hash_oldPassword, Guid.Parse(User.Identity.Name)) &&
                 PasswordHelper.CheckPassword(newPassword) &&
-                PasswordHelper.PasswordComparison(newPassword, confirmPassword))
+                PasswordHelper.PasswordComparison(newPassword, confirmPassword) &&
+                Change_Password.CheckPasswordRepeat(hash_newPassword, Guid.Parse(User.Identity.Name)))
             {
                 Change_Password.CancelOldPassword(hash_oldPassword, Guid.Parse(User.Identity.Name));
                 Change_Password.SaveNewPassword(hash_newPassword, Guid.Parse(User.Identity.Name));

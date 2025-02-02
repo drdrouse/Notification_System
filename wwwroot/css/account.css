@@ -32,8 +32,8 @@ body.light-mode .bottom-part {
 
 /* Аватарка */
 .avatar {
-    width: 200px;
-    height: 200px;
+    width: 300px;
+    height: 300px;
     border-radius: 20px;
     border: 2px solid var(--background-item);
     background: var(--background-item);
@@ -54,7 +54,7 @@ body.light-mode .avatar{
     margin-top: var(--margin-size);
     margin-left: var(--margin-size);
     width: 135vh;
-    height: 200px;
+    height: 165px;
 }
     .info-box p {
         margin-bottom: 0rem;
@@ -106,4 +106,5 @@ body.light-mode .text-1{
 body.light-mode .text-2 {
     color: var(--text-color-light);
 }
+
 
