@@ -139,12 +139,12 @@ body.light-mode .add-item {
     padding: 10px;
 }
 
-.emailsdrop {
+.datadrop {
     position: relative;
     display: inline-block;
 }
 
-.emailsdrop-content {
+.datadrop-content {
     display: none;
 }
 

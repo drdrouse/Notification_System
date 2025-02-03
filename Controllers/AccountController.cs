@@ -21,7 +21,11 @@ namespace Notification_System.Controllers
             ViewData["ShowSideBarBlock"] = true;
             Guid accountID = Guid.Parse(User.Identity.Name);
             var account = _notificationSystemContext.Accounts.Where(acc => acc.AccountId == accountID).FirstOrDefault();
-            var profile = _notificationSystemContext.Profiles.Include(mail => mail.Mail).ThenInclude(tmail => tmail.TypeMail).FirstOrDefault(prof => prof.ProfileId == account.ProfileId);   
+            var profile = _notificationSystemContext.Profiles.Include(mail => mail.Mail).
+                ThenInclude(tmail => tmail.TypeMail).
+                Include(phone => phone.Phones).
+                ThenInclude(tphone => tphone.TypePhone).
+                FirstOrDefault(prof => prof.ProfileId == account.ProfileId);   
             return View(profile);
         }
     }

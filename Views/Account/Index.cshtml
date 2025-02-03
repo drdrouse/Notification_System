@@ -34,22 +34,31 @@
                             <span class="text-2" id="tabnum">ПАО СБЕРБАНК/ДВ/Компетенции по защите данных</span>
                         </div>
                     </div>
-                    <div class="emailsdrop">
-                        <button onclick="myFunction()" class="add-item">
+                    @*Список emails*@
+                    <div class="datadrop">
+                        <button onclick="myFunctionEmail()" class="add-item">
                             <div class="button-text">Emails</div>
                         </button>
-                        <div id="emailsDrop" class="emailsdrop-content">
+                        <div id="emailsDrop" class="datadrop-content">
                             @foreach (var mail in Model.Mail)
                             {
-                                <div class="item"><div style="font-weight: bold">@mail.TypeMail.TypeMailName почта:</div>   @mail.MailsName</div>
+                                <div class="item"><div style="font-weight: bold">@mail.TypeMail.TypeMailName почта:</div>@mail.MailsName</div>
                             }
                         </div>
                     </div>
                    
-
-                    <button class="add-item">
-                        <div class="button-text">Телефоны</div>
-                    </button>
+                    @*Список телефонов*@
+                    <div class="datadrop">
+                        <button onclick="myFunctionPhone()" class="add-item">
+                            <div class="button-text">Телефоны</div>
+                        </button>
+                        <div id="phonesDrop" class="datadrop-content">
+                            @foreach (var phone in Model.Phones)
+                            {
+                                <div class="item"><div style="font-weight: bold">@phone.TypePhone.TypePhoneName телефон:</div>@phone.PhonesNum</div>
+                            }
+                        </div>
+                    </div>
                 </div>
             </div>
             @*Нижняя часть информационной области*@
@@ -57,6 +66,7 @@
             </div>
         </div>
     </div>
-    <script src="~/js/account_data_lists.js"></script>
+    <script src="~/js/account_emaildrop.js"></script>
+    <script src="~/js/account_phonedrop.js"></script>
 </body>
 </html>
