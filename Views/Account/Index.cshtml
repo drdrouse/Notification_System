@@ -41,7 +41,7 @@
                         <div id="emailsDrop" class="emailsdrop-content">
                             @foreach (var mail in Model.Mail)
                             {
-                                <div class="item">@mail.TypeMail.TypeMailName почта: @mail.MailsName</div>
+                                <div class="item"><div style="font-weight: bold">@mail.TypeMail.TypeMailName почта:</div>   @mail.MailsName</div>
                             }
                         </div>
                     </div>
