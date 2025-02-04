@@ -77,6 +77,7 @@ namespace Notification_System.Controllers
                 HttpContext.Session.SetString("OldPasswordValid", "input-success");
                 HttpContext.Session.SetString("NewPasswordValid", "input-success");
                 HttpContext.Session.SetString("ConfirmPasswordValid", "input-success");
+                Log_Creater.Create(Guid.Parse(User.Identity.Name), "Change_Password");
             }
 
             HttpContext.Session.SetString("OpenModal", "true");
