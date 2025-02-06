@@ -28,6 +28,16 @@
                         </button>
                     </a>
                     <hr />
+                    @if (User.IsInRole("UserCreator"))
+                    {
+                        <a asp-controller="UserCreate" asp-action="Index">
+                            <button class="menu-item top-item" id="settings">
+                                <p>Новый пользователь</p>
+                                <img src="~/content/images/account/setting.png" alt="setting" />
+                            </button>
+                        </a>
+                        <hr />
+                    }
                 </div>
 
                 <div class="bottom-button">

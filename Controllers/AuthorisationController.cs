@@ -20,7 +20,7 @@ namespace Notification_System.Controllers
                 var claims = new List<Claim>
                 {
                 new Claim(ClaimTypes.Name, AuthorisationConfirm.AccountID().ToString()),
-                //new Claim(ClaimTypes.Role, "Admin") // Можно добавить роли
+                new Claim(ClaimTypes.Role, AuthorisationConfirm.Role(AuthorisationConfirm.AccountID())) 
                 };
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
