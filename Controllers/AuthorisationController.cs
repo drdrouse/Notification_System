@@ -33,6 +33,7 @@ namespace Notification_System.Controllers
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity),
                 authProperties);
+
                 Log_Creater.Create(AuthorisationConfirm.AccountID(), "Enter");
 
                 return RedirectToAction("Index", "Account");
