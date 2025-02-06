@@ -28,7 +28,7 @@
                         </button>
                     </a>
                     <hr />
-                    @if (User.IsInRole("UserCreator"))
+                    @if (User.IsInRole("UserCreator") || User.IsInRole("Admin"))
                     {
                         <a asp-controller="UserCreate" asp-action="Index">
                             <button class="menu-item top-item" id="settings">
