@@ -1,0 +1,80 @@
+﻿:root {
+    /*Стили для тёмной темы*/
+    --hr-color: #08a652;
+    /*Постоянная часть стилей*/
+    /*Стили для светлой темы*/
+    --hr-color-light: #6c6767;
+}
+.main-data h1 {
+    font-size: 50px;
+    text-align: justify;
+    color: var(--text-color);
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: var(--font);
+}
+
+body.light-mode .main-data h1 {
+    color: var(--text-color-light);
+}
+
+.main-data hr {
+    border: 0;
+    border-top: 2px solid;
+    color: var(--hr-color);
+    width: 150vh;
+    margin: 0px 0; /* Отступы сверху и снизу */
+}
+
+body.light-mode .main-data hr {
+    color: var(--hr-color-light);
+}
+
+.messenger-button {
+    width: 100%;
+    margin-top: 20px;
+    background-color: var(--background-item);
+    border-radius: var(--radius-item);
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow);
+}
+
+body.light-mode .messenger-button {
+    background-color: var(--background-item-light);
+    box-shadow: var(--shadow-light);
+}
+
+.messenger-menu {
+    background-color: var(--background-item);
+    color: var(--text-color);
+    height: 50px;
+    border: none;
+    border-radius: var(--radius-item);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+    .messenger-menu:hover {
+        background-color: #666;
+    }
+
+.messenger-menu p {
+    font-size: 25px;
+    padding-left: 15px;
+    padding-top: 15px;
+}
+
+
+body.light-mode .messenger-menu {
+    background-color: var(--background-item-light);
+    color: var(--text-color-light);
+}
+
+    body.light-mode .messenger-menu:hover {
+        background-color: #c2c2c2;
+    }
