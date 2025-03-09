@@ -38,6 +38,16 @@
                         </a>
                         <hr />
                     }
+                    @if (User.IsInRole("MessengerCreator") || User.IsInRole("Admin"))
+                    {
+                        <a asp-controller="MessengerCreate" asp-action="Index">
+                            <button class="menu-item top-item" id="messenger">
+                                <p>Мессенджеры</p>
+                                <img src="~/content/images/account/messenger.png" alt="messenger" />
+                            </button>
+                        </a>
+                        <hr />
+                    }
                 </div>
 
                 <div class="bottom-button">
