@@ -30,6 +30,64 @@ body.light-mode .main-data hr {
     color: var(--hr-color-light);
 }
 
+.active {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.active h4 {
+    text-align: justify;
+    color: var(--text-color);
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: var(--font);
+    padding-top: 1%;
+}
+
+body.light-mode .active h4 {
+    color: var(--text-color-light);
+}
+
+.active button {
+    background-color: var(--background-item);
+    color: var(--text-color);
+    border: none;
+    border-radius: var(--radius-item);
+    transition: background-color 0.3s;
+    margin: 0.5%;
+    box-shadow: var(--shadow);
+    width: 15%;
+}
+
+    .active button:hover {
+        background-color: #666;
+    }
+
+.active p {
+    text-align: center;
+    color: var(--text-color);
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: var(--font);
+    font-size: 20px;
+    padding-top: 15px;
+}
+
+body.light-mode .active button {
+    background-color: var(--background-item-light);
+    color: var(--text-color-light);
+    box-shadow: var(--shadow-light);
+}
+    body.light-mode .active button:hover {
+        background-color: #c2c2c2;
+    }
+
+body.light-mode .active p {
+    color: var(--text-color-light);
+}
+
+
 .messenger-button {
     width: 100%;
     margin-top: 20px;
@@ -98,3 +156,4 @@ body.light-mode .messanger-data-visible {
     color: var(--text-color-light);
     box-shadow: var(--shadow-light);
 }
+

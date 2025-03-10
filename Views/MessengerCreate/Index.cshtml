@@ -10,6 +10,11 @@
         <div class="main-data">
             <h1>Мессенджеры</h1>
             <hr />
+            <div class="active">
+                <h4>Активные каналы отправки данных</h4>
+                <button><p>Добавить</p></button>
+            </div>
+            <hr />
             @for (int check = 0; check < 2; check++)
             {
                 <div class="messenger-button">
@@ -17,6 +22,11 @@
                 </div>
                 <div id="@check" class="messanger-data-hidden">Скрытая область 1</div>
             }
+            <hr style="margin-top:2%"/>
+            <div class="active">
+                <h4>Заблокированные каналы отправки данных</h4>
+            </div>
+            <hr />
         </div>
     </div>
     <script src="~/js/messenger.js"></script>
