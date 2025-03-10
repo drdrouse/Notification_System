@@ -78,3 +78,17 @@ body.light-mode .messenger-menu {
     body.light-mode .messenger-menu:hover {
         background-color: #c2c2c2;
     }
+
+.messanger-data-hidden {
+    display: none;
+}
+
+.messanger-data-visible {
+    display: block;
+    background-color: var(--background-item);
+    color: var(--text-color);
+}
+
+body.light-mode .messanger-data-visible{
+
+}

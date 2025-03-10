@@ -10,9 +10,15 @@
         <div class="main-data">
             <h1>Мессенджеры</h1>
             <hr />
-            <div class="messenger-button">
-                <button class="messenger-menu " id=""><p>Здесь будет название</p> </button>
-            </div>
+            @for (int check = 0; check < 2; check++)
+            {
+                <div class="messenger-button">
+                    <button class="messenger-menu " id="toggleButton" button-target="@check"><p>Здесь будет название</p> </button>
+                </div>
+                <div id="@check" class="messanger-data-hidden">Скрытая область 1</div>
+            }
         </div>
+    </div>
+    <script src="~/js/messenger.js"></script>
 </body>
 </html>
