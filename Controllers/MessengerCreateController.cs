@@ -5,7 +5,7 @@ namespace Notification_System.Controllers
 {
     public class MessengerCreateController : Controller
     {
-        [Authorize(Roles = "MessengerCreator,Admin")]
+        [Authorize(Roles = "ServicesCreator,Admin")]
         public IActionResult Index()
         {
             ViewData["ShowSideBarBlock"] = true;

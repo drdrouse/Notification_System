@@ -38,7 +38,7 @@
                         </a>
                         <hr />
                     }
-                    @if (User.IsInRole("MessengerCreator") || User.IsInRole("Admin"))
+                    @if (User.IsInRole("ServicesCreator") || User.IsInRole("Admin"))
                     {
                         <a asp-controller="MessengerCreate" asp-action="Index">
                             <button class="menu-item top-item" id="messengers">
