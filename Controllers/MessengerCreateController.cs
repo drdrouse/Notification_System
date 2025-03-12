@@ -11,5 +11,19 @@ namespace Notification_System.Controllers
             ViewData["ShowSideBarBlock"] = true;
             return View();
         }
+
+        //[HttpPost]
+        //public async Task<IActionResult> CreateService()
+        //{
+        //    HttpContext.Session.Clear();
+        //    HttpContext.Session.SetString("OpenModal", "true");
+        //    return RedirectToAction("Index", "Setting");
+        //}
+
+        public IActionResult ClearSession()
+        {
+            HttpContext.Session.Clear(); // Очищаем всю сессию
+            return RedirectToAction("Index", "MessengerCreate"); // Редирект на главную страницу сервисов
+        }
     }
 }

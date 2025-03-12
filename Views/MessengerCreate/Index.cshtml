@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="~/css/messenger.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/create_services.css" asp-append-version="true" />
 </head>
 <body>
     <div class="container">
@@ -12,7 +13,7 @@
             <hr />
             <div class="active">
                 <h4>Активные сервисы</h4>
-                <button><p>Добавить</p></button>
+                <button id="create_services"><p>Добавить</p></button>
             </div>
             <hr />
             @for (int check = 0; check < 2; check++)
@@ -22,13 +23,30 @@
                 </div>
                 <div id="@check" class="messanger-data-hidden">Скрытая область 1</div>
             }
-            <hr style="margin-top:2%"/>
+            <hr style="margin-top:2%" />
             <div class="active">
                 <h4>Заблокированные сервисы</h4>
             </div>
             <hr />
         </div>
+
     </div>
+    @*Форма cоздания нового сервиса*@
+        <div id="modalForm" class="modal">
+            <div class="modal-content">
+                <a href="@Url.Action("ClearSession", "MessengerCreate")" id="closeFormButton" class="close">&times;</a>
+                <h2>Форма добавления нового сервиса</h2>
+                <form method="post" asp-controller="Index" asp-action="MessengerCreate">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    @if (Context.Session.GetString("OpenModal") == "true")
+    {
+        <script src="~/js/service_create_form.js"></script>
+    }
     <script src="~/js/messenger.js"></script>
+    <script src="~/js/open_create_service_form.js"></script>
 </body>
 </html>
