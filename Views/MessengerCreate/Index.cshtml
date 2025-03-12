@@ -37,6 +37,9 @@
                 <a href="@Url.Action("ClearSession", "MessengerCreate")" id="closeFormButton" class="close">&times;</a>
                 <h2>Форма добавления нового сервиса</h2>
                 <form method="post" asp-controller="Index" asp-action="MessengerCreate">
+                    @* Поле для ввода названия сервиса *@
+                    <label for="service_name">Название сервиса:</label>
+                    <input type="text" id="service_name" name="service" required>
                 </form>
             </div>
         </div>

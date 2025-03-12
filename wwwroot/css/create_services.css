@@ -39,3 +39,37 @@
     .close:hover {
         color: black;
     }
+
+/* Стили для формы */
+form {
+    width: 100%; /* Ширина формы на всю ширину modal-content */
+    display: flex;
+    flex-direction: row; /* Элементы формы в столбце */
+    gap: 10px; /* Отступы между элементами */
+    align-items: center;
+}
+
+    form label {
+        font-weight: bold;
+    }
+
+    form input {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 65%; /* Ширина на всю доступную ширину */
+    }
+
+    form button {
+        padding: 10px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+        form button:hover {
+            background-color: #218838;
+        }
+
