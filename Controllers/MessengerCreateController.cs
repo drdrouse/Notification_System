@@ -12,13 +12,13 @@ namespace Notification_System.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> CreateService()
-        //{
-        //    HttpContext.Session.Clear();
-        //    HttpContext.Session.SetString("OpenModal", "true");
-        //    return RedirectToAction("Index", "Setting");
-        //}
+        [HttpPost]
+        public async Task<IActionResult> CreateService(string serviceName, string dispalyName, string link)
+        {
+            HttpContext.Session.Clear();
+            HttpContext.Session.SetString("OpenModal", "true");
+            return RedirectToAction("Index", "Setting");
+        }
 
         public IActionResult ClearSession()
         {

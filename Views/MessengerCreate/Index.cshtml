@@ -36,10 +36,29 @@
             <div class="modal-content">
                 <a href="@Url.Action("ClearSession", "MessengerCreate")" id="closeFormButton" class="close">&times;</a>
                 <h2>Форма добавления нового сервиса</h2>
-                <form method="post" asp-controller="Index" asp-action="MessengerCreate">
+                <form method="post" asp-controller="MessengerCreate" asp-action="CreateService">
                     @* Поле для ввода названия сервиса *@
-                    <label for="service_name">Название сервиса:</label>
-                    <input type="text" id="service_name" name="service" required>
+                    <label for="service_name">Сервис отправки:</label>
+                    <input type="text" id="service_name" name="service" required
+                           class="@Context.Session.GetString("ServiceName")">
+
+                    @* Поле для ввода названия сервиса *@
+                    <label for="service_displayname">Полное наименование:</label>
+                    <input type="text" id="service_displayname" name="service" required
+                           class="@Context.Session.GetString("DispalyName")">
+
+                    @* Поле для ввода ссылки на загрузку сервиса *@
+                    <label for="service_link">Ссылка на сервис:</label>
+                    <input type="text" id="service_link" name="service" required
+                           class="@Context.Session.GetString("Link")">
+                    <div class="buttons">
+                        @* Кнопка отправки данных *@
+                        <button type="submit" class="btn btn-success">Отправить</button>
+
+                        @* Кнопка добавление новых полей *@
+                        <button class="btn btn-success">Добавить значения</button>
+                    </div>
+                    
                 </form>
             </div>
         </div>
