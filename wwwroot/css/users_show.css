@@ -39,6 +39,28 @@ body.light-mode .main-data hr {
     margin-top: 1%;
 }
 
+    .user_table th {
+        padding: 2%;
+        border: 2px solid var(--hr-color);
+    }
+
+        /* Убираем внешние границы */
+        .user_table th:first-child {
+            border-left: none;
+        }
+
+        .user_table th:last-child {
+            border-right: none;
+        }
+
+    .user_table tr:first-child th {
+        border-top: none;
+    }
+
+    .user_table tr:last-child th {
+        border-bottom: none;
+    }
+
 .main-data tr {
     text-align: center;
     color: var(--text-color);
@@ -47,9 +69,6 @@ body.light-mode .main-data hr {
     font-family: var(--font);
 }
 
-.main-data th {
-    padding: 2%;
-}
 
 .first-column {
     width: 15%;
