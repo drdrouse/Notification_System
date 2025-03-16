@@ -23,6 +23,9 @@
     max-width: 600px; /* Максимальная ширина */
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
+    height: 53%;
+    overflow-y: auto;
+    box-sizing: border-box;
 }
 
 /* Кнопка закрытия */
@@ -113,3 +116,9 @@ form {
     .field-container label {
         margin-bottom: 2%;
     }
+
+::-webkit-scrollbar {
+    width: 0.5%; /* Ширина скролла */
+    height: 0.5%; /* Высота скролла */
+}
+
