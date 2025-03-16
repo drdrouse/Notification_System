@@ -61,6 +61,31 @@ body.light-mode .main-data hr {
         border-bottom: none;
     }
 
+body.light-mode .user_table {
+    background: var(--background-item-light);
+    box-shadow: var(--shadow-light);
+}
+
+    body.light-mode .user_table th {
+        border: 2px solid var(--hr-color-light);
+    }
+        body.light-mode .user_table th:first-child {
+            border-left: none;
+        }
+
+        body.light-mode .user_table th:last-child {
+            border-right: none;
+        }
+
+    body.light-mode .user_table tr:first-child th {
+        border-top: none;
+    }
+
+    body.light-mode .user_table tr:last-child th {
+        border-bottom: none;
+    }
+
+
 .main-data tr {
     text-align: center;
     color: var(--text-color);
@@ -68,7 +93,9 @@ body.light-mode .main-data hr {
     font-weight: bold;
     font-family: var(--font);
 }
-
+body.light-mode .main-data tr {
+    color: var(--text-color-light);
+}
 
 .first-column {
     width: 15%;
