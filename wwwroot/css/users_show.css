@@ -30,3 +30,27 @@ body.light-mode .main-data h1 {
 body.light-mode .main-data hr {
     color: var(--hr-color-light);
 }
+
+.user_table {
+    background: var(--background-item);
+    box-shadow: var(--shadow);
+    border-radius: var(--radius-item);
+    width: 99%;
+    margin-top: 1%;
+}
+
+.main-data tr {
+    text-align: center;
+    color: var(--text-color);
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: var(--font);
+}
+
+.main-data th {
+    padding: 2%;
+}
+
+.user-data{
+
+}
