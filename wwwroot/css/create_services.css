@@ -52,6 +52,20 @@ form {
     
 }
 
+    form select {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 100%; /* Ширина на всю доступную ширину */
+    }
+
+    form option {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 100%; /* Ширина на всю доступную ширину */
+    }
+
     form label {
         font-weight: bold;
     }
