@@ -34,7 +34,7 @@ namespace Notification_System.Controllers
                 new ClaimsPrincipal(claimsIdentity),
                 authProperties);
 
-                Log_Creater.Create(AuthorisationConfirm.AccountID(), "Enter");
+                Log_Creater.Create(AuthorisationConfirm.AccountID(), "LogIn");
 
                 return RedirectToAction("Index", "Account");
             }
@@ -49,7 +49,7 @@ namespace Notification_System.Controllers
         {
             // Удаляем куки авторизации
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            Log_Creater.Create(Guid.Parse(User.Identity.Name), "Exite");
+            Log_Creater.Create(Guid.Parse(User.Identity.Name), "LogOut");
             return RedirectToAction("Index", "Authorisation");
         }
 

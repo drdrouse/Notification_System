@@ -6,6 +6,7 @@ function toggleTheme() {
     const accountImage = document.querySelector('#account img');
    //const passwordImage = document.querySelector('#change_password img');
     const messengerImage = document.getElementById('messengers').querySelector('img');
+    const userImage = document.getElementById('usercreate').querySelector('img');
     //const themeImage = document.querySelector('#change_theme img');
 
 
@@ -20,6 +21,7 @@ function toggleTheme() {
         //passwordImage.src = '/content/images/account/password-lite.png';
         //themeImage.src = '/content/images/account/change-theme-lite.png';
         messengerImage.src = '/content/images/account/messenger-lite.png';
+        userImage.src = '/content/images/account/users-lite.png';
         localStorage.setItem('theme', 'light');
     } else {
         settingImage.src = '/content/images/account/setting.png'; // Путь к изображению для тёмной темы
@@ -28,6 +30,7 @@ function toggleTheme() {
         //themeImage.src = '/content/images/account/change-theme.png';
         messengerImage.src = '/content/images/account/messenger.png';
         //passwordImage.src = '/content/images/account/password.png';
+        userImage.src = '/content/images/account/users.png';
         localStorage.setItem('theme', 'dark');
     }
 }
@@ -41,6 +44,7 @@ window.onload = () => {
     //const passwordImage = document.querySelector('#change_password img');
     //const themeImage = document.querySelector('#change_theme img');
     const messengerImage = document.getElementById('messengers').querySelector('img');
+    const userImage = document.getElementById('usercreate').querySelector('img');
 
     if (savedTheme === 'light') {
         document.body.classList.add('light-mode');
@@ -49,6 +53,7 @@ window.onload = () => {
         accountImage.src = '/content/images/account/account-lite.png';        
         //themeImage.src = '/content/images/account/change-theme-lite.png';
         messengerImage.src = '/content/images/account/messenger-lite.png';
+        userImage.src = '/content/images/account/users-lite.png';
        // passwordImage.src = '/content/images/account/password-lite.png';
     } else if (savedTheme === 'dark') {
         document.body.classList.remove('light-mode');
@@ -57,6 +62,7 @@ window.onload = () => {
         accountImage.src = '/content/images/account/account.png';        
         //themeImage.src = '/content/images/account/change-theme.png';
         messengerImage.src = '/content/images/account/messenger.png';
+        userImage.src = '/content/images/account/users.png';
         //passwordImage.src = '/content/images/account/password.png';
     }
 };
