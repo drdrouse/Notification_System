@@ -22,7 +22,9 @@ namespace Notification_System.Controllers
         public IActionResult Index()
         {
             ViewData["ShowSideBarBlock"] = true;
-            var profiles = _notificationSystemContext.Profiles.ToList();
+            var profiles = _notificationSystemContext.Profiles.
+                Include(p => p.Phones).
+                Include(p => p.Mail).ThenInclude(ml => ml.TypeMail).ToList();
             return View(profiles);
         }
     }

@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<DataAccessLibrary.Models.Profile>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -21,14 +21,17 @@
                     <th class="fifth-column">Роль</th>
                     <th class="sixth-column">Статус</th>
                 </tr>
-                <tr>
-                    <th class="first-column">123456</th>
-                    <th class="second-column">Иванов Иван Иванович</th>
-                    <th class="third-column">+7(901)649-71-06</th>
-                    <th class="fourth-column">nanohuc-afi4@gmail.com</th>
-                    <th class="fifth-column">Создатель пользователей</th>
-                    <th class="sixth-column">Доступен</th>
-                </tr>
+                @foreach (var profile in Model)
+                {
+                    <tr>
+                        <th class="first-column">@profile.ProfileTabNum</th>
+                        <th class="second-column">@profile.ProfileSurname @profile.ProfileName @profile.ProfilePatronymic</th>
+                        <th class="third-column">@profile.Phones.Where(ph => ph.PhonesIsPriority == true).FirstOrDefault()?.PhonesNum</th>
+                        <th class="fourth-column">@profile.Mail.Where(ml => ml.MailsName == "potij_efozu23@yahoo.com").FirstOrDefault()?.MailsName</th>
+                        <th class="fifth-column"></th>
+                        <th class="sixth-column"></th>
+                    </tr>
+                }
             </table>
         </div>
     </div>
