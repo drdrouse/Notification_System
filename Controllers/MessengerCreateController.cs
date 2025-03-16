@@ -1,15 +1,25 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using DataAccessLibrary.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Notification_System.Controllers
 {
     public class MessengerCreateController : Controller
     {
+        private readonly NotificationSystemContext _notificationSystemContext;
+
+        public MessengerCreateController(NotificationSystemContext notificationSystemContext)
+        {
+            _notificationSystemContext = notificationSystemContext;
+        }
+
         [Authorize(Roles = "ServicesCreator,Admin")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             ViewData["ShowSideBarBlock"] = true;
-            return View();
+            var service_names = await _notificationSystemContext.ServiceNames.ToListAsync();
+            return View(service_names);
         }
 
         [HttpPost]

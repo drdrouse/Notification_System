@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@model IEnumerable<DataAccessLibrary.Models.ServiceName>
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -32,45 +34,46 @@
 
     </div>
     @*Форма cоздания нового сервиса*@
-        <div id="modalForm" class="modal">
-            <div class="modal-content">
-                <a href="@Url.Action("ClearSession", "MessengerCreate")" id="closeFormButton" class="close">&times;</a>
-                <h2>Форма добавления нового сервиса</h2>
-                <form method="post" asp-controller="MessengerCreate" asp-action="CreateService">
-                    @* Список для выбора сервиса отправки *@
-                    <label for="service_name">Сервис отправки:</label>
-                    <select id="service_name" name="service" required>
-                        <!-- Здесь можно добавить варианты выбора -->
-                        <option hidden>Выберите сервис</option>
-                        <option value="value1">Вариант 1</option>
-                        <option value="value2">Вариант 2</option>
-                        <option value="value3">Вариант 3</option>
-                    </select>
+    <div id="modalForm" class="modal">
+        <div class="modal-content">
+            <a href="@Url.Action("ClearSession", "MessengerCreate")" id="closeFormButton" class="close">&times;</a>
+            <h2>Форма добавления нового сервиса</h2>
+            <form method="post" asp-controller="MessengerCreate" asp-action="CreateService">
+                @* Список для выбора сервиса отправки *@
+                <label for="service_name">Сервис отправки:</label>
+                <select id="service_name" name="service" required>
+                    <!-- Здесь можно добавить варианты выбора -->
+                    <option hidden>Выберите сервис</option>
+                    @foreach (var service in Model)
+                    {
+                        <option value="@service.ServiceNameId">@service.ServiceNameName</option>
+                    }
+                </select>
 
-                    @* Поле для ввода названия сервиса *@
-                    <label for="service_displayname">Полное наименование:</label>
-                    <input type="text" id="service_displayname" name="service" required
-                           class="@Context.Session.GetString("DispalyName")">
+                @* Поле для ввода названия сервиса *@
+                <label for="service_displayname">Полное наименование:</label>
+                <input type="text" id="service_displayname" name="service" required
+                       class="@Context.Session.GetString("DispalyName")">
 
-                    @* Поле для ввода ссылки на загрузку сервиса *@
-                    <label for="service_link">Ссылка на сервис:</label>
-                    <input type="text" id="service_link" name="service" required
-                           class="@Context.Session.GetString("Link")">
-                    @*Контейнер для полей с настройками*@
-                    <div id="fieldsContainer"></div>
-                    
-                    @*Контейнер с кнпоками*@
-                    <div class="buttons">
-                        @* Кнопка отправки данных *@
-                        <button type="submit" class="btn btn-success">Отправить</button>
+                @* Поле для ввода ссылки на загрузку сервиса *@
+                <label for="service_link">Ссылка на сервис:</label>
+                <input type="text" id="service_link" name="service" required
+                       class="@Context.Session.GetString("Link")">
+                @*Контейнер для полей с настройками*@
+                <div id="fieldsContainer"></div>
 
-                        @* Кнопка добавление новых полей *@
-                        <button class="btn btn-success" id="addFieldButton">Добавить значения</button>
-                    </div>
+                @*Контейнер с кнпоками*@
+                <div class="buttons">
+                    @* Кнопка отправки данных *@
+                    <button type="submit" class="btn btn-success">Отправить</button>
 
-                </form>
-            </div>
+                    @* Кнопка добавление новых полей *@
+                    <button class="btn btn-success" id="addFieldButton">Добавить значения</button>
+                </div>
+
+            </form>
         </div>
+    </div>
     </div>
 
     @if (Context.Session.GetString("OpenModal") == "true")
