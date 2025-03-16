@@ -51,6 +51,26 @@ body.light-mode .main-data hr {
     padding: 2%;
 }
 
-.user-data{
+.first-column {
+    width: 15%;
+}
+
+.second-column {
+    width: 14%;
+}
+
+.third-column{
+
+}
+
+.fourth-column {
+    width: 19%;
+}
+
+.fifth-column {
+    width: 18.5%;
+}
+
+.sixth-column{
 
 }
