@@ -105,3 +105,11 @@ form {
 .input-success {
     border: 2px solid #28a745 !important;
 }
+
+.field-container {
+    margin-bottom: 2%;
+}
+
+    .field-container label {
+        margin-bottom: 2%;
+    }
