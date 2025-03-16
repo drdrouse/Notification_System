@@ -51,14 +51,18 @@
                     <label for="service_link">Ссылка на сервис:</label>
                     <input type="text" id="service_link" name="service" required
                            class="@Context.Session.GetString("Link")">
+                    @*Контейнер для полей с настройками*@
+                    <div id="fieldsContainer"></div>
+                    
+                    @*Контейнер с кнпоками*@
                     <div class="buttons">
                         @* Кнопка отправки данных *@
                         <button type="submit" class="btn btn-success">Отправить</button>
 
                         @* Кнопка добавление новых полей *@
-                        <button class="btn btn-success">Добавить значения</button>
+                        <button class="btn btn-success" id="addFieldButton">Добавить значения</button>
                     </div>
-                    
+
                 </form>
             </div>
         </div>
@@ -70,5 +74,6 @@
     }
     <script src="~/js/messenger.js"></script>
     <script src="~/js/open_create_service_form.js"></script>
+    <script src="~/js/add_input.js"></script>
 </body>
 </html>
