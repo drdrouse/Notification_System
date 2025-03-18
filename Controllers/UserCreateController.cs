@@ -25,7 +25,8 @@ namespace Notification_System.Controllers
             var profiles = _notificationSystemContext.Accounts.
                 Include(ac => ac.Profile).ThenInclude(p => p.Phones).
                 Include(ac => ac.Profile).ThenInclude(p => p.Mail).ThenInclude(m => m.TypeMail).
-                Include(ac => ac.RoleAssignments).ThenInclude(r => r.Role);
+                Include(ac => ac.RoleAssignments).ThenInclude(r => r.Role).
+                Include(ac => ac.AccountStatus);
             return View(profiles);
         }
     }
