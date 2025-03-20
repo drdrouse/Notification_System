@@ -12,7 +12,7 @@
     <div class="container">
 
         <div class="main-data">
-            <button class="back_button" type="submit">Назад</button>
+            <a class="back_button" type="submit" asp-controller="UserCreate" asp-action="Index">Назад</a>
             <div class="top-part">
                 @*Аватарка пользователя*@
                 <div class="avatar-container">
@@ -48,7 +48,6 @@
                             }
                         </div>
                     </div>
-
                     @*Список телефонов*@
                     <div class="datadrop">
                         <button onclick="myFunctionPhone()" class="add-item">
