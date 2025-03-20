@@ -54,3 +54,37 @@ body.light-mode .back_button {
     body.light-mode .back_button:hover {
         background-color: var(--button-hover-color-lite);
     }
+
+.user-setting {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.status-list {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+    .status-list label {
+        color: var(--text-color);
+        font-size: 22px;
+    }
+
+    .status-list select {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: var(--shadow);
+        margin-left: 10px;
+    }
+
+    .status-list option {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 100%; /* Ширина на всю доступную ширину */
+    }

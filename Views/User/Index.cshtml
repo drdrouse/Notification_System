@@ -12,7 +12,17 @@
     <div class="container">
 
         <div class="main-data">
-            <a class="back_button" type="submit" asp-controller="UserCreate" asp-action="Index">Назад</a>
+            <div class="user-setting">
+                <a class="back_button" type="submit" asp-controller="UserCreate" asp-action="Index">Назад</a>
+                <div class="status-list">
+                    <label for="dropdown">Статус пользователя:</label>
+                    <select id="dropdown" name="dropdown">
+                        <option value="1">Первый пункт</option>
+                        <option value="2">Второй пункт</option>
+                        <option value="3">Третий пункт</option>
+                    </select>
+                </div>
+            </div>
             <div class="top-part">
                 @*Аватарка пользователя*@
                 <div class="avatar-container">
