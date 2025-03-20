@@ -20,10 +20,14 @@ namespace Notification_System.Controllers
         public IActionResult Index(int tabnum)
         {
             ViewData["ShowSideBarBlock"] = true;
+            var statuses = _notificationSystemContext.AccountStatuses.ToList();
             var profile = _notificationSystemContext.Profiles.Where(p => p.ProfileTabNum == tabnum).FirstOrDefault();
             var account = _notificationSystemContext.Accounts.Where(a => a.ProfileId == profile.ProfileId).
                 Include(a => a.Profile).ThenInclude(p => p.Mail).ThenInclude(m => m.TypeMail).
-                Include(a => a.Profile).ThenInclude(p => p.Phones).ThenInclude(ph => ph.TypePhone).ToList();
+                Include(a => a.Profile).ThenInclude(p => p.Phones).ThenInclude(ph => ph.TypePhone).
+                Include(a => a.AccountStatus).ToList();
+
+            ViewBag.Statuses = statuses;
             return View(account);
         }
     }

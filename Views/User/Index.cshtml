@@ -1,4 +1,7 @@
 ﻿@model IEnumerable<DataAccessLibrary.Models.Account>
+@{
+    var statuses = (List<DataAccessLibrary.Models.AccountStatus>)ViewBag.Statuses;
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="~/css/account.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/user.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/user.css" asp-append-version="true" />
 </head>
 <body>
     <div class="container">
@@ -15,11 +18,17 @@
             <div class="user-setting">
                 <a class="back_button" type="submit" asp-controller="UserCreate" asp-action="Index">Назад</a>
                 <div class="status-list">
-                    <label for="dropdown">Статус пользователя:</label>
-                    <select id="dropdown" name="dropdown">
-                        <option value="1">Первый пункт</option>
-                        <option value="2">Второй пункт</option>
-                        <option value="3">Третий пункт</option>
+                    <label for="status">Статус пользователя:</label>
+                    <select id="status" name="status">
+                        <option value="@Model.FirstOrDefault().AccountStatus.AccountStatusName">@Model.FirstOrDefault().AccountStatus.AccountStatusName</option>
+                        @foreach (var status in statuses)
+                        {
+                            @if (status.AccountStatusName != Model.FirstOrDefault().AccountStatus.AccountStatusName)
+                            {
+                                <option value="@status.AccountStatusName">@status.AccountStatusName</option>
+                            }
+                         }
+
                     </select>
                 </div>
             </div>
