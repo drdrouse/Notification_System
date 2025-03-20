@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<DataAccessLibrary.Models.Account>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6,11 +6,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="~/css/account.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/user.css" asp-append-version="true"/>
 </head>
 <body>
     <div class="container">
 
         <div class="main-data">
+            <button class="back_button" type="submit">Назад</button>
             <div class="top-part">
                 @*Аватарка пользователя*@
                 <div class="avatar-container">
@@ -20,11 +22,11 @@
                     @*Плашка с данными*@
                     <div class="info-box">
                         @*ФИО*@
-                        <p id="name"></p>
+                        <p id="name">@Model.FirstOrDefault().Profile.ProfileSurname @Model.FirstOrDefault().Profile.ProfileName @Model.FirstOrDefault().Profile.ProfilePatronymic</p>
                         <hr />
                         @*Табльный номер*@
                         <div class="text-container">
-                            <span class="text-1">Табельный номер:</span>
+                            <span class="text-1">Табельный номер: @Model.FirstOrDefault().Profile.ProfileTabNum</span>
                             <span class="text-2" id="tabnum"></span>
                         </div>
                         <hr />
@@ -40,7 +42,10 @@
                             <div class="button-text">Почта</div>
                         </button>
                         <div id="emailsDrop" class="datadrop-content">
-
+                            @foreach (var mail in Model.FirstOrDefault().Profile.Mail)
+                            {
+                                <div class="item"><div style="font-weight: bold">@mail.TypeMail.TypeMailName почта:</div>@mail.MailsName</div>
+                            }
                         </div>
                     </div>
 
@@ -50,7 +55,10 @@
                             <div class="button-text">Телефон</div>
                         </button>
                         <div id="phonesDrop" class="datadrop-content">
-
+                            @foreach (var phone in Model.FirstOrDefault().Profile.Phones)
+                            {
+                                <div class="item"><div style="font-weight: bold">@phone.TypePhone.TypePhoneName телефон:</div>@phone.PhonesNum</div>
+                            }
                         </div>
                     </div>
                 </div>

@@ -1,2 +1,53 @@
-﻿body {
+﻿/* Определим основные переменные для цветов */
+:root {
+    /*Стили для тёмной темы*/
+    --primary-color: #148f2b;
+    --hover-color: #63dd64;
+    --background-gradient: linear-gradient(to top, #004D40, #0e0e0e);
+    --input-border-color: #148f2b;
+    --input-focus-border-color: #63dd64;
+    --text-color: #FFFFFF;
+    --placeholder-color: #CCCCCC;
+    /*Стили для светлой темы*/
+    --background-account-light: linear-gradient(to top, white, #08a652);
+    --text-color-light: #000000;
+    --button-color-lite: #0055ee;
+    --button-hover-color-lite: #5464e6;
+    --placeholder-color-lite: #757575;
+    --input-border-color-lite: #3d3d3d;
+    --input-focus-border-color-lite: #7a7a7a;
 }
+
+.back_button {
+    width: 12%;
+    height: 40px;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    font-size: 22px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    margin-left: 1%;
+}
+
+    .back_button:hover,
+    .back_button:active {
+        background-color: var(--hover-color);
+    }
+
+    .back_button:active {
+        border: 2px solid var(--text-color);
+    }
+
+body.light-mode .back_button {
+    background-color: var(--button-color-lite);
+}
+
+    body.light-mode .back_button:active {
+        background-color: var(--button-hover-color-lite);
+    }
+
+    body.light-mode .back_button:hover {
+        background-color: var(--button-hover-color-lite);
+    }

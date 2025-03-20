@@ -25,16 +25,16 @@
                 {
                     <tr>
                         <th class="first-column" onclick="location.href = '@Url.Action("Index", "User",  new { tabnum = account.Profile.ProfileTabNum })'">@account.Profile.ProfileTabNum</th>
-                        <th class="second-column">@account.Profile.ProfileSurname @account.Profile.ProfileName @account.Profile.ProfilePatronymic</th>
-                        <th class="third-column" >@account.Profile.Phones.Where(ph => ph.PhonesIsPriority == true).FirstOrDefault()?.PhonesNum</th>
-                        <th class="fourth-column">@account.Profile.Mail.Where(m => m.TypeMail.TypeMailName == "Корпоративная").FirstOrDefault()?.MailsName</th>
-                        <th class="fifth-column">
+                        <th class="second-column" onclick="location.href = '@Url.Action("Index", "User",  new { tabnum = account.Profile.ProfileTabNum })'">@account.Profile.ProfileSurname @account.Profile.ProfileName @account.Profile.ProfilePatronymic</th>
+                        <th class="third-column" onclick="location.href = '@Url.Action("Index", "User",  new { tabnum = account.Profile.ProfileTabNum })'">@account.Profile.Phones.Where(ph => ph.PhonesIsPriority == true).FirstOrDefault()?.PhonesNum</th>
+                        <th class="fourth-column" onclick="location.href = '@Url.Action("Index", "User",  new { tabnum = account.Profile.ProfileTabNum })'">@account.Profile.Mail.Where(m => m.TypeMail.TypeMailName == "Корпоративная").FirstOrDefault()?.MailsName</th>
+                        <th class="fifth-column" onclick="location.href = '@Url.Action("Index", "User",  new { tabnum = account.Profile.ProfileTabNum })'">
                             @foreach (var role in account.RoleAssignments.ToList()) 
                             {
                                @role.Role.RoleName
                             }
                         </th>
-                        <th class="sixth-column">@account.AccountStatus.AccountStatusName</th>
+                        <th class="sixth-column" onclick="location.href = '@Url.Action("Index", "User",  new { tabnum = account.Profile.ProfileTabNum })'">@account.AccountStatus.AccountStatusName</th>
                     </tr>
                 }
             </table>
