@@ -24,7 +24,7 @@
                 @foreach (var account in Model)
                 {
                     <tr>
-                        <th class="first-column">@account.Profile.ProfileTabNum</th>
+                        <th class="first-column" onclick="location.href = '@Url.Action("Index", "User",  new { tabnum = account.Profile.ProfileTabNum })'">@account.Profile.ProfileTabNum</th>
                         <th class="second-column">@account.Profile.ProfileSurname @account.Profile.ProfileName @account.Profile.ProfilePatronymic</th>
                         <th class="third-column" >@account.Profile.Phones.Where(ph => ph.PhonesIsPriority == true).FirstOrDefault()?.PhonesNum</th>
                         <th class="fourth-column">@account.Profile.Mail.Where(m => m.TypeMail.TypeMailName == "Корпоративная").FirstOrDefault()?.MailsName</th>
