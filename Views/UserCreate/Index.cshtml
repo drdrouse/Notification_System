@@ -26,7 +26,7 @@
                     <tr>
                         <th class="first-column">@account.Profile.ProfileTabNum</th>
                         <th class="second-column">@account.Profile.ProfileSurname @account.Profile.ProfileName @account.Profile.ProfilePatronymic</th>
-                        <th class="third-column">@account.Profile.Phones.Where(ph => ph.PhonesIsPriority == true).FirstOrDefault()?.PhonesNum</th>
+                        <th class="third-column" >@account.Profile.Phones.Where(ph => ph.PhonesIsPriority == true).FirstOrDefault()?.PhonesNum</th>
                         <th class="fourth-column">@account.Profile.Mail.Where(m => m.TypeMail.TypeMailName == "Корпоративная").FirstOrDefault()?.MailsName</th>
                         <th class="fifth-column">
                             @foreach (var role in account.RoleAssignments.ToList()) 

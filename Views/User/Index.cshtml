@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/css/account.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="container">
+
+        <div class="main-data">
+            <div class="top-part">
+                @*Аватарка пользователя*@
+                <div class="avatar-container">
+                    <img src="/content/images/account/avatar-placeholder.png" id="photo" class="avatar">
+                </div>
+                <div class="person-data">
+                    @*Плашка с данными*@
+                    <div class="info-box">
+                        @*ФИО*@
+                        <p id="name"></p>
+                        <hr />
+                        @*Табльный номер*@
+                        <div class="text-container">
+                            <span class="text-1">Табельный номер:</span>
+                            <span class="text-2" id="tabnum"></span>
+                        </div>
+                        <hr />
+                        @*Место работы*@
+                        <div class="text-container">
+                            <span class="text-1">Место работы:</span>
+                            <span class="text-2" id="tabnum">ПАО СБЕРБАНК/ДВ/</span>
+                        </div>
+                    </div>
+                    @*Список emails*@
+                    <div class="datadrop">
+                        <button onclick="myFunctionEmail()" class="add-item">
+                            <div class="button-text">Почта</div>
+                        </button>
+                        <div id="emailsDrop" class="datadrop-content">
+                           
+                        </div>
+                    </div>
+
+                    @*Список телефонов*@
+                    <div class="datadrop">
+                        <button onclick="myFunctionPhone()" class="add-item">
+                            <div class="button-text">Телефон</div>
+                        </button>
+                        <div id="phonesDrop" class="datadrop-content">
+              
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script src="~/js/account_emaildrop.js"></script>
+    <script src="~/js/account_phonedrop.js"></script>
+</body>
+</html>
