@@ -17,10 +17,17 @@
         display: block;
     }
 
-    .user_table th, .user_table td {
+    .user_table th {
         padding: 2%;
         border: 2px solid #08a652;
         word-wrap: break-word;
+    }
+
+    .user_table td {
+        padding: 2%;
+        border: 2px solid #08a652;
+        word-wrap: break-word;
+        border-bottom: 1px;
     }
 
         /* Убираем внешние границы */
@@ -79,6 +86,9 @@ body.light-mode .user_table {
 
 
 tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
     text-align: center;
     color: var(--text-color);
     text-transform: uppercase;
