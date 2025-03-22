@@ -69,6 +69,7 @@ body.light-mode .back_button {
     flex-direction: row;
     justify-content: space-between;
     margin-left: 1%;
+
 }
 
     .status-list label {
@@ -78,15 +79,15 @@ body.light-mode .back_button {
 
     .status-list select {
         padding: 8px;
-        border: 1px solid #ccc;
         border-radius: 5px;
         box-shadow: var(--shadow);
         margin-left: 10px;
+        background: var(--background-item);
+        color: var(--text-color);
     }
 
     .status-list option {
         padding: 8px;
-        border: 1px solid #ccc;
         border-radius: 5px;
         width: 100%; /* Ширина на всю доступную ширину */
     }
