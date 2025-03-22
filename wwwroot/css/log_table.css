@@ -12,12 +12,12 @@
 
 
     .user_table tbody {
-        height: 100%; /* Устанавливаем фиксированную высоту тела таблицы */
+        height: 68%; /* Устанавливаем фиксированную высоту тела таблицы */
         overflow-y: scroll; /* Включаем вертикальную прокрутку */
         display: block;
     }
 
-    .user_table th {
+    .user_table th, .user_table td {
         padding: 2%;
         border: 2px solid #08a652;
         word-wrap: break-word;
@@ -31,12 +31,24 @@
         .user_table th:last-child {
             border-right: none;
         }
+        .user_table td:first-child {
+            border-left: none;
+        }
+
+        .user_table td:last-child {
+            border-right: none;
+        }
 
     .user_table tr:first-child th {
         border-top: none;
     }
 
-    .user_table tr:last-child th {
+    .user_table tr:first-child td {
+        border-top: none;
+    }
+
+
+    .user_table tr:last-child td {
         border-bottom: none;
     }
 

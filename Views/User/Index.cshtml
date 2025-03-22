@@ -83,22 +83,25 @@
                 </div>
             </div>
             <table border="0" class="user_table">
-                
-                <tr>
-                    <th class="first-column">Табельный номер</th>
-                    <th class="second-column">Событие</th>
-                    <th class="third-column">Дата</th>
-                    <th class="fourth-column">Описание</th>
-                </tr>
-                @foreach (var log in Model.FirstOrDefault().Profile.Logs.OrderBy(log => log.LogDateTime))
-                {
+                <thead>
                     <tr>
-                        <th class="first-column">@Model.FirstOrDefault().Profile.ProfileTabNum</th>
-                        <th class="second-column" >@log.EventCode.EventCodeName</th>
-                        <th class="third-column" >@log.LogDateTime</th>
-                        <th class="fourth-column" >@log.LogDeccription</th>
+                        <th class="first-column">Табельный номер</th>
+                        <th class="second-column">Событие</th>
+                        <th class="third-column">Дата</th>
+                        <th class="fourth-column">Описание</th>
                     </tr>
-                }
+                </thead>
+                <tbody>
+                    @foreach (var log in Model.FirstOrDefault().Profile.Logs.OrderBy(log => log.LogDateTime))
+                    {
+                        <tr>
+                            <td class="first-column">@Model.FirstOrDefault().Profile.ProfileTabNum</td>
+                            <td class="second-column">@log.EventCode.EventCodeName</td>
+                            <td class="third-column">@log.LogDateTime</td>
+                            <td class="fourth-column">@log.LogDeccription</td>
+                        </tr>
+                    }
+                </tbody>
             </table>
 
         </div>
