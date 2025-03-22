@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="~/css/account.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/user.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/log_table.css" asp-append-version="true" />
 </head>
 <body>
     <div class="container">
@@ -27,7 +28,7 @@
                             {
                                 <option value="@status.AccountStatusName">@status.AccountStatusName</option>
                             }
-                         }
+                        }
 
                     </select>
                 </div>
@@ -81,6 +82,24 @@
                     </div>
                 </div>
             </div>
+            <table border="0" class="user_table">
+                
+                <tr>
+                    <th class="first-column">Табельный номер</th>
+                    <th class="second-column">Событие</th>
+                    <th class="third-column">Дата</th>
+                    <th class="fourth-column">Описание</th>
+                </tr>
+                @foreach (var log in Model.FirstOrDefault().Profile.Logs.OrderBy(log => log.LogDateTime))
+                {
+                    <tr>
+                        <th class="first-column">@Model.FirstOrDefault().Profile.ProfileTabNum</th>
+                        <th class="second-column" >@log.EventCode.EventCodeName</th>
+                        <th class="third-column" >@log.LogDateTime</th>
+                        <th class="fourth-column" >@log.LogDeccription</th>
+                    </tr>
+                }
+            </table>
 
         </div>
     </div>

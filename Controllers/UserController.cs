@@ -25,10 +25,17 @@ namespace Notification_System.Controllers
             var account = _notificationSystemContext.Accounts.Where(a => a.ProfileId == profile.ProfileId).
                 Include(a => a.Profile).ThenInclude(p => p.Mail).ThenInclude(m => m.TypeMail).
                 Include(a => a.Profile).ThenInclude(p => p.Phones).ThenInclude(ph => ph.TypePhone).
-                Include(a => a.AccountStatus).ToList();
+                Include(a => a.AccountStatus).
+                Include(a => a.Profile).ThenInclude(p => p.Logs).ThenInclude(e => e.EventCode).ToList();
 
             ViewBag.Statuses = statuses;
             return View(account);
         }
+
+        //[HttpPost]
+        //public async Task<IActionResult> ChangeStatus(string status)
+        //{
+
+        //}
     }
 }
