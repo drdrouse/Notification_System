@@ -11,13 +11,14 @@
     <link rel="stylesheet" href="~/css/account.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/user.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/log_table.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/role.css" asp-append-version="true" />
 </head>
 <body>
     <div class="container">
 
         <div class="main-data">
             <div class="user-setting">
-                <a class="back_button" type="submit" asp-controller="UserCreate" asp-action="Index">Назад</a>
+
                 <div class="status-list">
                     <label for="status">Статус пользователя:</label>
                     <select id="status" name="status">
@@ -82,6 +83,14 @@
                     </div>
                 </div>
             </div>
+            <div class="role">
+                <h4>Роли пользователя</h4>
+                <button id="create_services"><p>Добавить</p></button>
+            </div>
+                <div class="messenger-button">
+                    <button class="messenger-menu" data-target=""><p>Здесь будет название</p> </button>
+                </div>
+
             <table border="0" class="user_table">
                 <thead>
                     <tr>
@@ -103,7 +112,10 @@
                     }
                 </tbody>
             </table>
-
+            <div class="end-button">
+                <a class="back_button" type="submit" asp-controller="UserCreate" asp-action="Index">Назад</a>
+                <a class="back_button">Сохранить</a>
+            </div>
         </div>
     </div>
     <script src="~/js/account_emaildrop.js"></script>

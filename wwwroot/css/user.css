@@ -31,6 +31,7 @@
     margin-left: 1%;
     text-align: center;
     padding-top: 0.25%;
+    margin-bottom: 1%;
 }
 
     .back_button:hover,
@@ -67,6 +68,7 @@ body.light-mode .back_button {
     align-items: center;
     flex-direction: row;
     justify-content: space-between;
+    margin-left: 1%;
 }
 
     .status-list label {
@@ -88,3 +90,10 @@ body.light-mode .back_button {
         border-radius: 5px;
         width: 100%; /* Ширина на всю доступную ширину */
     }
+
+.end-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 2.5%;
+}

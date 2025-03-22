@@ -1,0 +1,108 @@
+﻿.role {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 1%;
+}
+
+.role h4 {
+    text-align: justify;
+    color: var(--text-color);
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: var(--font);
+    padding-top: 1%;
+}
+
+body.light-mode .role h4 {
+    color: var(--text-color-light);
+}
+
+.role button {
+    background-color: var(--background-item);
+    color: var(--text-color);
+    border: none;
+    border-radius: var(--radius-item);
+    transition: background-color 0.3s;
+    margin: 0.5%;
+    box-shadow: var(--shadow);
+    width: 15%;
+}
+
+    .role button:hover {
+        background-color: #666;
+    }
+
+.role p {
+    text-align: center;
+    color: var(--text-color);
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: var(--font);
+    font-size: 15px;
+    padding-top: 15px;
+}
+
+body.light-mode .role button {
+    background-color: var(--background-item-light);
+    color: var(--text-color-light);
+    box-shadow: var(--shadow-light);
+}
+
+    body.light-mode .role button:hover {
+        background-color: #c2c2c2;
+    }
+
+body.light-mode .role p {
+    color: var(--text-color-light);
+}
+
+.messenger-button {
+    width: 99%;
+    margin-left: 1%;
+    background-color: var(--background-item);
+    border-radius: var(--radius-item);
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow);
+}
+
+body.light-mode .messenger-button {
+    background-color: var(--background-item-light);
+    box-shadow: var(--shadow-light);
+}
+
+.messenger-menu {
+    background-color: var(--background-item);
+    color: var(--text-color);
+    height: 50px;
+    border: none;
+    border-radius: var(--radius-item);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+    .messenger-menu:hover {
+        background-color: #666;
+    }
+
+    .messenger-menu p {
+        font-size: 25px;
+        padding-left: 15px;
+        padding-top: 15px;
+    }
+
+
+body.light-mode .messenger-menu {
+    background-color: var(--background-item-light);
+    color: var(--text-color-light);
+}
+
+    body.light-mode .messenger-menu:hover {
+        background-color: #c2c2c2;
+    }

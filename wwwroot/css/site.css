@@ -34,7 +34,7 @@ body {
     justify-content: flex-start;
     align-items: center;
     height: 100vh;
-    background: var(--background-account);
+    background: var(--background-account) no-repeat center center fixed;
 }
 
     body.light-mode {
