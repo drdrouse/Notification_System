@@ -91,10 +91,14 @@
             {
                 <div class="user_roles" id="@role.Role.RoleName">
 
-                    <p class="p_role">@role.Role.RoleName</p> 
+                    <p class="p_role">@role.Role.RoleName</p>
                     @if (@role.Role.RoleName != "Admin")
                     {
-                        <a onclick="location.href = '@Url.Action("RemoveRole", "User",  new { name = @role.Role.RoleName, tabnum = @Model.FirstOrDefault().Profile.ProfileTabNum})'" id="@role.Role.RoleName" class="button_role">X</a>                     
+                        <a onclick="location.href = '@Url.Action("RemoveRole", "User",  new { name = @role.Role.RoleName, tabnum = @Model.FirstOrDefault().Profile.ProfileTabNum})'" id="@role.Role.RoleName" class="button_role">X</a>
+                    }
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a onclick="location.href = '@Url.Action("RemoveRole", "User",  new { name = @role.Role.RoleName, tabnum = @Model.FirstOrDefault().Profile.ProfileTabNum})'" id="@role.Role.RoleName" class="button_role">X</a>
                     }
                 </div>
             }
@@ -124,7 +128,7 @@
                 <a class="back_button">Сохранить</a>
             </div>
         </div>
-    </div>
+        </div>
     <script src="~/js/account_emaildrop.js"></script>
     <script src="~/js/account_phonedrop.js"></script>
 </body>

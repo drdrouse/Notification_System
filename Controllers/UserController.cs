@@ -1,7 +1,10 @@
 ﻿using DataAccessLibrary.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Notification_System.Controllers
 {
@@ -36,7 +39,29 @@ namespace Notification_System.Controllers
         public async Task<IActionResult> RemoveRole(string name, int tabnum)
         {
             if (DataAccessLibrary.Role_Change.Remove_Role(name))
+            {
+                var users = User as ClaimsPrincipal;
+                var identity = User.Identity as ClaimsIdentity;
+
+                var claimToRemove = identity.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role && c.Value == name);
+                
+                if (claimToRemove != null)
+                {
+                    identity.RemoveClaim(claimToRemove);
+                    await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+                    await HttpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(identity),
+                        new AuthenticationProperties
+                        {
+                            ExpiresUtc = DateTime.UtcNow.AddHours(1)
+                        }
+                    );
+                }
+
                 return RedirectToAction("Index", "User", new { Tabnum = tabnum });
+            }
             return RedirectToAction("Index", "User",  new { Tabnum = tabnum }); 
         }
         //[HttpPost]
