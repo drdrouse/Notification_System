@@ -87,11 +87,17 @@
                 <h4>Роли пользователя</h4>
                 <button id="create_services"><p>Добавить</p></button>
             </div>
-                <div class="user_roles">
-                   <label><p>Роль</p> <button>X</button></label> 
-                   
-                </div>
+            @foreach (var role in Model.FirstOrDefault().RoleAssignments)
+            {
+                <div class="user_roles" id="@role.Role.RoleName">
 
+                    <p class="p_role">@role.Role.RoleName</p> 
+                    @if (@role.Role.RoleName != "Admin")
+                    {
+                        <a onclick="location.href = '@Url.Action("RemoveRole", "User",  new { name = @role.Role.RoleName, tabnum = @Model.FirstOrDefault().Profile.ProfileTabNum})'" id="@role.Role.RoleName" class="button_role">X</a>                     
+                    }
+                </div>
+            }
             <table border="0" class="user_table">
                 <thead>
                     <tr>

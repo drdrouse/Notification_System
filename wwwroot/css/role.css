@@ -4,6 +4,7 @@
     justify-content: space-between;
     align-items: center;
     margin-left: 1%;
+    margin-bottom: 1%;
 }
 
 .role h4 {
@@ -58,33 +59,52 @@ body.light-mode .role p {
     color: var(--text-color-light);
 }
 
-.user_roles{
+.user_roles {
     display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 1%;
+    width: 99%;
+    background-color: var(--background-item);
+    color: var(--text-color);
+    border: none;
+    border-radius: var(--radius-item);
+    box-shadow: var(--shadow);
+    margin-bottom: 1.5%;
 }
 
     .user_roles label {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        margin-left: 1%;
-        width: 100%;
-        background-color: var(--background-item);
-        color: var(--text-color);
-        border: none;
-        border-radius: var(--radius-item);
-        box-shadow: var(--shadow);
+        
     }
-}
 
-.user_roles p {
+.p_role {
     text-align: justify;
     color: var(--text-color);
-    text-transform: uppercase;
     font-family: var(--font);
-    padding-top: 1%;
+    padding-top: 1.5%;
+    margin-left: 1%;
+    font-size: 20px;
+    font-weight: bold;
 }
 
-.user_roles button{
+.button_role {
+    background-color: var(--background-item);
+    color: var(--text-color);
+    border: none;
+    border-radius: var(--radius-item);
+    transition: background-color 0.3s;
+    margin: 0.5%;
+    height: 99%;
+    font-size: 26px;
+    font-weight: bold;
+    margin-right: 0%;
+    width: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
+.button_role:hover {
+    background-color: #666;
 }

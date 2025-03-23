@@ -11,17 +11,20 @@ namespace Notification_System.Controllers
     [AllowAnonymous]
     public class AuthorisationController : Controller
     {
+        List<Claim> claims = new List<Claim>();
         [HttpPost]
         public IActionResult Index(string login, string password)
         {
             if (AuthorisationConfirm.LoginPasswordAccept(login, password))
             {
 
-                var claims = new List<Claim>
+                claims.Add(new Claim(ClaimTypes.Name, AuthorisationConfirm.AccountID().ToString()));
+
+                var roles = AuthorisationConfirm.Role(AuthorisationConfirm.AccountID());
+                foreach (var role in roles)
                 {
-                new Claim(ClaimTypes.Name, AuthorisationConfirm.AccountID().ToString()),
-                new Claim(ClaimTypes.Role, AuthorisationConfirm.Role(AuthorisationConfirm.AccountID())) 
-                };
+                    claims.Add(new Claim(ClaimTypes.Role, role.ToString()));
+                }
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
                 var authProperties = new AuthenticationProperties
