@@ -69,5 +69,11 @@ namespace Notification_System.Controllers
         //{
 
         //}
+
+        public IActionResult ClearSession(int tabnum)
+        {
+            HttpContext.Session.Clear(); // Очищаем всю сессию
+            return RedirectToAction("Index", "User", new { Tabnum = tabnum }); // Редирект на главную страницу сервисов
+        }
     }
 }

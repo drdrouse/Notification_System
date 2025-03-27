@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="~/css/user.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/log_table.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/role.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/role_form.css" asp-append-version="true" />
 </head>
 <body>
     <div class="container">
@@ -85,7 +86,7 @@
             </div>
             <div class="role">
                 <h4>Роли пользователя</h4>
-                <button id="create_services"><p>Добавить</p></button>
+                <button id="add_role"><p>Добавить</p></button>
             </div>
             @foreach (var role in Model.FirstOrDefault().RoleAssignments)
             {
@@ -128,8 +129,19 @@
                 <a class="back_button">Сохранить</a>
             </div>
         </div>
+        @*Форма добавления новой роли*@
+        <div id="modalForm" class="modal">
+            <div class="modal-content">
+                <a href="@Url.Action("ClearSession", "User",  new {tabnum = Model.FirstOrDefault().Profile.ProfileTabNum})" id="closeFormButton" class="close">&times;</a>
+                <h2>Форма добавления новой роли</h2>
+                <form method="post" asp-controller="MessengerCreate" asp-action="CreateService">
+                    
+                </form>
+            </div>
         </div>
+    </div>
     <script src="~/js/account_emaildrop.js"></script>
     <script src="~/js/account_phonedrop.js"></script>
+    <script src="~/js/open_role_form.js"></script>
 </body>
 </html>
