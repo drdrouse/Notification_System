@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<DataAccessLibrary.Models.Account>
 @{
     var statuses = (List<DataAccessLibrary.Models.AccountStatus>)ViewBag.Statuses;
+    var roles = (List<DataAccessLibrary.Models.Role>)ViewBag.Roles;
 }
 
 <!DOCTYPE html>
@@ -135,7 +136,17 @@
                 <a href="@Url.Action("ClearSession", "User",  new {tabnum = Model.FirstOrDefault().Profile.ProfileTabNum})" id="closeFormButton" class="close">&times;</a>
                 <h2>Форма добавления новой роли</h2>
                 <form method="post" asp-controller="MessengerCreate" asp-action="CreateService">
-                    
+                    @foreach (var role in roles)
+                    {
+                        @if (!Model.FirstOrDefault().RoleAssignments.Select(ra => ra.Role.RoleName).ToList().Contains(role.RoleName))
+                        {
+                            <label class="role_chbo">
+                            <input type="checkbox" id="@role.RoleName"> @role.RoleName
+                        </label>
+                        }
+                    }
+                    @* Кнопка добавление новых полей *@
+                    <button class="save_button_role" id="addRole">Сохранить</button>
                 </form>
             </div>
         </div>

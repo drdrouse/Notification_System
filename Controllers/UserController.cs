@@ -23,6 +23,7 @@ namespace Notification_System.Controllers
         {
             ViewData["ShowSideBarBlock"] = true;
             var statuses = _notificationSystemContext.AccountStatuses.ToList();
+            var roles = _notificationSystemContext.Roles.ToList();
             var profile = _notificationSystemContext.Profiles.Where(p => p.ProfileTabNum == Tabnum).FirstOrDefault();
             var account = _notificationSystemContext.Accounts.Where(a => a.ProfileId == profile.ProfileId).
                 Include(a => a.Profile).ThenInclude(p => p.Mail).ThenInclude(m => m.TypeMail).
@@ -30,8 +31,10 @@ namespace Notification_System.Controllers
                 Include(a => a.AccountStatus).
                 Include(a => a.Profile).ThenInclude(p => p.Logs).ThenInclude(e => e.EventCode).
                 Include(a => a.RoleAssignments).ThenInclude(ra => ra.Role).ToList();
+            
 
             ViewBag.Statuses = statuses;
+            ViewBag.Roles = roles;
             return View(account);
         }
 

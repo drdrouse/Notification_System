@@ -26,6 +26,7 @@
     height: 53%;
     overflow-y: auto;
     box-sizing: border-box;
+    align-items: center;
 }
 
 /* Кнопка закрытия */
@@ -49,4 +50,30 @@ form {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    align-items: center;
+}
+
+
+.save_button_role {
+    padding: 10px;
+    background-color: #198754;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    position: absolute;
+    bottom: 10px;
+    width: 93.5%;
+}
+
+    .save_button_role:hover {
+        background-color: #157347;
+    }
+.role_chbo {
+    margin: 2%;
+    font-size: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 60%;
 }
