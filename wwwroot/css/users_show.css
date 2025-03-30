@@ -121,3 +121,48 @@ body.light-mode .main-data tr {
 .sixth-column{
 
 }
+
+.head-user {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+    .head-user button {
+        background-color: var(--background-item);
+        color: var(--text-color);
+        border: none;
+        border-radius: var(--radius-item);
+        transition: background-color 0.3s;
+        margin: 0.5%;
+        box-shadow: var(--shadow);
+        width: 20%;
+    }
+
+        .head-user button:hover {
+            background-color: #666;
+        }
+
+    .head-user p {
+        text-align: center;
+        color: var(--text-color);
+        text-transform: uppercase;
+        font-weight: bold;
+        font-family: var(--font);
+        font-size: 15px;
+        padding-top: 15px;
+    }
+
+body.light-mode .head-user button {
+    background-color: var(--background-item-light);
+    color: var(--text-color-light);
+    box-shadow: var(--shadow-light);
+}
+
+    body.light-mode .head-user button:hover {
+        background-color: #c2c2c2;
+    }
+body.light-mode .head-user p {
+    color: var(--text-color-light);
+}
