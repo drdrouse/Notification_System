@@ -49,8 +49,26 @@
             <div class="modal-content">
                 <a href="@Url.Action("ClearSession", "UserCreate")" id="closeFormButton" class="close">&times;</a>
                 <h2>Форма добавления нового пользователя</h2>
-                <form >
+                <form>
+                    <label for="Surname">Фамилия:</label>
+                    <input type="text" id="Surname" name="Surname" required>
 
+                    <label for="Name">Имя:</label>
+                    <input type="text" id="Name" name="Name" required>
+
+                    <label for="Patronymic">Отчество:</label>
+                    <input type="text" id="Patronymic" name="Patronymic" required>
+                    <hr />
+                    <h4>Почта</h4>
+
+                    <div id="emailsContainer"></div>
+                    <button class="newUser_button" id="addEmail">Добавить почту</button>
+                    <hr />
+                    <h4>Телефон</h4>
+
+                    <div id="phoneContainer"></div>
+                    <button class="newUser_button" id="addPhone">Добавить телефон</button>
+                    <hr />
                     @* Кнопка добавление новых полей *@
                     <button class="newUser_button" id="addUser">Сохранить</button>
                 </form>
@@ -58,5 +76,7 @@
         </div>
     </div>
     <script src="~/js/open_new_user_form.js"></script>
+    @*<script src="~/js/add_input_email.js"></script>*@
+    <script src="~/js/add_input_phone.js"></script>
 </body>
 </html>
