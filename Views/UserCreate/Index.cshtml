@@ -6,6 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="~/css/users_show.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/user_create_form.css" asp-append-version="true" />
 </head>
 <body>
     <div class="container">
@@ -32,10 +33,10 @@
                         <th class="third-column" onclick="location.href = '@Url.Action("Index", "User",  new { tabnum = account.Profile.ProfileTabNum })'">@account.Profile.Phones.Where(ph => ph.PhonesIsPriority == true).FirstOrDefault()?.PhonesNum</th>
                         <th class="fourth-column" onclick="location.href = '@Url.Action("Index", "User",  new { tabnum = account.Profile.ProfileTabNum })'">@account.Profile.Mail.Where(m => m.TypeMail.TypeMailName == "Корпоративная").FirstOrDefault()?.MailsName</th>
                         <th class="fifth-column" onclick="location.href = '@Url.Action("Index", "User",  new { tabnum = account.Profile.ProfileTabNum })'">
-                            @foreach (var role in account.RoleAssignments.ToList()) 
+                            @foreach (var role in account.RoleAssignments.ToList())
                             {
-                               @role.Role.RoleName
-                               <br />
+                                @role.Role.RoleName
+                                <br />
                             }
                         </th>
                         <th class="sixth-column" onclick="location.href = '@Url.Action("Index", "User",  new { tabnum = account.Profile.ProfileTabNum })'">@account.AccountStatus.AccountStatusName</th>
@@ -43,6 +44,19 @@
                 }
             </table>
         </div>
+        @*Форма добавления новой роли*@
+        <div id="modalForm" class="modal">
+            <div class="modal-content">
+                <a href="@Url.Action("ClearSession", "UserCreate")" id="closeFormButton" class="close">&times;</a>
+                <h2>Форма добавления нового пользователя</h2>
+                <form >
+
+                    @* Кнопка добавление новых полей *@
+                    <button class="newUser_button" id="addUser">Сохранить</button>
+                </form>
+            </div>
+        </div>
     </div>
+    <script src="~/js/open_new_user_form.js"></script>
 </body>
 </html>

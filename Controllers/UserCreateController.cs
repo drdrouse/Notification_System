@@ -29,5 +29,11 @@ namespace Notification_System.Controllers
                 Include(ac => ac.AccountStatus);
             return View(profiles);
         }
+
+        public IActionResult ClearSession(int tabnum)
+        {
+            HttpContext.Session.Clear(); // Очищаем всю сессию
+            return RedirectToAction("Index", "UserСreate"); // Редирект на главную страницу сервисов
+        }
     }
 }
