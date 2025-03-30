@@ -30,10 +30,10 @@ namespace Notification_System.Controllers
             return View(profiles);
         }
 
-        public IActionResult ClearSession(int tabnum)
+        public IActionResult ClearSession()
         {
             HttpContext.Session.Clear(); // Очищаем всю сессию
-            return RedirectToAction("Index", "UserСreate"); // Редирект на главную страницу сервисов
+            return RedirectToAction("Index", "UserCreate"); // Редирект на главную страницу сервисов
         }
     }
 }

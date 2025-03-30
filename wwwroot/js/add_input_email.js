@@ -1,29 +1,40 @@
 ﻿function createNewFieldEmail() {
-    // Создаем контейнер для одного набора полей
     const fieldContainer = document.createElement('div');
     fieldContainer.classList.add('field-container');
 
-    // Создаем метку
-    const label = document.createElement('label');
-    label.htmlFor = 'srvice_setting' + fieldsContainer.childNodes.length; // Уникальное имя для каждого поля
-    label.textContent = 'Почта';
-    fieldContainer.appendChild(label);
+    const index = document.querySelectorAll('#emailsContainer input').length; // Получаем количество полей
 
-    // Создаем поле ввода
+    // Создаем выпадающий список
+    const select = document.createElement('select');
+    select.id = 'email_type_' + index;
+
+    const options = ['Корпоративная', 'Персональная', 'Временная'];
+    options.forEach(optionText => {
+        const option = document.createElement('option');
+        option.value = optionText.toLowerCase();
+        option.textContent = optionText;
+        select.appendChild(option);
+    });
+
+    fieldContainer.appendChild(select);
+
+    // Создаем поле ввода email
     const input = document.createElement('input');
-    input.type = 'text';
-    input.id = 'srvice_setting' + fieldsContainer.childNodes.length; // Уникальное ID для каждого поля
+    input.type = 'email';
+    input.id = 'email_' + index;
+    input.placeholder = 'Введите email';
     fieldContainer.appendChild(input);
 
     return fieldContainer;
 }
 
 // Обработка нажатия на кнопку
-const addFieldButton = document.getElementById('addEmail');
-const fieldsContainer = document.getElementById('emailsContainer');
+const addEmailButton = document.getElementById('addEmail');
+const emailsContainer = document.getElementById('emailsContainer');
 
-addFieldButton.addEventListener('click', () => {
-    // Создаем новое поле и добавляем его в контейнер
+addEmailButton.addEventListener('click', (event) => {
+    event.preventDefault();
+
     const newField = createNewFieldEmail();
-    fieldsContainer.appendChild(newField);
+    emailsContainer.appendChild(newField);
 });
