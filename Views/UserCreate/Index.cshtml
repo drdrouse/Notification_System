@@ -49,9 +49,10 @@
             <div class="modal-content">
                 <a href="@Url.Action("ClearSession", "UserCreate")" id="closeFormButton" class="close">&times;</a>
                 <h2>Форма добавления нового пользователя</h2>
-                <form>
+                <form method="post" asp-controller="UserCreate" asp-action="CreateUser">
                     <label for="Surname">Фамилия:</label>
-                    <input type="text" id="Surname" name="Surname" required>
+                    <input type="text" id="Surname" name="Surname" required
+                           class="@Context.Session.GetString("SurnameValid")">
 
                     <label for="Name">Имя:</label>
                     <input type="text" id="Name" name="Name" required>
@@ -69,12 +70,20 @@
                     <div id="phoneContainer"></div>
                     <button class="newUser_button" id="addPhone" type="button">Добавить телефон</button>
                     <hr />
+
+                    <div id="messageArea" class="alert @Context.Session.GetString("MessageType")">
+                        <pre>@Context.Session.GetString("Message")</pre>
+                    </div>
                     @* Кнопка добавление новых полей *@
                     <button class="newUser_button" id="addUser">Сохранить</button>
                 </form>
             </div>
         </div>
     </div>
+    @if (Context.Session.GetString("OpenModal") == "true")
+    {
+        <script src="~/js/open_change_password_form.js"></script>
+    }
     <script src="~/js/open_new_user_form.js"></script>
     <script src="~/js/add_input_email.js"></script>
     <script src="~/js/add_input_phone.js"></script>
