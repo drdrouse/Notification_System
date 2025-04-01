@@ -2,7 +2,7 @@
     const fieldContainer = document.createElement('div');
     fieldContainer.classList.add('field-container');
 
-    const index = document.querySelectorAll('#phoneContainer input').length; // Получаем количество полей
+    const index = document.querySelectorAll('#phoneContainer .field-container').length; // Считаем количество полей
 
     // Создаем выпадающий список
     const select = document.createElement('select');
@@ -35,6 +35,12 @@ const fieldsContainer = document.getElementById('phoneContainer');
 addFieldButton.addEventListener('click', (event) => {
     event.preventDefault();
 
-    const newField = createNewFieldPhone();
-    fieldsContainer.appendChild(newField);
+    const fieldCount = document.querySelectorAll('#phoneContainer .field-container').length;
+
+    if (fieldCount < 4) {
+        const newField = createNewFieldPhone();
+        fieldsContainer.appendChild(newField);
+    } else {
+        alert("Можно добавить не более 4 номеров!");
+    }
 });
