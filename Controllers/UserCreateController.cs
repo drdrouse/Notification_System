@@ -37,23 +37,43 @@ namespace Notification_System.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser(string Surname)
+        public async Task<IActionResult> CreateUser(string Surname, string Name, string Patronymic)
         {
 
             string result_error = "";
-            string result_success = "Пользователь успешно создан";
+            string result_success = "Пользователь успешно создан.";
 
             HttpContext.Session.Clear();
 
-            if (Surname == "Иванов")
+            if (!DataHelper.UserHelper.CheckFLP(Surname))
             {
-                result_error += "Неверно введёна фамилия\n";
+                result_error += "Ошибка вводе фамилии\n";
                 HttpContext.Session.SetString("Message", result_error);
                 HttpContext.Session.SetString("MessageType", "alert-error");
                 HttpContext.Session.SetString("SurnameValid", "input-error");
             }
             else
                 HttpContext.Session.SetString("SurnameValid", "input-success");
+
+            if (!DataHelper.UserHelper.CheckFLP(Name))
+            {
+                result_error += "Ошибка вводе имени\n";
+                HttpContext.Session.SetString("Message", result_error);
+                HttpContext.Session.SetString("MessageType", "alert-error");
+                HttpContext.Session.SetString("NameValid", "input-error");
+            }
+            else
+                HttpContext.Session.SetString("NameValid", "input-success");
+
+            if (!DataHelper.UserHelper.CheckFLP(Patronymic))
+            {
+                result_error += "Ошибка вводе имени\n";
+                HttpContext.Session.SetString("Message", result_error);
+                HttpContext.Session.SetString("MessageType", "alert-error");
+                HttpContext.Session.SetString("PatronymicValid", "input-error");
+            }
+            else
+                HttpContext.Session.SetString("PatronymicValid", "input-success");
 
             HttpContext.Session.SetString("OpenModal", "true");
             return RedirectToAction("Index", "UserCreate");

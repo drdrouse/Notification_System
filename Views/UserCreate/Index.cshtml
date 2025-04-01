@@ -55,10 +55,12 @@
                            class="@Context.Session.GetString("SurnameValid")">
 
                     <label for="Name">Имя:</label>
-                    <input type="text" id="Name" name="Name" required>
+                    <input type="text" id="Name" name="Name" required
+                           class="@Context.Session.GetString("NameValid")">
 
                     <label for="Patronymic">Отчество:</label>
-                    <input type="text" id="Patronymic" name="Patronymic" required>
+                    <input type="text" id="Patronymic" name="Patronymic" required
+                           class="@Context.Session.GetString("PatronymicValid")">
                     <hr />
                     <h4>Почта</h4>
 
