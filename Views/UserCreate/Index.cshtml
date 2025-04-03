@@ -61,18 +61,6 @@
                     <label for="Patronymic">Отчество:</label>
                     <input type="text" id="Patronymic" name="Patronymic" required
                            class="@Context.Session.GetString("PatronymicValid")">
-                    <hr />
-                    <h4>Почта</h4>
-
-                    <div id="emailsContainer"></div>
-                    <button class="newUser_button" id="addEmail" type="button">Добавить почту</button>
-                    <hr />
-                    <h4>Телефон</h4>
-
-                    <div id="phoneContainer"></div>
-                    <button class="newUser_button" id="addPhone" type="button">Добавить телефон</button>
-                    <hr />
-
                     <div id="messageArea" class="alert @Context.Session.GetString("MessageType")">
                         <pre>@Context.Session.GetString("Message")</pre>
                     </div>

@@ -47,7 +47,7 @@ namespace Notification_System.Controllers
 
             if (!DataHelper.UserHelper.CheckFLP(Surname))
             {
-                result_error += "Ошибка вводе фамилии\n";
+                result_error += "Фамилия имеет неверный формат.\n";
                 HttpContext.Session.SetString("Message", result_error);
                 HttpContext.Session.SetString("MessageType", "alert-error");
                 HttpContext.Session.SetString("SurnameValid", "input-error");
@@ -57,7 +57,7 @@ namespace Notification_System.Controllers
 
             if (!DataHelper.UserHelper.CheckFLP(Name))
             {
-                result_error += "Ошибка вводе имени\n";
+                result_error += "Имя имеет неверный формат.\n";
                 HttpContext.Session.SetString("Message", result_error);
                 HttpContext.Session.SetString("MessageType", "alert-error");
                 HttpContext.Session.SetString("NameValid", "input-error");
@@ -67,13 +67,28 @@ namespace Notification_System.Controllers
 
             if (!DataHelper.UserHelper.CheckFLP(Patronymic))
             {
-                result_error += "Ошибка вводе имени\n";
+                result_error += "Отчество имеет неверный формат.\n";
                 HttpContext.Session.SetString("Message", result_error);
                 HttpContext.Session.SetString("MessageType", "alert-error");
                 HttpContext.Session.SetString("PatronymicValid", "input-error");
             }
             else
                 HttpContext.Session.SetString("PatronymicValid", "input-success");
+
+            if (DataHelper.UserHelper.CheckFLP(Surname) &&
+                DataHelper.UserHelper.CheckFLP(Name) &&
+                DataHelper.UserHelper.CheckFLP(Patronymic))
+            {
+                if (DataAccessLibrary.CreateUser.AddNewUser(Surname, Name, Patronymic))
+                    if (DataAccessLibrary.CreateAccount.AddNewAccount(Surname, Name, Patronymic))
+                    {
+                        HttpContext.Session.SetString("Message", result_success);
+                        HttpContext.Session.SetString("MessageType", "alert-success");
+                        HttpContext.Session.SetString("SurnameValid", "input-success");
+                        HttpContext.Session.SetString("NameValid", "input-success");
+                        HttpContext.Session.SetString("PatronymicValid", "input-success");
+                    }
+            }
 
             HttpContext.Session.SetString("OpenModal", "true");
             return RedirectToAction("Index", "UserCreate");
