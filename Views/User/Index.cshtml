@@ -87,7 +87,10 @@
             </div>
             <div class="role">
                 <h4>Роли пользователя</h4>
-                <button id="add_role"><p>Добавить</p></button>
+                @if (!Model.FirstOrDefault().RoleAssignments.Select(ra => ra.Role.RoleName).ToList().Contains("Admin"))
+                {
+                    <button id="add_role"><p>Добавить</p></button>
+                }
             </div>
             @foreach (var role in Model.FirstOrDefault().RoleAssignments)
             {
@@ -139,17 +142,27 @@
             <div class="modal-content">
                 <a href="@Url.Action("ClearSession", "User",  new {tabnum = Model.FirstOrDefault().Profile.ProfileTabNum})" id="closeFormButton" class="close">&times;</a>
                 <h2>Форма добавления новой роли</h2>
-                <form class="checkbox-group" method="post" asp-controller="MessengerCreate" asp-action="CreateService">
+                <form class="checkbox-group" method="post" asp-controller="User" asp-action="AddNewRole">
 
                     @foreach (var role in roles)
                     {
                         @if (!Model.FirstOrDefault().RoleAssignments.Select(ra => ra.Role.RoleName).ToList().Contains(role.RoleName))
                         {
-                            <label class="role_chbo">
-                                <input type="checkbox" id="@role.RoleName"> @role.RoleName
-                            </label>
+                            @if (role.RoleName == "Admin" && !User.IsInRole("Admin"))
+                            {
+                                continue;
+
+                            }
+                            else
+                            {
+                                <label class="role_chbo">
+                                    <input type="checkbox" name="@role.RoleName" value="true"> @role.RoleName
+                                </label>
+                            }
+
                         }
                     }
+                    <input type="hidden" name="tabNum" value="@Model.FirstOrDefault().Profile.ProfileTabNum" />
                     @* Кнопка добавление новых полей *@
                     <button class="save_button_role" id="addRole">Сохранить</button>
                 </form>

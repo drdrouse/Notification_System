@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using DataAccessLibrary;
 
 namespace Notification_System.Controllers
 {
@@ -41,7 +42,7 @@ namespace Notification_System.Controllers
 
         public async Task<IActionResult> RemoveRole(string name, int tabnum)
         {
-            if (DataAccessLibrary.Role_Change.Remove_Role(name))
+            if (Role_Change.Remove_Role(name))
             {
                 var users = User as ClaimsPrincipal;
                 var identity = User.Identity as ClaimsIdentity;
@@ -72,7 +73,23 @@ namespace Notification_System.Controllers
         //{
 
         //}
-
+        [HttpPost]
+        public async Task<IActionResult> AddNewRole(int tabNum, bool LogViewer,
+            bool ServicesCreator, bool UserCreator, bool Admin)
+        {
+            List<string> roles = new List<string>();
+            if (LogViewer)
+                roles.Add("LogViewer");
+            if (ServicesCreator)
+                roles.Add("ServicesCreator");
+            if (UserCreator)
+                roles.Add("ServicesCreator");
+            if (Admin)
+                roles.Add("Admin");
+            if(Role_Change.Add_Role(roles, tabNum)) 
+                return RedirectToAction("Index", "User", new { Tabnum = tabNum });
+            return RedirectToAction("Index", "User", new { Tabnum = tabNum });
+        }
         public IActionResult ClearSession(int tabnum)
         {
             HttpContext.Session.Clear(); // Очищаем всю сессию
