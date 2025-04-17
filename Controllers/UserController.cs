@@ -68,11 +68,16 @@ namespace Notification_System.Controllers
             }
             return RedirectToAction("Index", "User",  new { Tabnum = tabnum }); 
         }
-        //[HttpPost]
-        //public async Task<IActionResult> ChangeStatus(string status)
-        //{
 
-        //}
+        [HttpPost]
+        public async Task<IActionResult> ChangeStatus(string status, int tabnummner)
+        {
+            if(Status_Change.NewStatus(status, tabnummner)) 
+                return RedirectToAction("Index", "UserCreate");
+            return RedirectToAction("Index", "UserCreate");
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> AddNewRole(int tabNum, bool LogViewer,
             bool ServicesCreator, bool UserCreator, bool Admin)
@@ -90,7 +95,7 @@ namespace Notification_System.Controllers
                 return RedirectToAction("Index", "User", new { Tabnum = tabNum });
             return RedirectToAction("Index", "User", new { Tabnum = tabNum });
         }
-        public IActionResult ClearSession(int tabnum)
+        public async Task<IActionResult> ClearSession(int tabnum)
         {
             HttpContext.Session.Clear(); // Очищаем всю сессию
             return RedirectToAction("Index", "User", new { Tabnum = tabnum }); // Редирект на главную страницу сервисов

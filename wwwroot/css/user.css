@@ -18,6 +18,10 @@
     --input-focus-border-color-lite: #7a7a7a;
 }
 
+.back_button_form {
+    display: flex;
+    align-items: flex-end;
+}
 .back_button {
     width: 12%;
     height: 40px;

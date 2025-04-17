@@ -23,13 +23,14 @@
 
                 <div class="status-list">
                     <label for="status">Статус пользователя:</label>
-                    <select id="status" name="status">
+                    <select id="status" name="status" form="statusForm">
                         <option value="@Model.FirstOrDefault().AccountStatus.AccountStatusName">@Model.FirstOrDefault().AccountStatus.AccountStatusName</option>
                         @foreach (var status in statuses)
                         {
                             @if (status.AccountStatusName != Model.FirstOrDefault().AccountStatus.AccountStatusName)
                             {
                                 <option value="@status.AccountStatusName">@status.AccountStatusName</option>
+
                             }
                         }
 
@@ -49,8 +50,7 @@
                         <hr />
                         @*Табльный номер*@
                         <div class="text-container">
-                            <span class="text-1">Табельный номер: @Model.FirstOrDefault().Profile.ProfileTabNum</span>
-                            <span class="text-2" id="tabnum"></span>
+                            <span class="text-1" id="tabnum">Табельный номер: @Model.FirstOrDefault().Profile.ProfileTabNum</span>
                         </div>
                         <hr />
                         @*Место работы*@
@@ -134,8 +134,11 @@
             </table>
             <div class="end-button">
                 <a class="back_button" type="submit" asp-controller="UserCreate" asp-action="Index">Назад</a>
-                <a class="back_button">Сохранить</a>
+                <form id="statusForm" class="back_button_form" method="post" asp-controller="User" asp-action="ChangeStatus">
+                    <button class="back_button">Сохранить</button>
+                </form>
             </div>
+            <input type="hidden" name="tabnummner" value="@Model.FirstOrDefault().Profile.ProfileTabNum" form="statusForm"/>
         </div>
         @*Форма добавления новой роли*@
         <div id="modalForm" class="modal">
