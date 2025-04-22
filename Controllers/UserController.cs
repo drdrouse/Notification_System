@@ -44,26 +44,6 @@ namespace Notification_System.Controllers
         {
             if (Role_Change.Remove_Role(name))
             {
-                var users = User as ClaimsPrincipal;
-                var identity = User.Identity as ClaimsIdentity;
-
-                var claimToRemove = identity.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role && c.Value == name);
-                
-                if (claimToRemove != null)
-                {
-                    identity.RemoveClaim(claimToRemove);
-                    await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-                    await HttpContext.SignInAsync(
-                        CookieAuthenticationDefaults.AuthenticationScheme,
-                        new ClaimsPrincipal(identity),
-                        new AuthenticationProperties
-                        {
-                            ExpiresUtc = DateTime.UtcNow.AddHours(1)
-                        }
-                    );
-                }
-
                 return RedirectToAction("Index", "User", new { Tabnum = tabnum });
             }
             return RedirectToAction("Index", "User",  new { Tabnum = tabnum }); 
@@ -88,7 +68,7 @@ namespace Notification_System.Controllers
             if (ServicesCreator)
                 roles.Add("ServicesCreator");
             if (UserCreator)
-                roles.Add("ServicesCreator");
+                roles.Add("UserCreator");
             if (Admin)
                 roles.Add("Admin");
             if(Role_Change.Add_Role(roles, tabNum)) 

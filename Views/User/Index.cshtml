@@ -25,15 +25,20 @@
                     <label for="status">Статус пользователя:</label>
                     <select id="status" name="status" form="statusForm">
                         <option value="@Model.FirstOrDefault().AccountStatus.AccountStatusName">@Model.FirstOrDefault().AccountStatus.AccountStatusName</option>
-                        @foreach (var status in statuses)
+                        @if (Model.FirstOrDefault().RoleAssignments.Select(ra => ra.Role.RoleName).ToList().Contains("Admin")
+                         && !User.IsInRole("Admin"))
+                        { }
+                        else
                         {
-                            @if (status.AccountStatusName != Model.FirstOrDefault().AccountStatus.AccountStatusName)
+                            @foreach (var status in statuses)
                             {
-                                <option value="@status.AccountStatusName">@status.AccountStatusName</option>
+                                @if (status.AccountStatusName != Model.FirstOrDefault().AccountStatus.AccountStatusName)
+                                {
+                                    <option value="@status.AccountStatusName">@status.AccountStatusName</option>
 
+                                }
                             }
                         }
-
                     </select>
                 </div>
             </div>
@@ -97,17 +102,20 @@
                 <div class="user_roles" id="@role.Role.RoleName">
 
                     <p class="p_role">@role.Role.RoleName</p>
-                    @if (role.Role.RoleName == "Admin" && User.IsInRole("Admin"))
+                    @if (Guid.Parse(User.Identity.Name) != Model.FirstOrDefault().AccountId)
                     {
-                        <a onclick="location.href = '@Url.Action("RemoveRole", "User",  new { name = @role.Role.RoleName, tabnum = @Model.FirstOrDefault().Profile.ProfileTabNum})'" id="@role.Role.RoleName" class="button_role">X</a>
-                    }
-                    @if (role.Role.RoleName == "Admin" && !User.IsInRole("Admin"))
-                    {
+                        @if (role.Role.RoleName == "Admin" && User.IsInRole("Admin"))
+                        {
+                            <a onclick="location.href = '@Url.Action("RemoveRole", "User", new { name = @role.Role.RoleName, tabnum = @Model.FirstOrDefault().Profile.ProfileTabNum })'" id="@role.Role.RoleName" class="button_role">X</a>
+                        }
+                        @if (role.Role.RoleName == "Admin" && !User.IsInRole("Admin"))
+                        {
 
-                    }
-                    @if (role.Role.RoleName != "Admin")
-                    {
-                        <a onclick="location.href = '@Url.Action("RemoveRole", "User",  new { name = @role.Role.RoleName, tabnum = @Model.FirstOrDefault().Profile.ProfileTabNum})'" id="@role.Role.RoleName" class="button_role">X</a>
+                        }
+                        @if (role.Role.RoleName != "Admin")
+                        {
+                            <a onclick="location.href = '@Url.Action("RemoveRole", "User", new { name = @role.Role.RoleName, tabnum = @Model.FirstOrDefault().Profile.ProfileTabNum })'" id="@role.Role.RoleName" class="button_role">X</a>
+                        }
                     }
                 </div>
             }
