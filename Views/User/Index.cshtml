@@ -25,18 +25,19 @@
                     <label for="status">Статус пользователя:</label>
                     <select id="status" name="status" form="statusForm">
                         <option value="@Model.FirstOrDefault().AccountStatus.AccountStatusName">@Model.FirstOrDefault().AccountStatus.AccountStatusName</option>
-                        @if (Model.FirstOrDefault().RoleAssignments.Select(ra => ra.Role.RoleName).ToList().Contains("Admin")
-                         && !User.IsInRole("Admin"))
+                        
+                        @if ((Model.FirstOrDefault().RoleAssignments.Select(ra => ra.Role.RoleName).ToList().Contains("Admin")
+                        && !User.IsInRole("Admin")) || (Guid.Parse(User.Identity.Name) == Model.FirstOrDefault().AccountId))
                         { }
                         else
                         {
                             @foreach (var status in statuses)
                             {
                                 @if (status.AccountStatusName != Model.FirstOrDefault().AccountStatus.AccountStatusName)
-                                {
-                                    <option value="@status.AccountStatusName">@status.AccountStatusName</option>
+                            {
+                                <option value="@status.AccountStatusName">@status.AccountStatusName</option>
 
-                                }
+                            }
                             }
                         }
                     </select>
