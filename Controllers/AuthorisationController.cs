@@ -15,34 +15,39 @@ namespace Notification_System.Controllers
         [HttpPost]
         public IActionResult Index(string login, string password)
         {
-            if (AuthorisationConfirm.LoginPasswordAccept(login, password))
+            if (AuthorisationConfirm.CheckStatus(login))
             {
-
-                claims.Add(new Claim(ClaimTypes.Name, AuthorisationConfirm.AccountID().ToString()));
-
-                var roles = AuthorisationConfirm.Role(AuthorisationConfirm.AccountID());
-                foreach (var role in roles)
+                if (AuthorisationConfirm.LoginPasswordAccept(login, password))
                 {
-                    claims.Add(new Claim(ClaimTypes.Role, role.ToString()));
+
+                    claims.Add(new Claim(ClaimTypes.Name, AuthorisationConfirm.AccountID().ToString()));
+
+                    var roles = AuthorisationConfirm.Role(AuthorisationConfirm.AccountID());
+                    foreach (var role in roles)
+                    {
+                        claims.Add(new Claim(ClaimTypes.Role, role.ToString()));
+                    }
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                    var authProperties = new AuthenticationProperties
+                    {
+                        IsPersistent = true // Запомнить пользователя между сессиями
+                    };
+
+                    HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    new ClaimsPrincipal(claimsIdentity),
+                    authProperties);
+
+                    Log_Creater.Create(AuthorisationConfirm.AccountID(), "LogIn");
+
+                    return RedirectToAction("Index", "Account");
                 }
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-                var authProperties = new AuthenticationProperties
-                {
-                    IsPersistent = true // Запомнить пользователя между сессиями
-                };
-
-                HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(claimsIdentity),
-                authProperties);
-
-                Log_Creater.Create(AuthorisationConfirm.AccountID(), "LogIn");
-
-                return RedirectToAction("Index", "Account");
+                ViewBag.Error = "Неверно введены данные";
+                return View();
             }
 
-            ViewBag.Error = "Неверно введены данные";
+            ViewBag.Error = "Ваш аккаунт заблокирован. Обратитесь к администратору.";
             return View();
 
         }
