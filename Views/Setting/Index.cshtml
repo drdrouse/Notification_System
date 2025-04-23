@@ -18,6 +18,9 @@
                 @*Кнопка смены стиля интерфейса*@
                 <button class="setting-menu top-button" id="change_theme" onclick="toggleTheme()"><p>Сменить стиль</p> <img src="~/content/images/account/change-theme.png" alt="change_theme" /></button>
                 <hr />
+                @*Кнопка добавления нового телефона*@
+                <button class="setting-menu top-button" id="add_phone"><p>Добавить номер телефона</p> <img src="~/content/images/account/phone.png" alt="phone" /></button>
+                <hr />
             </div>
         </div>
         @*Форма смены пароля*@
@@ -27,7 +30,7 @@
 
 
                 <h2>Форма смены пароля</h2>
-                <form method="post" asp-controller="Setting" asp-action="CreateUser">
+                <form method="post" asp-controller="Setting" asp-action="ChangePassword">
                     @* Поле для текущего пароля *@
                     <label for="oldPassword">Текущий пароль:</label>
                     <input type="password" id="oldPassword" name="oldPassword" placeholder="Введите текущий пароль" required
@@ -51,13 +54,30 @@
                     @* Кнопка отправки паролей *@
                     <button type="submit" class="btn btn-success">Отправить</button>
                 </form>
+           </div>
+        </div>
+        @*Форма добавления телефона*@
+        <div id="modalForm_phone" class="modal">
+            <div class="modal-content">
+                <a href="@Url.Action("ClearSession", "Setting")" id="closeFormButton_phone" class="close">&times;</a>
+
+
+                <h2>Форма добавления телефона</h2>
+                <form method="post" asp-controller="Setting" asp-action="Add_Phone">
+
+
+                    @* Кнопка отправки паролей *@
+                    <button type="submit" class="btn btn-success">Отправить</button>
+                </form>
             </div>
         </div>
+     </div>
 
         @if (Context.Session.GetString("OpenModal") == "true")
         {
             <script src="~/js/open_change_password_form.js"></script>
         }
         <script src="~/js/change_password.js"></script>
+        <script src="~/js/add_phone.js"></script>
 </body>
 </html>

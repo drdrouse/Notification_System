@@ -18,6 +18,12 @@ namespace Notification_System.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> Add_Phone()
+        {
+            return RedirectToAction("Index", "Setting");
+        }
+
+        [HttpPost]
         public async Task<IActionResult> ChangePassword(string oldPassword, string newPassword, string confirmPassword)
         {
             string hash_oldPassword = PasswordHelper.SHA256Convert(oldPassword);
