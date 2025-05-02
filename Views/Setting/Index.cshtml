@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@model IEnumerable<DataAccessLibrary.Models.Account>
+@{
+    var phoneType = (List<DataAccessLibrary.Models.TypePhone>)ViewBag.phoneType;
+    var mailType = (List<DataAccessLibrary.Models.TypeMail>)ViewBag.mailType;
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -20,6 +26,9 @@
                 <hr />
                 @*Кнопка добавления нового телефона*@
                 <button class="setting-menu top-button" id="add_phone"><p>Добавить номер телефона</p> <img src="~/content/images/account/phone.png" alt="phone" /></button>
+                <hr />
+                @*Кнопка добавления новой почты*@
+                <button class="setting-menu top-button" id="add_mail"><p>Добавить почту</p> <img src="~/content/images/account/mail.png" alt="mail" /></button>
                 <hr />
             </div>
         </div>
@@ -54,30 +63,95 @@
                     @* Кнопка отправки паролей *@
                     <button type="submit" class="btn btn-success">Отправить</button>
                 </form>
-           </div>
+            </div>
         </div>
         @*Форма добавления телефона*@
         <div id="modalForm_phone" class="modal">
             <div class="modal-content">
                 <a href="@Url.Action("ClearSession", "Setting")" id="closeFormButton_phone" class="close">&times;</a>
 
-
                 <h2>Форма добавления телефона</h2>
-                <form method="post" asp-controller="Setting" asp-action="Add_Phone">
+                <form method="post" asp-controller="Setting" asp-action="AddPhone">
 
+                    @* Выпадающий список *@
+                    <div class="form-group">
+                        <label for="phoneType">Тип телефона:</label>
+                        <select id="phoneType" name="phoneType" class="form-control" required>
+                            @foreach (var phone in phoneType)
+                            {
+                                <option value="@phone.TypePhoneName">@phone.TypePhoneName</option>
+                            }
+                        </select>
+                    </div>
 
+                    @* Поле для ввода номера телефона *@
+                    <div class="form-group">
+                        <label for="phoneNumber">Номер телефона:</label>
+                        <input type="tel" id="phoneNumber" name="phoneNumber"
+                               placeholder="+7(XXX)XXX-XX-XX"
+                               required
+                               class="@Context.Session.GetString("PhoneNum")">
+                        <small class="form-text text-muted">Формат: +7(XXX)XXX-XX-XX</small>
+                    </div>
+                    <div id="messageArea" class="alert @Context.Session.GetString("PhoneMessage")">
+                        <pre>@Context.Session.GetString("Phone")</pre>
+                    </div>
                     @* Кнопка отправки паролей *@
-                    <button type="submit" class="btn btn-success">Отправить</button>
+                    <button type="submit" class="btn btn-success">Сохранить</button>
                 </form>
             </div>
         </div>
-     </div>
+        @*Форма добавления почты*@
+        <div id="modalForm_mail" class="modal">
+            <div class="modal-content">
+                <a href="@Url.Action("ClearSession", "Setting")" id="closeFormButton_phone" class="close">&times;</a>
 
-        @if (Context.Session.GetString("OpenModal") == "true")
-        {
-            <script src="~/js/open_change_password_form.js"></script>
-        }
-        <script src="~/js/change_password.js"></script>
-        <script src="~/js/add_phone.js"></script>
+                <h2>Форма добавления почты</h2>
+                <form method="post" asp-controller="Setting" asp-action="AddMail">
+
+                    @* Выпадающий список *@
+                    <div class="form-group">
+                        <label for="mailType">Тип почты:</label>
+                        <select id="mailType" name="mailType" class="form-control" required>
+                            @foreach (var mail in mailType)
+                            {
+                                <option value="@mail.TypeMailName">@mail.TypeMailName</option>
+                            }
+                        </select>
+                    </div>
+
+                    @* Поле для ввода номера телефона *@
+                    <div class="form-group">
+                        <label for="mail">Почта:</label>
+                        <input type="tel" id="mail" name="mail"
+                               placeholder="Введите почту"
+                               required
+                               class="@Context.Session.GetString("MailIn")">
+                    </div>
+                    <div id="messageArea" class="alert @Context.Session.GetString("MailMessage")">
+                        <pre>@Context.Session.GetString("Mail")</pre>
+                    </div>
+                    @* Кнопка отправки паролей *@
+                    <button type="submit" class="btn btn-success">Сохранить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    @if (Context.Session.GetString("OpenModal") == "true")
+    {
+        <script src="~/js/open_change_password_form.js"></script>
+    }
+    @if (Context.Session.GetString("OpenModalPhone") == "true")
+    {
+        <script src="~/js/open_phone_form.js"></script>
+    }
+    @if (Context.Session.GetString("OpenModalMail") == "true")
+    {
+        <script src="~/js/open_mail_form.js"></script>
+    }
+    <script src="~/js/change_password.js"></script>
+    <script src="~/js/add_phone.js"></script>
+    <script src="~/js/add_mail.js"></script>
 </body>
 </html>

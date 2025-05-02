@@ -5,23 +5,32 @@ using DataHelper;
 using DataAccessLibrary;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using DataAccessLibrary.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace Notification_System.Controllers
 {
     [Authorize]
     public class SettingController : Controller
     {
+        private readonly NotificationSystemContext _notificationSystemContext;
+        public SettingController(NotificationSystemContext notificationSystemContext)
+        {
+            _notificationSystemContext = notificationSystemContext;
+        }
+
         public IActionResult Index()
         {
             ViewData["ShowSideBarBlock"] = true;
+            var phoneType = _notificationSystemContext.TypePhones.ToList();
+            var mailType= _notificationSystemContext.TypeMails.ToList();
+            ViewBag.phoneType = phoneType;
+            ViewBag.mailType = mailType;
             return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Add_Phone()
-        {
-            return RedirectToAction("Index", "Setting");
-        }
 
         [HttpPost]
         public async Task<IActionResult> ChangePassword(string oldPassword, string newPassword, string confirmPassword)
@@ -95,6 +104,59 @@ namespace Notification_System.Controllers
         {
             HttpContext.Session.Clear(); // Очищаем всю сессию
             return RedirectToAction("Index", "Setting"); // Редирект на главную страницу настроек
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddPhone(string phoneType, string phoneNumber)
+        {
+
+            string result_error = "";
+            string result_success = "Телефон успешно добавлен.";
+            HttpContext.Session.Clear();
+            if (!PhoneHelper.IsValidPhoneNumber(phoneNumber))
+            {
+                result_error += "Телефон введён в неверном формате.";
+                HttpContext.Session.SetString("Phone", result_error);
+                HttpContext.Session.SetString("PhoneMessage", "alert-error");
+                HttpContext.Session.SetString("PhoneNum", "input-error");
+            }
+            else
+            {
+                if (AddNewPhone.AddPhone(phoneNumber, phoneType, Guid.Parse(User.Identity.Name)))
+                {
+                    HttpContext.Session.SetString("Phone", result_success);
+                    HttpContext.Session.SetString("PhoneMessage", "alert-success");
+                    HttpContext.Session.SetString("PhoneNum", "input-success");
+                }
+            }
+            HttpContext.Session.SetString("OpenModalPhone", "true");
+            return RedirectToAction("Index", "Setting");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddMail(string mailType, string mail)
+        {
+            string result_error = "";
+            string result_success = "Почта успешно добавлена.";
+            HttpContext.Session.Clear();
+            if (!MailHelper.IsValidEmail(mail))
+            {
+                result_error += "Почта введён в неверном формате.";
+                HttpContext.Session.SetString("Mail", result_error);
+                HttpContext.Session.SetString("MailMessage", "alert-error");
+                HttpContext.Session.SetString("MailIn", "input-error");
+            }
+            else
+            {
+                if (AddNewMail.AddMail(mail, mailType, Guid.Parse(User.Identity.Name)))
+                {
+                    HttpContext.Session.SetString("Mail", result_success);
+                    HttpContext.Session.SetString("MailMessage", "alert-success");
+                    HttpContext.Session.SetString("MailIn", "input-success");
+                }
+            }
+            HttpContext.Session.SetString("OpenModalMail", "true");
+            return RedirectToAction("Index", "Setting");
         }
     }
 }

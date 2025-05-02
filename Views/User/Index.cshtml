@@ -93,10 +93,15 @@
             </div>
             <div class="role">
                 <h4>Роли пользователя</h4>
-                @if (!Model.FirstOrDefault().RoleAssignments.Select(ra => ra.Role.RoleName).ToList().Contains("Admin"))
+                @if (!(Guid.Parse(User.Identity.Name) == Model.FirstOrDefault().AccountId))
                 {
-                    <button id="add_role"><p>Добавить</p></button>
+                    @if (!Model.FirstOrDefault().RoleAssignments.Select(ra => ra.Role.RoleName).ToList().Contains("Admin"))
+                    {
+
+                        <button id="add_role"><p>Добавить</p></button>
+                    }
                 }
+
             </div>
             @foreach (var role in Model.FirstOrDefault().RoleAssignments)
             {
