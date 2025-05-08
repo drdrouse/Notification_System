@@ -1,0 +1,47 @@
+﻿@model List<DataAccessLibrary.Models.Log>
+
+@{
+    var statuses = (List<DataAccessLibrary.Models.EventCode>)ViewBag.Event;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/css/logview.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/table.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="container">
+
+        <div class="main-data">
+            <h1>События</h1>
+            <hr />
+            <table border="0" class="user_table">
+                <thead>
+                    <tr>
+                        <th class="first-column">Табельный номер</th>
+                        <th class="second-column">Событие</th>
+                        <th class="third-column">Дата</th>
+                        <th class="fourth-column">Описание</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var log in @Model.ToList())
+                    {
+                        <tr>
+                            <td class="first-column">@log.Profile.ProfileTabNum</td>
+                            <td class="second-column">@log.EventCode.EventCodeName</td>
+                            <td class="third-column">@log.LogDateTime</td>
+                            <td class="fourth-column">@log.LogDeccription</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+</body>
+</html>

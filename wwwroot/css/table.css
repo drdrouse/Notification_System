@@ -1,0 +1,122 @@
+﻿.user_table {
+    background: var(--background-item);
+    box-shadow: var(--shadow);
+    border-radius: var(--radius-item);
+    width: 99%;
+    margin-top: 1%;
+    margin-left: 1%;
+    display: block;
+    max-height: 90%;
+}
+
+
+
+    .user_table tbody {
+        height: 85%; /* Устанавливаем фиксированную высоту тела таблицы */
+        overflow-y: scroll; /* Включаем вертикальную прокрутку */
+        display: block;
+    }
+
+    .user_table th {
+        padding: 2%;
+        border: 2px solid #08a652;
+        word-wrap: break-word;
+    }
+
+    .user_table td {
+        padding: 2%;
+        border: 2px solid #08a652;
+        word-wrap: break-word;
+        border-bottom: 1px;
+    }
+
+    /* Убираем внешние границы */
+    .user_table th:first-child {
+        border-left: none;
+    }
+
+    .user_table th:last-child {
+        border-right: none;
+    }
+
+    .user_table td:first-child {
+        border-left: none;
+    }
+
+    .user_table td:last-child {
+        border-right: none;
+    }
+
+    .user_table tr:first-child th {
+        border-top: none;
+    }
+
+    .user_table tr:first-child td {
+        border-top: none;
+    }
+
+
+    .user_table tr:last-child td {
+        border-bottom: none;
+    }
+
+body.light-mode .user_table {
+    background: var(--background-item-light);
+    box-shadow: var(--shadow-light);
+}
+
+    body.light-mode .user_table th {
+        border: 2px solid #6c6767;
+    }
+
+        body.light-mode .user_table th:first-child {
+            border-left: none;
+        }
+
+        body.light-mode .user_table th:last-child {
+            border-right: none;
+        }
+
+    body.light-mode .user_table tr:first-child th {
+        border-top: none;
+    }
+
+    body.light-mode .user_table tr:last-child th {
+        border-bottom: none;
+    }
+
+
+tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    text-align: center;
+    color: var(--text-color);
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: var(--font);
+}
+
+body.light-mode .main-data tr {
+    color: var(--text-color-light);
+}
+
+.first-column {
+    width: 15%;
+}
+
+.second-column {
+    width: 14%;
+}
+
+.third-column {
+}
+
+.fourth-column {
+    width: 55%;
+}
+
+::-webkit-scrollbar {
+    width: 0.5%; /* Ширина скролла */
+    height: 0.5%; /* Высота скролла */
+}

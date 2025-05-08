@@ -48,6 +48,16 @@
                         </a>
                         <hr />
                     }
+                    @if (User.IsInRole("LogViewer") || User.IsInRole("Admin"))
+                    {
+                        <a asp-controller="LogView" asp-action="Index">
+                            <button class="menu-item top-item" id="log">
+                                <p>События</p>
+                                <img src="@Url.Content("~/content/images/account/log.png")" alt="log" />
+                            </button>
+                        </a>
+                        <hr />
+                    }
                 </div>
 
                 <div class="bottom-button">

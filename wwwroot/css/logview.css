@@ -1,0 +1,35 @@
+﻿:root {
+    /*Стили для тёмной темы*/
+    --hr-color: #08a652;
+    /*Постоянная часть стилей*/
+    /*Стили для светлой темы*/
+    --hr-color-light: #6c6767;
+}
+
+.main-data h1 {
+    font-size: 50px;
+    text-align: justify;
+    color: var(--text-color);
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: var(--font);
+}
+
+body.light-mode .main-data h1 {
+    color: var(--text-color-light);
+}
+
+.main-data hr {
+    border: 0;
+    border-top: 2px solid;
+    color: var(--hr-color);
+    width: 150vh;
+    margin: 0px 0; /* Отступы сверху и снизу */
+}
+
+body.light-mode .main-data hr {
+    color: var(--hr-c
+}
+
+
+

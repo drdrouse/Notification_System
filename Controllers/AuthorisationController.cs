@@ -5,12 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using DataAccessLibrary;
 using Microsoft.Identity.Client;
+using DataAccessLibrary.Models;
 
 namespace Notification_System.Controllers
 {
     [AllowAnonymous]
     public class AuthorisationController : Controller
     {
+        private NotificationSystemContext _notificationSystemContext;
         List<Claim> claims = new List<Claim>();
         [HttpPost]
         public IActionResult Index(string login, string password)
@@ -39,7 +41,9 @@ namespace Notification_System.Controllers
                     new ClaimsPrincipal(claimsIdentity),
                     authProperties);
 
-                    Log_Creater.Create(AuthorisationConfirm.AccountID(), "LogIn");
+                    
+                    string description = $"User {Log_Creater.TabNum(AuthorisationConfirm.AccountID())} logged into the account"; 
+                    Log_Creater.Create(AuthorisationConfirm.AccountID(), "LogIn", description);
 
                     return RedirectToAction("Index", "Account");
                 }
@@ -57,7 +61,8 @@ namespace Notification_System.Controllers
         {
             // Удаляем куки авторизации
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            Log_Creater.Create(Guid.Parse(User.Identity.Name), "LogOut");
+            string description = $"User {Log_Creater.TabNum(Guid.Parse(User.Identity.Name))} logged out of the account";
+            Log_Creater.Create(Guid.Parse(User.Identity.Name), "LogOut", description);
             return RedirectToAction("Index", "Authorisation");
         }
 
