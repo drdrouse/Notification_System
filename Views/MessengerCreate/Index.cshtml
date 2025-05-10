@@ -33,47 +33,38 @@
         </div>
 
     </div>
-    @*Форма cоздания нового сервиса*@
+    @*Форма создания нового сервиса*@
     <div id="modalForm" class="modal">
         <div class="modal-content">
             <a href="@Url.Action("ClearSession", "MessengerCreate")" id="closeFormButton" class="close">&times;</a>
             <h2>Форма добавления нового сервиса</h2>
             <form method="post" asp-controller="MessengerCreate" asp-action="CreateService">
-                @* Список для выбора сервиса отправки *@
                 <label for="service_name">Сервис отправки:</label>
-                <select id="service_name" name="service" required>
-                    <!-- Здесь можно добавить варианты выбора -->
+                <select id="service_name" name="serviceName" required onchange="loadServiceFields()">
                     <option hidden>Выберите сервис</option>
                     @foreach (var service in Model)
                     {
-                        <option value="@service.ServiceNameId">@service.ServiceNameName</option>
+                        <option value="@service.ServiceNameName">@service.ServiceNameName</option>
                     }
                 </select>
 
-                @* Поле для ввода названия сервиса *@
                 <label for="service_displayname">Полное наименование:</label>
-                <input type="text" id="service_displayname" name="service" required
-                       class="@Context.Session.GetString("DispalyName")">
+                <input type="text" id="service_displayname" name="dispalyName" required>
 
-                @* Поле для ввода ссылки на загрузку сервиса *@
-                <label for="service_link">Ссылка на сервис:</label>
-                <input type="text" id="service_link" name="service" required
-                       class="@Context.Session.GetString("Link")">
+                @*<label for="service_link">Ссылка на сервис:</label>
+                <input type="text" id="service_link" name="link" required>*@
+
                 @*Контейнер для полей с настройками*@
-                <div id="fieldsContainer"></div>
-
-                @*Контейнер с кнпоками*@
-                <div class="buttons">
-                    @* Кнопка отправки данных *@
-                    <button type="submit" class="btn btn-success">Отправить</button>
-
-                    @* Кнопка добавление новых полей *@
-                    <button class="btn btn-success" id="addFieldButton" type="button">Добавить значения</button>
+                <div id="fieldsContainer" class="service-fields-container">
+                    <!-- Поля будут загружаться автоматически -->
                 </div>
 
+                @*Контейнер с кнопками*@
+                <div class="buttons">
+                    <button type="submit" class="btn btn-success">Сохранить</button>
+                </div>
             </form>
         </div>
-    </div>
     </div>
 
     @if (Context.Session.GetString("OpenModal") == "true")
@@ -82,6 +73,6 @@
     }
     <script src="~/js/messenger.js"></script>
     <script src="~/js/open_create_service_form.js"></script>
-    <script src="~/js/add_input.js"></script>
+    <script src="~/js/selected_inputs.js"></script>
 </body>
 </html>
