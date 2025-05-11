@@ -162,13 +162,9 @@ body.light-mode .messanger-data-visible {
 .messanger-data-hidden {
     background-color: var(--background-item);
     border-radius: var(--radius-item);
-    padding: 1%;
     margin: 15px 0;
     box-shadow: var(--shadow);
     border: none;
-}
-.hidden-content hr {
-    margin-left: -1%;
 }
     /* Стили текстового блока */
 
@@ -182,32 +178,44 @@ body.light-mode .messanger-data-visible {
 /* Стили блока с кнопками */
 .hidden-buttons {
     display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+    width: 100%;
+    background-color: var(--background-item); /* Цвет фона области */
+    border-radius: var(--radius-item);
+    overflow: hidden;
+
 }
 
-.hidden-btn {
-    background-color: #0078d7;
-    color: white;
+.flat-btn {
+    flex: 1; /* Равномерно распределяет пространство */
+    padding: 12px 0;
     border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
+    background-color: transparent;
+    color: var(--text-color);
+    text-align: center;
     font-size: 14px;
-    transition: background-color 0.3s;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
 }
 
-    .hidden-btn:hover {
-        background-color: #005a9e;
+    /* Разделители между кнопками */
+    .flat-btn:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 25%;
+        height: 50%;
+        width: 1px;
+        background-color: var(--hr-color);
     }
 
-/* Для адаптивности - кнопки в столбик на мобильных */
-@media (max-width: 480px) {
-    .hidden-buttons {
-        flex-direction: column;
+    /* Эффект при наведении */
+    .flat-btn:hover {
+        background-color: #666;
     }
 
-    .hidden-btn {
-        width: 100%;
+
+    /* Убираем стандартный outline */
+    .flat-btn:focus {
+        outline: none;
     }
-}
