@@ -1,4 +1,5 @@
 ﻿using DataAccessLibrary.Models;
+using Email;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,9 +27,37 @@ namespace Notification_System.Controllers
         public async Task<IActionResult> CreateService(string serviceName, string dispalyName, string link)
         {
             HttpContext.Session.Clear();
+
+            // Если выбран email сервис
+            if (serviceName == "Email") // предполагая, что у вас есть сервис с таким именем в БД
+            {
+                try
+                {
+                    // Получаем настройки из формы (нужно добавить в форму)
+                    var smtpServer = Request.Form["SmtpServer"];
+                    var smtpPort = int.Parse(Request.Form["SmtpPort"]);
+                    var username = Request.Form["Username"];
+                    var password = Request.Form["Password"];
+                    var fromEmail = Request.Form["FromEmail"];
+                    var enableSsl = bool.Parse(Request.Form["EnableSsl"]);
+
+                   
+                }
+                catch (Exception ex)
+                {
+                    HttpContext.Session.SetString("OpenModal", "true");
+                    HttpContext.Session.SetString("Message", $"Ошибка при настройке email сервиса: {ex.Message}");
+                    HttpContext.Session.SetString("Error", "alert-error");
+                    return RedirectToAction("Index", "MessengerCreate");
+                }
+            }
+
             HttpContext.Session.SetString("OpenModal", "true");
-            return RedirectToAction("Index", "Setting");
+            HttpContext.Session.SetString("Message", "Сервис успешно добавлен.");
+            HttpContext.Session.SetString("Error", "alert-success");
+            return RedirectToAction("Index", "MessengerCreate");
         }
+
 
         public IActionResult ClearSession()
         {

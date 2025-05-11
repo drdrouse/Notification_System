@@ -24,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DataAccessLibrary\DataAccessLibrary.csproj" />
     <ProjectReference Include="..\DataHelper\DataHelper.csproj" />
+    <ProjectReference Include="..\Email\Email.csproj" />
   </ItemGroup>
 
 </Project>

@@ -52,13 +52,15 @@
                 <input type="text" id="service_displayname" name="dispalyName" required>
 
                 @*<label for="service_link">Ссылка на сервис:</label>
-                <input type="text" id="service_link" name="link" required>*@
+        <input type="text" id="service_link" name="link" required>*@
 
                 @*Контейнер для полей с настройками*@
                 <div id="fieldsContainer" class="service-fields-container">
                     <!-- Поля будут загружаться автоматически -->
                 </div>
-
+                <div id="messageArea" class="alert @Context.Session.GetString("Error")">
+                    <pre>@Context.Session.GetString("Message")</pre>
+                </div>
                 @*Контейнер с кнопками*@
                 <div class="buttons">
                     <button type="submit" class="btn btn-success">Сохранить</button>
