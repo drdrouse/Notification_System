@@ -157,3 +157,57 @@ body.light-mode .messanger-data-visible {
     box-shadow: var(--shadow-light);
 }
 
+
+/* Основные стили скрытой области */
+.messanger-data-hidden {
+    background-color: var(--background-item);
+    border-radius: var(--radius-item);
+    padding: 1%;
+    margin: 15px 0;
+    box-shadow: var(--shadow);
+    border: none;
+}
+.hidden-content hr {
+    margin-left: -1%;
+}
+    /* Стили текстового блока */
+
+.hidden-content p {
+    margin: 8px 0;
+    padding-left: 10px;
+    color: var(--text-color);
+    font-family: var(--font);
+}
+
+/* Стили блока с кнопками */
+.hidden-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.hidden-btn {
+    background-color: #0078d7;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+    .hidden-btn:hover {
+        background-color: #005a9e;
+    }
+
+/* Для адаптивности - кнопки в столбик на мобильных */
+@media (max-width: 480px) {
+    .hidden-buttons {
+        flex-direction: column;
+    }
+
+    .hidden-btn {
+        width: 100%;
+    }
+}

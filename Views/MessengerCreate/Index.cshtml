@@ -18,20 +18,34 @@
                 <button id="create_services"><p>Добавить</p></button>
             </div>
             <hr />
-            @for (int check = 0; check < 2; check++)
-            {
-                <div class="messenger-button">
-                    <button class="messenger-menu" data-target="@check"><p>Здесь будет название</p> </button>
+            <div class="messenger-button">
+                <button class="messenger-menu" onclick="toggleHiddenArea()"><p>Здесь будет название</p></button>
+            </div>
+            <div class="messanger-data-hidden" id="hiddenArea" style="display: none;">
+                <div class="hidden-content">
+                    <p>Надпись 1</p>
+                    <hr />
+                    <p>Надпись 2</p>
+                    <hr />
+                    <p>Надпись 3</p>
+                    <hr />
+                    <p>Надпись 4</p>
+                    <hr />
+                    <p>Надпись 5</p>
+                    <hr />
+                    <div class="hidden-buttons">
+                        <button asp-controller="YourController" asp-action="Method1">Действие 1</button>
+                        <button asp-controller="YourController" asp-action="Method2">Действие 2</button>
+                        <button asp-controller="YourController" asp-action="Method3">Действие 3</button>
+                    </div>
                 </div>
-                <div id="@check" class="messanger-data-hidden">Скрытая область 1</div>
-            }
+            </div>
             <hr style="margin-top:2%" />
             <div class="active">
                 <h4>Заблокированные сервисы</h4>
             </div>
             <hr />
         </div>
-
     </div>
     @*Форма создания нового сервиса*@
     <div id="modalForm" class="modal">
@@ -76,5 +90,6 @@
     <script src="~/js/messenger.js"></script>
     <script src="~/js/open_create_service_form.js"></script>
     <script src="~/js/selected_inputs.js"></script>
+    <script src="~/js/open_data.js"></script>
 </body>
 </html>

@@ -3,6 +3,7 @@ using Email;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using DataAccessLibrary;
 
 namespace Notification_System.Controllers
 {
@@ -24,7 +25,7 @@ namespace Notification_System.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateService(string serviceName, string dispalyName, string link)
+        public async Task<IActionResult> CreateService(string serviceName, string dispalyName)
         {
             HttpContext.Session.Clear();
 
@@ -41,7 +42,44 @@ namespace Notification_System.Controllers
                     var fromEmail = Request.Form["FromEmail"];
                     var enableSsl = bool.Parse(Request.Form["EnableSsl"]);
 
-                   
+                    // Создаем и тестируем сервис
+                    var emailSettings = new EmailServiceSettings
+                    {
+                        SmtpServer = smtpServer,
+                        SmtpPort = smtpPort,
+                        Username = username,
+                        Password = password,
+                        FromEmail = fromEmail,
+                        EnableSsl = enableSsl
+                    };
+
+                    var emailService = new EmailService(emailSettings);
+
+                    // Отправляем тестовое сообщение
+                    var testMessage = new EmailMessageData
+                    {
+                        Destination = username,
+                        Message = $"Это тестовое сообщение от сервиса {dispalyName}. Не отвечайте на него."
+                    };
+
+                    var result = emailService.Send(testMessage);
+
+                    if (!result.Success)
+                    {
+                        HttpContext.Session.SetString("OpenModal", "true");
+
+                        HttpContext.Session.SetString("Message", $"Ошибка отправки тестового сообщения: {result.ErrorMessage}");
+                        HttpContext.Session.SetString("Error", "alert-error");
+                        return RedirectToAction("Index", "MessengerCreate");
+                    }
+
+                    if (await AddService.AddEmail(dispalyName, Guid.Parse(User.Identity.Name),
+                        smtpServer, smtpPort, username, password, fromEmail, enableSsl))
+                    {
+                        HttpContext.Session.SetString("OpenModal", "true");
+                        HttpContext.Session.SetString("Message", "Сервис успешно добавлен и протестирован");
+                        HttpContext.Session.SetString("Error", "alert-success");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -51,10 +89,8 @@ namespace Notification_System.Controllers
                     return RedirectToAction("Index", "MessengerCreate");
                 }
             }
-
-            HttpContext.Session.SetString("OpenModal", "true");
-            HttpContext.Session.SetString("Message", "Сервис успешно добавлен.");
-            HttpContext.Session.SetString("Error", "alert-success");
+            
+            
             return RedirectToAction("Index", "MessengerCreate");
         }
 
