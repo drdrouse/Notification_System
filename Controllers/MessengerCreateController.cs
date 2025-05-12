@@ -21,7 +21,10 @@ namespace Notification_System.Controllers
         {
             ViewData["ShowSideBarBlock"] = true;
             var service_names = await _notificationSystemContext.ServiceNames.ToListAsync();
-            return View(service_names);
+            var service = await _notificationSystemContext.Services.Include(sn => sn.ServiceName).
+                Include(ac => ac.Account).ThenInclude(p => p.Profile).ToListAsync();
+            ViewBag.ServiceName = service_names;
+            return View(service);
         }
 
         [HttpPost]

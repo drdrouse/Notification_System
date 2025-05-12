@@ -1,5 +1,8 @@
-﻿@model IEnumerable<DataAccessLibrary.Models.ServiceName>
-
+﻿@using static DataHelper.DictToString
+@model IEnumerable<DataAccessLibrary.Models.Service>
+@{
+    var servicename = (List<DataAccessLibrary.Models.ServiceName>)ViewBag.ServiceName;
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,28 +21,45 @@
                 <button id="create_services"><p>Добавить</p></button>
             </div>
             <hr />
-            <div class="messenger-button">
-                <button class="messenger-menu" onclick="toggleHiddenArea()"><p>Здесь будет название</p></button>
-            </div>
-            <div class="messanger-data-hidden" id="hiddenArea" style="display: none;">
-                <div class="hidden-content">
-                    <p>Надпись 1</p>
-                    <hr />
-                    <p>Надпись 2</p>
-                    <hr />
-                    <p>Надпись 3</p>
-                    <hr />
-                    <p>Надпись 4</p>
-                    <hr />
-                    <p>Надпись 5</p>
-                    <hr />
-                    <div class="hidden-buttons">
-                        <button class="flat-btn" asp-controller="YourController" asp-action="Method1">Действие 1</button>
-                        <button class="flat-btn" asp-controller="YourController" asp-action="Method2">Действие 2</button>
-                        <button class="flat-btn" asp-controller="YourController" asp-action="Method3">Действие 3</button>
+            @foreach(var service in Model)
+            {
+                <div class="messenger-button">
+                    <button class="messenger-menu" onclick="toggleHiddenArea()"><p>@service.ServiceDisplayName</p></button>
+                </div>
+                <div class="messanger-data-hidden" id="hiddenArea" style="display: none;">
+                    <div class="hidden-content">
+                        <p>Создатель: @service.Account.Profile.ProfileSurname @service.Account.Profile.ProfileName @service.Account.Profile.ProfilePatronymic</p>
+                        <hr />
+                        <p>Тип сервиса: @service.ServiceName.ServiceNameName</p>
+                        <hr />
+                        <p>Дата создания: @service.ServiceRegDate</p>
+                        <hr />
+                        @if (!service.ServiseIsDisable)
+                        {
+                            <p>Состояние: Активен</p>
+                        }
+                        @if (service.ServiseIsDisable)
+                        {
+                            <p>Состояние: Отключён</p>
+                        }
+                        <hr />
+                        @{
+                            var setting_dict = DataHelper.DictToString.ReturnString(service.ServiceSettings);
+                        }
+                        @foreach (var settings in setting_dict)
+                        {
+                            <p>@settings.Key: @settings.Value</p>
+                        }
+                        <hr />
+                        <div class="hidden-buttons">
+                            <button class="flat-btn" asp-controller="YourController" asp-action="Method1">Отправить тестовое письмо</button>
+                            <button class="flat-btn" asp-controller="YourController" asp-action="Method2">Отправить тестовый дакумент</button>
+                            <button class="flat-btn" asp-controller="YourController" asp-action="Method3">Запустить/Остановить</button>
+                            <button class="flat-btn" asp-controller="YourController" asp-action="Method3">Заблокировать</button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
             <hr style="margin-top:2%" />
             <div class="active">
                 <h4>Заблокированные сервисы</h4>
@@ -56,7 +76,7 @@
                 <label for="service_name">Сервис отправки:</label>
                 <select id="service_name" name="serviceName" required onchange="loadServiceFields()">
                     <option hidden>Выберите сервис</option>
-                    @foreach (var service in Model)
+                    @foreach (var service in servicename)
                     {
                         <option value="@service.ServiceNameName">@service.ServiceNameName</option>
                     }
@@ -66,7 +86,7 @@
                 <input type="text" id="service_displayname" name="dispalyName" required>
 
                 @*<label for="service_link">Ссылка на сервис:</label>
-        <input type="text" id="service_link" name="link" required>*@
+                    <input type="text" id="service_link" name="link" required>*@
 
                 @*Контейнер для полей с настройками*@
                 <div id="fieldsContainer" class="service-fields-container">
