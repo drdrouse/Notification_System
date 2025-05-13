@@ -21,50 +21,107 @@
                 <button id="create_services"><p>Добавить</p></button>
             </div>
             <hr />
-            @foreach(var service in Model)
+            @foreach (var service in Model)
             {
-                <div class="messenger-button">
-                    <button class="messenger-menu" onclick="toggleHiddenArea()"><p>@service.ServiceDisplayName</p></button>
-                </div>
-                <div class="messanger-data-hidden" id="hiddenArea" style="display: none;">
-                    <div class="hidden-content">
-                        <p>Создатель: @service.Account.Profile.ProfileSurname @service.Account.Profile.ProfileName @service.Account.Profile.ProfilePatronymic</p>
-                        <hr />
-                        <p>Тип сервиса: @service.ServiceName.ServiceNameName</p>
-                        <hr />
-                        <p>Дата создания: @service.ServiceRegDate</p>
-                        <hr />
-                        @if (!service.ServiseIsDisable)
-                        {
-                            <p>Состояние: Активен</p>
-                        }
-                        @if (service.ServiseIsDisable)
-                        {
-                            <p>Состояние: Отключён</p>
-                        }
-                        <hr />
-                        @{
-                            var setting_dict = DataHelper.DictToString.ReturnString(service.ServiceSettings);
-                        }
-                        @foreach (var settings in setting_dict)
-                        {
-                            <p>@settings.Key: @settings.Value</p>
-                        }
-                        <hr />
-                        <div class="hidden-buttons">
-                            <button class="flat-btn" asp-controller="YourController" asp-action="Method1">Отправить тестовое письмо</button>
-                            <button class="flat-btn" asp-controller="YourController" asp-action="Method2">Отправить тестовый дакумент</button>
-                            <button class="flat-btn" asp-controller="YourController" asp-action="Method3">Запустить/Остановить</button>
-                            <button class="flat-btn" asp-controller="YourController" asp-action="Method3">Заблокировать</button>
+                @if (!service.ServiceIsBlocked)
+                {
+                    <div class="messenger-button">
+                        <button class="messenger-menu" onclick="toggleHiddenArea()"><p>@service.ServiceDisplayName</p></button>
+                    </div>
+                    <div class="messanger-data-hidden" id="hiddenArea" style="display: none;">
+                        <div class="hidden-content">
+                            <p>Создатель: @service.Account.Profile.ProfileSurname @service.Account.Profile.ProfileName @service.Account.Profile.ProfilePatronymic</p>
+                            <hr />
+                            <p>Тип сервиса: @service.ServiceName.ServiceNameName</p>
+                            <hr />
+                            <p>Дата создания: @service.ServiceRegDate</p>
+                            <hr />
+                            @if (!service.ServiseIsDisable)
+                            {
+                                <p>Состояние: Активен</p>
+                            }
+                            @if (service.ServiseIsDisable)
+                            {
+                                <p>Состояние: Отключён</p>
+                            }
+                            <hr />
+                            @{
+                                var setting_dict = DataHelper.DictToString.ReturnString(service.ServiceSettings);
+                            }
+                            @foreach (var settings in setting_dict)
+                            {
+                                 @if (settings.Key != "Password")
+                                 {
+                                    <p>@settings.Key: @settings.Value</p>
+                                 }
+                            }
+                            <hr />
+                            <div class="hidden-buttons">
+                                <form method="post" asp-controller="MessengerCreate" asp-action="SendTestEmail">
+                                    <input type="hidden" name="serviceName" value="@service.ServiceDisplayName" />
+                                    <button type="submit" class="flat-btn">Отправить тестовое письмо</button>
+                                </form>                                
+                                <form method="post" asp-controller="MessengerCreate" asp-action="StartStopSend">
+                                    <input type="hidden" name="serviceName" value="@service.ServiceDisplayName" />
+                                    <button type="submit" class="flat-btn">Запустить/Остановить</button>
+                                </form>
+                                <form method="post" asp-controller="MessengerCreate" asp-action="BlockedService">
+                                    <input type="hidden" name="serviceName" value="@service.ServiceDisplayName" />
+                                    <button type="submit" class="flat-btn">Заблокировать</button>
+                                </form>
+                               
+                            </div>
                         </div>
                     </div>
-                </div>
+                }
             }
             <hr style="margin-top:2%" />
             <div class="active">
                 <h4>Заблокированные сервисы</h4>
             </div>
             <hr />
+            @foreach (var service in Model)
+            {
+                @if (service.ServiceIsBlocked)
+                {
+                    <div class="messenger-button">
+                        <button class="messenger-menu" onclick="toggleHiddenArea()"><p>@service.ServiceDisplayName</p></button>
+                    </div>
+                    <div class="messanger-data-hidden" id="hiddenArea" style="display: none;">
+                        <div class="hidden-content">
+                            <p>Создатель: @service.Account.Profile.ProfileSurname @service.Account.Profile.ProfileName @service.Account.Profile.ProfilePatronymic</p>
+                            <hr />
+                            <p>Тип сервиса: @service.ServiceName.ServiceNameName</p>
+                            <hr />
+                            <p>Дата создания: @service.ServiceRegDate</p>
+                            <hr />
+                            @if (!service.ServiseIsDisable)
+                            {
+                                <p>Состояние: Активен</p>
+                            }
+                            @if (service.ServiseIsDisable)
+                            {
+                                <p>Состояние: Отключён</p>
+                            }
+                            <hr />
+                            @{
+                                var setting_dict = DataHelper.DictToString.ReturnString(service.ServiceSettings);
+                            }
+                            @foreach (var settings in setting_dict)
+                            {
+                                <p>@settings.Key: @settings.Value</p>
+                            }
+                            <hr />
+                            <div class="hidden-buttons">                                 
+                                <form method="post" asp-controller="MessengerCreate" asp-action="UnBlockedService">
+                                    <input type="hidden" name="serviceName" value="@service.ServiceDisplayName" />
+                                    <button type="submit" class="flat-btn">Разблокировать</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
         </div>
     </div>
     @*Форма создания нового сервиса*@

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DataAccessLibrary;
+using System.Text.Json;
 
 namespace Notification_System.Controllers
 {
@@ -97,7 +98,55 @@ namespace Notification_System.Controllers
             return RedirectToAction("Index", "MessengerCreate");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> SendTestEmail(string serviceName)
+        {
+            var service = _notificationSystemContext.Services.Where(s => s.AccountId == Guid.Parse(User.Identity.Name) & s.ServiceDisplayName == serviceName).FirstOrDefault(); 
+            
+            Dictionary<string, string> setting = DataHelper.DictToString.ReturnString(service.ServiceSettings);
 
+
+            var emailSettings = new EmailServiceSettings
+            {
+                SmtpServer = setting["SmtpServer"],
+                SmtpPort = int.Parse(setting["SmtpPort"]),
+                Username = setting["Username"],
+                Password = setting["Password"],
+                FromEmail = setting["FromEmail"],
+                EnableSsl = bool.Parse(setting["EnableSsl"])
+            };
+
+            var emailService = new EmailService(emailSettings);
+
+            // Отправляем тестовое сообщение
+            var testMessage = new EmailMessageData
+            {
+                Destination = emailSettings.Username,
+                Message = $"Это тестовое сообщение от сервиса {serviceName}. Не отвечайте на него."
+            };
+
+            var result = emailService.Send(testMessage);
+
+            return RedirectToAction("Index", "MessengerCreate");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> BlockedService(string serviceName)
+        {
+            if (await AddService.Blocked(serviceName, Guid.Parse(User.Identity.Name))) 
+                return RedirectToAction("Index", "MessengerCreate");
+            return RedirectToAction("Index", "MessengerCreate");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UnBlockedService(string serviceName)
+        {
+            if (await AddService.UnBlocked(serviceName, Guid.Parse(User.Identity.Name)))
+                return RedirectToAction("Index", "MessengerCreate");
+            return RedirectToAction("Index", "MessengerCreate");
+        }
+
+       
         public IActionResult ClearSession()
         {
             HttpContext.Session.Clear(); // Очищаем всю сессию
