@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DataAccessLibrary;
 using System.Text.Json;
+using ServiceLibrary;
 
 namespace Notification_System.Controllers
 {
@@ -66,7 +67,7 @@ namespace Notification_System.Controllers
                         Message = $"Это тестовое сообщение от сервиса {dispalyName}. Не отвечайте на него."
                     };
 
-                    var result = emailService.Send(testMessage);
+                    SendResult result = await emailService.SendAsync(testMessage);
 
                     if (!result.Success)
                     {
@@ -125,7 +126,7 @@ namespace Notification_System.Controllers
                 Message = $"Это тестовое сообщение от сервиса {serviceName}. Не отвечайте на него."
             };
 
-            var result = emailService.Send(testMessage);
+            SendResult result = await emailService.SendAsync(testMessage);
 
             return RedirectToAction("Index", "MessengerCreate");
         }
