@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using DataAccessLibrary;
 using System.Text.Json;
 using ServiceLibrary;
+using System.Net.Mail;
 
 namespace Notification_System.Controllers
 {
@@ -22,12 +23,34 @@ namespace Notification_System.Controllers
         [Authorize(Roles = "ServicesCreator,Admin")]
         public async Task<IActionResult> Index()
         {
-            ViewData["ShowSideBarBlock"] = true;
-            var service_names = await _notificationSystemContext.ServiceNames.ToListAsync();
-            var service = await _notificationSystemContext.Services.Include(sn => sn.ServiceName).
-                Include(ac => ac.Account).ThenInclude(p => p.Profile).ToListAsync();
-            ViewBag.ServiceName = service_names;
-            return View(service);
+            try
+            {
+                ViewData["ShowSideBarBlock"] = true;
+
+                // Получаем список названий сервисов
+                var service_names = await _notificationSystemContext.ServiceNames.ToListAsync();
+
+                // Получаем полные данные сервисов с включенными зависимостями
+                var service = await _notificationSystemContext.Services
+                    .Include(sn => sn.ServiceName)
+                    .Include(ac => ac.Account)
+                        .ThenInclude(p => p.Profile)
+                    .ToListAsync();
+
+                ViewBag.ServiceName = service_names;
+                Log_Creater.Create(Guid.Parse(User.Identity.Name), "Messanger_Open", $"User {Log_Creater.TabNum(Guid.Parse(User.Identity.Name))} opened the messanger tab");
+                return View(service);
+            }
+            catch (Exception ex)
+            {
+                // Логирование ошибки (раскомментировать при необходимости)
+                Log_Creater.Create(Guid.Parse(User.Identity.Name), "Log_Lost", ex.ToString());
+
+                // В случае ошибки возвращаем минимально работоспособное состояние
+                ViewData["ShowSideBarBlock"] = true;
+                ViewBag.ServiceName = new List<ServiceName>(); // Пустой список вместо null
+                return View(new List<Service>()); // Пустой список сервисов
+            }
         }
 
         [HttpPost]
@@ -72,6 +95,7 @@ namespace Notification_System.Controllers
 
                     if (!result.Success)
                     {
+                        Log_Creater.Create(Guid.Parse(User.Identity.Name), "Send_Email_Error", result.ErrorMessage);
                         HttpContext.Session.SetString("OpenModal", "true");
 
                         HttpContext.Session.SetString("Message", $"Ошибка отправки тестового сообщения: {result.ErrorMessage}");
@@ -82,6 +106,7 @@ namespace Notification_System.Controllers
                     if (await AddService.AddEmail(dispalyName, Guid.Parse(User.Identity.Name),
                         smtpServer, smtpPort, username, password, fromEmail, enableSsl))
                     {
+                        Log_Creater.Create(Guid.Parse(User.Identity.Name), "Create_Email_Success", $"User {Log_Creater.TabNum(Guid.Parse(User.Identity.Name))} successfully added email service");
                         HttpContext.Session.SetString("OpenModal", "true");
                         HttpContext.Session.SetString("Message", "Сервис успешно добавлен и протестирован");
                         HttpContext.Session.SetString("Error", "alert-success");
@@ -89,6 +114,7 @@ namespace Notification_System.Controllers
                 }
                 catch (Exception ex)
                 {
+                    Log_Creater.Create(Guid.Parse(User.Identity.Name), "Create_Email_Error", ex.ToString());
                     HttpContext.Session.SetString("OpenModal", "true");
                     HttpContext.Session.SetString("Message", $"Ошибка при настройке email сервиса: {ex.Message}");
                     HttpContext.Session.SetString("Error", "alert-error");
@@ -104,14 +130,18 @@ namespace Notification_System.Controllers
         public async Task<IActionResult> SendTestEmail(Guid serviceID)
         {
             await SendEmailAsync(serviceID);
+            Log_Creater.Create(Guid.Parse(User.Identity.Name), "Send", $"User  {Log_Creater.TabNum(Guid.Parse(User.Identity.Name))} sent a test message to the service");
             return RedirectToAction("Index", "MessengerCreate");
         }
 
         [HttpPost]
         public async Task<IActionResult> BlockedService(Guid serviceID)
         {
-            if (await AddService.Blocked(serviceID)) 
+            if (await AddService.Blocked(serviceID))
+            {
+                Log_Creater.Create(Guid.Parse(User.Identity.Name), "Blocked", $"User  {Log_Creater.TabNum(Guid.Parse(User.Identity.Name))}  blocked the ");
                 return RedirectToAction("Index", "MessengerCreate");
+            }
             return RedirectToAction("Index", "MessengerCreate");
         }
 
@@ -119,65 +149,153 @@ namespace Notification_System.Controllers
         public async Task<IActionResult> UnBlockedService(Guid serviceID)
         {
             if (await AddService.UnBlocked(serviceID))
+            {
+                Log_Creater.Create(Guid.Parse(User.Identity.Name), "Unblocked", $"User {Log_Creater.TabNum(Guid.Parse(User.Identity.Name))} blocked the {serviceID}");
                 return RedirectToAction("Index", "MessengerCreate");
+            }
             return RedirectToAction("Index", "MessengerCreate");
         }
 
         [HttpPost]
         public async Task<IActionResult> StartStopSend(Guid serviceID)
         {
-            var service = _notificationSystemContext.Services.FirstOrDefault(s => s.ServiceId == serviceID);
-            if (service == null)
-                return NotFound();
-
-            // Если сервис отключен, запускаем процесс
-            if (service.ServiseIsDisable)
+            try
             {
-                service.ServiseIsDisable = false;
-                await _notificationSystemContext.SaveChangesAsync();
+                // Находим сервис
+                var service = await _notificationSystemContext.Services
+                    .FirstOrDefaultAsync(s => s.ServiceId == serviceID);
 
-                _cts = new CancellationTokenSource();
-                _ = Task.Run(() => BackgroundSendLoop(serviceID, _cts.Token));
+                if (service == null)
+                    return NotFound();
+
+                // Обработка включения/выключения сервиса
+                if (service.ServiseIsDisable)
+                {
+                    // Включаем сервис
+                    service.ServiseIsDisable = false;
+                    await _notificationSystemContext.SaveChangesAsync();
+
+                    // Запускаем фоновую задачу
+                    _cts?.Dispose(); // Освобождаем предыдущий токен, если был
+                    _cts = new CancellationTokenSource();
+                    _ = Task.Run(() => BackgroundSendLoop(serviceID, _cts.Token));
+                }
+                else
+                {
+                    // Выключаем сервис
+                    service.ServiseIsDisable = true;
+                    await _notificationSystemContext.SaveChangesAsync();
+
+                    // Останавливаем фоновую задачу
+                    _cts?.Cancel();
+                }
+
+                return RedirectToAction("Index");
             }
-            else // Иначе останавливаем его
+            catch (DbUpdateException dbEx)
             {
-                service.ServiseIsDisable = true;
-                await _notificationSystemContext.SaveChangesAsync();
-
-                _cts?.Cancel();
+                // Логирование ошибки базы данных
+                Log_Creater.Create(Guid.Parse(User.Identity.Name), "Send_Error", dbEx.ToString());
+                return StatusCode(StatusCodes.Status500InternalServerError, "Ошибка при сохранении изменений в базе данных");
             }
-
-            return RedirectToAction("Index"); // или куда вы хотите
+            catch (OperationCanceledException ocEx)
+            {
+                // Логирование отмены задачи
+                Log_Creater.Create(Guid.Parse(User.Identity.Name), "Send_Error", ocEx.ToString());
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                // Логирование неожиданных ошибок
+                Log_Creater.Create(Guid.Parse(User.Identity.Name), "Send_Error", ex.ToString());
+                return StatusCode(StatusCodes.Status500InternalServerError, "Произошла непредвиденная ошибка");
+            }
         }
         private async Task SendEmailAsync(Guid serviceID)
         {
-            using (var context = new NotificationSystemContext())
+            NotificationSystemContext context = null;
+            try
             {
-                var service = context.Services.Where(s => s.ServiceId == serviceID).FirstOrDefault();
+                context = new NotificationSystemContext();
+                var service = await context.Services
+                    .FirstOrDefaultAsync(s => s.ServiceId == serviceID);
 
-                Dictionary<string, string> setting = DataHelper.DictToString.ReturnString(service.ServiceSettings);
-
-
-                var emailSettings = new EmailServiceSettings
+                if (service == null)
                 {
-                    SmtpServer = setting["SmtpServer"],
-                    SmtpPort = int.Parse(setting["SmtpPort"]),
-                    Username = setting["Username"],
-                    Password = setting["Password"],
-                    FromEmail = setting["FromEmail"],
-                    EnableSsl = bool.Parse(setting["EnableSsl"])
-                };
+                    // Логирование ошибки
+                    Log_Creater.Create(Guid.Parse(User.Identity.Name), "Send_Error", $"Service not found");
+                    return;
+                }
+
+                Dictionary<string, string> setting;
+                try
+                {
+                    setting = DataHelper.DictToString.ReturnString(service.ServiceSettings);
+                }
+                catch (Exception ex)
+                {
+                    // Логирование ошибки парсинга настроек
+                    Log_Creater.Create(Guid.Parse(User.Identity.Name), "Send_Error", ex.ToString());
+                    return;
+                }
+
+                // Проверка наличия всех необходимых ключей
+                var requiredKeys = new[] { "SmtpServer", "SmtpPort", "Username", "Password", "FromEmail", "EnableSsl" };
+                if (requiredKeys.Any(key => !setting.ContainsKey(key)))
+                {
+                    // Логирование отсутствия ключей
+                    Log_Creater.Create(Guid.Parse(User.Identity.Name), "Send_Error", $"Not all settings found");
+                    return;
+                }
+
+                EmailServiceSettings emailSettings;
+                try
+                {
+                    emailSettings = new EmailServiceSettings
+                    {
+                        SmtpServer = setting["SmtpServer"],
+                        SmtpPort = int.Parse(setting["SmtpPort"]),
+                        Username = setting["Username"],
+                        Password = setting["Password"],
+                        FromEmail = setting["FromEmail"],
+                        EnableSsl = bool.Parse(setting["EnableSsl"])
+                    };
+                }
+                catch (FormatException ex)
+                {
+                    // Логирование ошибки формата данных
+                    Log_Creater.Create(Guid.Parse(User.Identity.Name), "Send_Error", ex.ToString());
+                    return;
+                }
 
                 var emailService = new EmailService(emailSettings);
 
-                // Отправляем тестовое сообщение
                 var testMessage = new EmailMessageData
                 {
                     Destination = emailSettings.Username,
                     Message = $"Это тестовое сообщение от сервиса {service.ServiceDisplayName}. Не отвечайте на него."
                 };
 
-                SendResult result = await emailService.SendAsync(testMessage);
+                try
+                {
+                    SendResult result = await emailService.SendAsync(testMessage);
+                    // Логирование успешной отправки (при необходимости)
+                    // _logger.LogInformation($"Тестовое письмо для сервиса {serviceID} отправлено");
+                }
+                catch (SmtpException ex)
+                {
+                    // Логирование ошибки SMTP
+                    Log_Creater.Create(Guid.Parse(User.Identity.Name), "Send_Error", ex.ToString());
+                }
+                catch (Exception ex)
+                {
+                    // Логирование общей ошибки отправки
+                    Log_Creater.Create(Guid.Parse(User.Identity.Name), "Send_Error", ex.ToString());
+                }
+            }
+            finally
+            {
+                context?.Dispose();
             }
         }
 
@@ -185,20 +303,51 @@ namespace Notification_System.Controllers
         {
             while (!token.IsCancellationRequested)
             {
-                using (var context = new NotificationSystemContext())
+                NotificationSystemContext context = null;
+                try
                 {
-                    var service = context.Services.FirstOrDefault(s => s.ServiceId == serviceID);
+                    context = new NotificationSystemContext();
 
+                    // Получаем сервис с проверкой отмены
+                    var service = await context.Services
+                        .AsNoTracking() // Добавляем для оптимизации
+                        .FirstOrDefaultAsync(s => s.ServiceId == serviceID, token);
+
+                    // Проверяем условия выхода
                     if (service == null || service.ServiseIsDisable)
                         break;
 
-                    // Вызов метода отправки письма
+                    // Вызываем метод отправки письма
                     await SendEmailAsync(serviceID);
 
+                    // Ожидаем с проверкой отмены
                     await Task.Delay(TimeSpan.FromMinutes(1), token);
                 }
+                catch (OperationCanceledException)
+                {
+                    // Нормальное завершение при отмене
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    // Логирование ошибки (раскомментировать при необходимости)
+                    // _logger.LogError(ex, $"Ошибка в фоновом процессе для сервиса {serviceID}");
+                    Log_Creater.Create(Guid.Parse(User.Identity.Name), "Send_Error", ex.ToString());
+                    // Делаем паузу перед повторной попыткой
+                    try
+                    {
+                        await Task.Delay(TimeSpan.FromMinutes(1), token);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        break;
+                    }
+                }
+                finally
+                {
+                    context?.Dispose();
+                }
             }
-
         }
 
         public IActionResult ClearSession()

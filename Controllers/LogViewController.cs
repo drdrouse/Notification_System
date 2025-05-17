@@ -25,7 +25,7 @@ namespace Notification_System.Controllers
                     .Include(e => e.EventCode)
                     .OrderByDescending(l => l.LogDateTime) // предполагаем, что есть свойство Date
                     .ToList();
-                Log_Creater.Create(Guid.Parse(User.Identity.Name), "Log_Lost", $"{Log_Creater.TabNum(Guid.Parse(User.Identity.Name))} opened the logs tab");
+                Log_Creater.Create(Guid.Parse(User.Identity.Name), "Log_Open", $"User {Log_Creater.TabNum(Guid.Parse(User.Identity.Name))} opened the logs tab");
                 return View(log);
             }
             catch (Exception ex)
