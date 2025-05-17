@@ -50,7 +50,7 @@ namespace Notification_System.Controllers
             catch (Exception ex)
             {
                 
-                Log_Creater.Create(Guid.Parse(User.Identity.Name), "LogOff", ex.ToString());
+                Log_Creater.Create(Guid.Parse(User.Identity.Name), "Profile_Lost", ex.ToString());
 
                 // Возвращаем представление без данных в случае ошибки
                 return View();
