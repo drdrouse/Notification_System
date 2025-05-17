@@ -45,7 +45,7 @@ namespace Notification_System.Controllers
             catch (Exception ex)
             {
                 // Логирование ошибки (раскомментировать при необходимости)
-                Log_Creater.Create(Guid.Parse(User.Identity.Name), "Setting_Open", ex.ToString());
+                Log_Creater.Create(Guid.Parse(User.Identity.Name), "Setting_Lost", ex.ToString());
 
                 // Возвращаем корректное состояние даже при ошибке
                 ViewData["ShowSideBarBlock"] = true;
