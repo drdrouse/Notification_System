@@ -58,15 +58,15 @@
                             <hr />
                             <div class="hidden-buttons">
                                 <form method="post" asp-controller="MessengerCreate" asp-action="SendTestEmail">
-                                    <input type="hidden" name="serviceName" value="@service.ServiceDisplayName" />
+                                    <input type="hidden" name="serviceID" value="@service.ServiceId" />
                                     <button type="submit" class="flat-btn">Отправить тестовое письмо</button>
                                 </form>                                
                                 <form method="post" asp-controller="MessengerCreate" asp-action="StartStopSend">
-                                    <input type="hidden" name="serviceName" value="@service.ServiceDisplayName" />
+                                    <input type="hidden" name="serviceID" value="@service.ServiceId" />
                                     <button type="submit" class="flat-btn">Запустить/Остановить</button>
                                 </form>
                                 <form method="post" asp-controller="MessengerCreate" asp-action="BlockedService">
-                                    <input type="hidden" name="serviceName" value="@service.ServiceDisplayName" />
+                                    <input type="hidden" name="serviceID" value="@service.ServiceId" />
                                     <button type="submit" class="flat-btn">Заблокировать</button>
                                 </form>
                                
@@ -114,7 +114,7 @@
                             <hr />
                             <div class="hidden-buttons">                                 
                                 <form method="post" asp-controller="MessengerCreate" asp-action="UnBlockedService">
-                                    <input type="hidden" name="serviceName" value="@service.ServiceDisplayName" />
+                                    <input type="hidden" name="serviceID" value="@service.ServiceId" />
                                     <button type="submit" class="flat-btn">Разблокировать</button>
                                 </form>
                             </div>
