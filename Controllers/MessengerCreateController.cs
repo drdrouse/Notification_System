@@ -102,8 +102,30 @@ namespace Notification_System.Controllers
         [HttpPost]
         public async Task<IActionResult> SendTestEmail(Guid serviceID)
         {
-            var service = _notificationSystemContext.Services.Where(s => s.ServiceId == serviceID).FirstOrDefault(); 
-            
+            Send(serviceID);
+            return RedirectToAction("Index", "MessengerCreate");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> BlockedService(Guid serviceID)
+        {
+            if (await AddService.Blocked(serviceID)) 
+                return RedirectToAction("Index", "MessengerCreate");
+            return RedirectToAction("Index", "MessengerCreate");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UnBlockedService(Guid serviceID)
+        {
+            if (await AddService.UnBlocked(serviceID))
+                return RedirectToAction("Index", "MessengerCreate");
+            return RedirectToAction("Index", "MessengerCreate");
+        }
+
+        private async Task Send(Guid serviceID)
+        {
+            var service = _notificationSystemContext.Services.Where(s => s.ServiceId == serviceID).FirstOrDefault();
+
             Dictionary<string, string> setting = DataHelper.DictToString.ReturnString(service.ServiceSettings);
 
 
@@ -127,29 +149,6 @@ namespace Notification_System.Controllers
             };
 
             SendResult result = await emailService.SendAsync(testMessage);
-
-            return RedirectToAction("Index", "MessengerCreate");
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> BlockedService(Guid serviceID)
-        {
-            if (await AddService.Blocked(serviceID)) 
-                return RedirectToAction("Index", "MessengerCreate");
-            return RedirectToAction("Index", "MessengerCreate");
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> UnBlockedService(Guid serviceID)
-        {
-            if (await AddService.UnBlocked(serviceID))
-                return RedirectToAction("Index", "MessengerCreate");
-            return RedirectToAction("Index", "MessengerCreate");
-        }
-
-        private async Task Send(Guid serviceID)
-        {
-
         }
        
         public IActionResult ClearSession()
