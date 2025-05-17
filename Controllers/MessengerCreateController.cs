@@ -12,6 +12,7 @@ namespace Notification_System.Controllers
     public class MessengerCreateController : Controller
     {
         private readonly NotificationSystemContext _notificationSystemContext;
+        private static CancellationTokenSource _cts = null;
 
         public MessengerCreateController(NotificationSystemContext notificationSystemContext)
         {
@@ -102,7 +103,7 @@ namespace Notification_System.Controllers
         [HttpPost]
         public async Task<IActionResult> SendTestEmail(Guid serviceID)
         {
-            Send(serviceID);
+            await SendEmailAsync(serviceID);
             return RedirectToAction("Index", "MessengerCreate");
         }
 
@@ -122,35 +123,84 @@ namespace Notification_System.Controllers
             return RedirectToAction("Index", "MessengerCreate");
         }
 
-        private async Task Send(Guid serviceID)
+        [HttpPost]
+        public async Task<IActionResult> StartStopSend(Guid serviceID)
         {
-            var service = _notificationSystemContext.Services.Where(s => s.ServiceId == serviceID).FirstOrDefault();
+            var service = _notificationSystemContext.Services.FirstOrDefault(s => s.ServiceId == serviceID);
+            if (service == null)
+                return NotFound();
 
-            Dictionary<string, string> setting = DataHelper.DictToString.ReturnString(service.ServiceSettings);
-
-
-            var emailSettings = new EmailServiceSettings
+            // Если сервис отключен, запускаем процесс
+            if (service.ServiseIsDisable)
             {
-                SmtpServer = setting["SmtpServer"],
-                SmtpPort = int.Parse(setting["SmtpPort"]),
-                Username = setting["Username"],
-                Password = setting["Password"],
-                FromEmail = setting["FromEmail"],
-                EnableSsl = bool.Parse(setting["EnableSsl"])
-            };
+                service.ServiseIsDisable = false;
+                await _notificationSystemContext.SaveChangesAsync();
 
-            var emailService = new EmailService(emailSettings);
-
-            // Отправляем тестовое сообщение
-            var testMessage = new EmailMessageData
+                _cts = new CancellationTokenSource();
+                _ = Task.Run(() => BackgroundSendLoop(serviceID, _cts.Token));
+            }
+            else // Иначе останавливаем его
             {
-                Destination = emailSettings.Username,
-                Message = $"Это тестовое сообщение от сервиса {service.ServiceDisplayName}. Не отвечайте на него."
-            };
+                service.ServiseIsDisable = true;
+                await _notificationSystemContext.SaveChangesAsync();
 
-            SendResult result = await emailService.SendAsync(testMessage);
+                _cts?.Cancel();
+            }
+
+            return RedirectToAction("Index"); // или куда вы хотите
         }
-       
+        private async Task SendEmailAsync(Guid serviceID)
+        {
+            using (var context = new NotificationSystemContext())
+            {
+                var service = context.Services.Where(s => s.ServiceId == serviceID).FirstOrDefault();
+
+                Dictionary<string, string> setting = DataHelper.DictToString.ReturnString(service.ServiceSettings);
+
+
+                var emailSettings = new EmailServiceSettings
+                {
+                    SmtpServer = setting["SmtpServer"],
+                    SmtpPort = int.Parse(setting["SmtpPort"]),
+                    Username = setting["Username"],
+                    Password = setting["Password"],
+                    FromEmail = setting["FromEmail"],
+                    EnableSsl = bool.Parse(setting["EnableSsl"])
+                };
+
+                var emailService = new EmailService(emailSettings);
+
+                // Отправляем тестовое сообщение
+                var testMessage = new EmailMessageData
+                {
+                    Destination = emailSettings.Username,
+                    Message = $"Это тестовое сообщение от сервиса {service.ServiceDisplayName}. Не отвечайте на него."
+                };
+
+                SendResult result = await emailService.SendAsync(testMessage);
+            }
+        }
+
+        private async Task BackgroundSendLoop(Guid serviceID, CancellationToken token)
+        {
+            while (!token.IsCancellationRequested)
+            {
+                using (var context = new NotificationSystemContext())
+                {
+                    var service = context.Services.FirstOrDefault(s => s.ServiceId == serviceID);
+
+                    if (service == null || service.ServiseIsDisable)
+                        break;
+
+                    // Вызов метода отправки письма
+                    await SendEmailAsync(serviceID);
+
+                    await Task.Delay(TimeSpan.FromMinutes(1), token);
+                }
+            }
+
+        }
+
         public IActionResult ClearSession()
         {
             HttpContext.Session.Clear(); // Очищаем всю сессию
