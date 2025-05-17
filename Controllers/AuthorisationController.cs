@@ -43,7 +43,7 @@ namespace Notification_System.Controllers
 
                     
                     string description = $"User {Log_Creater.TabNum(AuthorisationConfirm.AccountID())} logged into the account"; 
-                    Log_Creater.Create(AuthorisationConfirm.AccountID(), "LogIn", description);
+                    Log_Creater.Create(AuthorisationConfirm.AccountID(), "LogOn", description);
 
                     return RedirectToAction("Index", "Account");
                 }
@@ -62,7 +62,7 @@ namespace Notification_System.Controllers
             // Удаляем куки авторизации
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             string description = $"User {Log_Creater.TabNum(Guid.Parse(User.Identity.Name))} logged out of the account";
-            Log_Creater.Create(Guid.Parse(User.Identity.Name), "LogOut", description);
+            Log_Creater.Create(Guid.Parse(User.Identity.Name), "LogOff", description);
             return RedirectToAction("Index", "Authorisation");
         }
 
