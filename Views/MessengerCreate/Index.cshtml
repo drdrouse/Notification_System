@@ -27,9 +27,18 @@
                 {
                     <div class="messenger-button">
                         <!-- Добавляем квадрат с иконкой перед кнопкой -->
-                        <div class="service-icon">
-                            <img src="/путь/к/вашей/картинке.png" alt="Service Icon">
-                        </div>
+                        @if (service.ServiseIsDisable)
+                        {
+                            <div class="service-icon" id="disable">
+                                <img src="~/content/images/account/disable.png" alt="disable">
+                            </div>
+                        }
+                        @if (!service.ServiseIsDisable)
+                        {
+                            <div class="service-icon" id="undisable">
+                                <img src="~/content/images/account/undisable.png" alt="undisable">
+                            </div>
+                        }
                         <!-- Само поле (кнопка) -->
                         <button class="messenger-menu" onclick="toggleHiddenArea()">
                             <p>@service.ServiceDisplayName</p>

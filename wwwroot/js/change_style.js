@@ -12,6 +12,8 @@ function toggleTheme() {
     const change_themeImage = document.querySelector('#change_theme img');
     const phoneImage = document.querySelector('#add_phone img');
     const mailImage = document.querySelector('#add_mail img');
+    const undisableImage = document.querySelector('#undisable img');
+    const disableImage = document.querySelector('#disable img');
     // Переключаем класс light-mode для изменения темы
     body.classList.toggle('light-mode');
 
@@ -28,6 +30,8 @@ function toggleTheme() {
         if (change_themeImage) change_themeImage.src = '/content/images/account/change-theme-lite.png';
         if (phoneImage) phoneImage.src = '/content/images/account/phone-lite.png';
         if (mailImage) mailImage.src = '/content/images/account/mail-lite.png'; 
+        if (undisableImage) undisableImage.src = '/content/images/account/undisable-lite.png';
+        if (disableImage) disableImage.src = '/content/images/account/disable-lite.png';
         localStorage.setItem('theme', 'light');
     } else {
         settingImage.src = '/content/images/account/setting.png'; // Путь к изображению для тёмной темы
@@ -42,6 +46,8 @@ function toggleTheme() {
         if (change_themeImage) change_themeImage.src = '/content/images/account/change-theme.png';
         if (phoneImage) phoneImage.src = '/content/images/account/phone.png';
         if (mailImage) mailImage.src = '/content/images/account/mail.png'; 
+        if (undisableImage) undisableImage.src = '/content/images/account/undisable.png';
+        if (disableImage) disableImage.src = '/content/images/account/disable.png';
     }
 }
 
@@ -59,6 +65,8 @@ window.onload = () => {
     const change_themeImage = document.querySelector('#change_theme img');
     const phoneImage = document.querySelector('#add_phone img');
     const mailImage = document.querySelector('#add_mail img');
+    const undisableImage = document.querySelector('#undisable img');
+    const disableImage = document.querySelector('#disable img');
     if (savedTheme === 'light') {
         document.body.classList.add('light-mode');
         settingImage.src = '/content/images/account/setting-lite.png'; // Путь к изображению для светлой темы
@@ -71,7 +79,9 @@ window.onload = () => {
         if (passwordImage) passwordImage.src = '/content/images/account/password-lite.png';
         if (change_themeImage) change_themeImage.src = '/content/images/account/change-theme-lite.png';
         if (phoneImage) phoneImage.src = '/content/images/account/phone-lite.png';
-        if (mailImage) mailImage.src = '/content/images/account/mail-lite.png'; 
+        if (mailImage) mailImage.src = '/content/images/account/mail-lite.png';
+        if (undisableImage) undisableImage.src = '/content/images/account/undisable-lite.png';
+        if (disableImage) disableImage.src = '/content/images/account/disable-lite.png'
     } else if (savedTheme === 'dark') {
         document.body.classList.remove('light-mode');
         settingImage.src = '/content/images/account/setting.png'; // Путь к изображению для тёмной темы
@@ -85,5 +95,7 @@ window.onload = () => {
         if (change_themeImage) change_themeImage.src = '/content/images/account/change-theme.png';
         if (phoneImage) phoneImage.src = '/content/images/account/phone.png';
         if (mailImage) mailImage.src = '/content/images/account/mail.png'; 
+        if (undisableImage) undisableImage.src = '/content/images/account/undisable.png';
+        if (disableImage) disableImage.src = '/content/images/account/disable.png';
     }
 };
