@@ -3,14 +3,15 @@ function toggleTheme() {
     const body = document.body;
     const settingImage = document.querySelector('#settings img'); // Изображение в настройках
     const exiteImage = document.querySelector('#exite img');
-    const userImage = document.getElementById('usercreate').querySelector('img');
     const accountImage = document.querySelector('#account img');
-   const passwordImage = document.querySelector('#change_password img');
-    const messengerImage = document.getElementById('messengers').querySelector('img');
-    
-    const themeImage = document.querySelector('#change_theme img');
-
-
+    const usercreateImage = document.querySelector('#usercreate img');
+    const photoImage = document.querySelector('#photo img');
+    const logImage = document.querySelector('#log img');
+    const messengersImage = document.querySelector('#messengers img');
+    const passwordImage = document.querySelector('#change_password img');
+    const change_themeImage = document.querySelector('#change_theme img');
+    const phoneImage = document.querySelector('#add_phone img');
+    const mailImage = document.querySelector('#add_mail img');
     // Переключаем класс light-mode для изменения темы
     body.classList.toggle('light-mode');
 
@@ -19,20 +20,28 @@ function toggleTheme() {
         settingImage.src = '/content/images/account/setting-lite.png'; // Путь к изображению для светлой темы
         exiteImage.src = '/content/images/account/exite-lite.png';
         accountImage.src = '/content/images/account/account-lite.png';
-        passwordImage.src = '/content/images/account/password-lite.png';
-        themeImage.src = '/content/images/account/change-theme-lite.png';
-        messengerImage.src = '/content/images/account/messenger-lite.png';
-        userImage.src = '/content/images/account/users-lite.png';
+        if (photoImage) photoImage.src = '/content/images/account/avatar-placeholder-lite.png';
+        if (usercreateImage) usercreateImage.src = '/content/images/account/users-lite.png';
+        if (logImage) logImage.src = '/content/images/account/log-lite.png';
+        if (messengersImage) messengersImage.src = '/content/images/account/messenger-lite.png';
+        if (passwordImage) passwordImage.src = '/content/images/account/password-lite.png';
+        if (change_themeImage) change_themeImage.src = '/content/images/account/change-theme-lite.png';
+        if (phoneImage) phoneImage.src = '/content/images/account/phone-lite.png';
+        if (mailImage) mailImage.src = '/content/images/account/mail-lite.png'; 
         localStorage.setItem('theme', 'light');
     } else {
         settingImage.src = '/content/images/account/setting.png'; // Путь к изображению для тёмной темы
         exiteImage.src = '/content/images/account/exite.png';
-        accountImage.src = '/content/images/account/account.png';        
-        themeImage.src = '/content/images/account/change-theme.png';
-        messengerImage.src = '/content/images/account/messenger.png';
-        passwordImage.src = '/content/images/account/password.png';
-        userImage.src = '/content/images/account/users.png';
-        localStorage.setItem('theme', 'dark');
+        accountImage.src = '/content/images/account/account.png';
+        if (photoImage) photoImage.src = '/content/images/account/avatar-placeholder.png';
+        if (usercreateImage) usercreateImage.src = '/content/images/account/users.png';
+        if (logImage) logImage.src = '/content/images/account/log.png';
+        if (messengersImage) messengersImage.src = '/content/images/account/messenger.png';
+        if (localStorage) localStorage.setItem('theme', 'dark');
+        if (passwordImage) passwordImage.src = '/content/images/account/password.png';
+        if (change_themeImage) change_themeImage.src = '/content/images/account/change-theme.png';
+        if (phoneImage) phoneImage.src = '/content/images/account/phone.png';
+        if (mailImage) mailImage.src = '/content/images/account/mail.png'; 
     }
 }
 
@@ -42,29 +51,39 @@ window.onload = () => {
     const settingImage = document.querySelector('#settings img'); // Изображение в настройках
     const exiteImage = document.querySelector('#exite img');
     const accountImage = document.querySelector('#account img');
+    const photoImage = document.querySelector('#photo img');
+    const usercreateImage = document.querySelector('#usercreate img');
+    const logImage = document.querySelector('#log img');
+    const messengersImage = document.querySelector('#messengers img');
     const passwordImage = document.querySelector('#change_password img');
-    const themeImage = document.querySelector('#change_theme img');
-    //const messengerImage = document.getElementById('messengers').querySelector('img');
-    //const userImage = document.getElementById('usercreate').querySelector('img');
-
+    const change_themeImage = document.querySelector('#change_theme img');
+    const phoneImage = document.querySelector('#add_phone img');
+    const mailImage = document.querySelector('#add_mail img');
     if (savedTheme === 'light') {
         document.body.classList.add('light-mode');
         settingImage.src = '/content/images/account/setting-lite.png'; // Путь к изображению для светлой темы
         exiteImage.src = '/content/images/account/exite-lite.png';
-        accountImage.src = '/content/images/account/account-lite.png';   
-        userImage.src = '/content/images/account/users-lite.png';
-        themeImage.src = '/content/images/account/change-theme-lite.png';
-        messengerImage.src = '/content/images/account/messenger-lite.png';
-        
-        passwordImage.src = '/content/images/account/password-lite.png';
+        accountImage.src = '/content/images/account/account-lite.png'; 
+        if (photoImage) photoImage.src = '/content/images/account/avatar-placeholder-lite.png';
+        if (usercreateImage) usercreateImage.src = '/content/images/account/users-lite.png';
+        if (logImage) logImage.src = '/content/images/account/log-lite.png';
+        if (messengersImage) messengersImage.src = '/content/images/account/messenger-lite.png';
+        if (passwordImage) passwordImage.src = '/content/images/account/password-lite.png';
+        if (change_themeImage) change_themeImage.src = '/content/images/account/change-theme-lite.png';
+        if (phoneImage) phoneImage.src = '/content/images/account/phone-lite.png';
+        if (mailImage) mailImage.src = '/content/images/account/mail-lite.png'; 
     } else if (savedTheme === 'dark') {
         document.body.classList.remove('light-mode');
         settingImage.src = '/content/images/account/setting.png'; // Путь к изображению для тёмной темы
         exiteImage.src = '/content/images/account/exite.png';
-        accountImage.src = '/content/images/account/account.png';        
-        themeImage.src = '/content/images/account/change-theme.png';
-        messengerImage.src = '/content/images/account/messenger.png';
-        userImage.src = '/content/images/account/users.png';
-        passwordImage.src = '/content/images/account/password.png';
+        accountImage.src = '/content/images/account/account.png';  
+        if (photoImage) photoImage.src = '/content/images/account/avatar-placeholder.png';
+        if (usercreateImage) usercreateImage.src = '/content/images/account/users.png';
+        if (logImage) logImage.src = '/content/images/account/log.png';
+        if (messengersImage) messengersImage.src = '/content/images/account/messenger.png';
+        if (passwordImage) passwordImage.src = '/content/images/account/password.png';
+        if (change_themeImage) change_themeImage.src = '/content/images/account/change-theme.png';
+        if (phoneImage) phoneImage.src = '/content/images/account/phone.png';
+        if (mailImage) mailImage.src = '/content/images/account/mail.png'; 
     }
 };

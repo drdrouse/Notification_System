@@ -9,12 +9,12 @@
 </head>
 <body>
     <div class="container">
-       
+
         <div class="main-data">
             <div class="top-part">
                 @*Аватарка пользователя*@
-                <div class="avatar-container">
-                    <img src="/content/images/account/avatar-placeholder.png" id="photo" class="avatar">
+                <div class="avatar-container" id="photo">
+                    <img src="/content/images/account/avatar-placeholder.png" alt="photo" class="avatar"/>
                 </div>
                 <div class="person-data">
                     @*Плашка с данными*@
@@ -46,7 +46,7 @@
                             }
                         </div>
                     </div>
-                   
+
                     @*Список телефонов*@
                     <div class="datadrop">
                         <button onclick="myFunctionPhone()" class="add-item">
@@ -68,5 +68,6 @@
     </div>
     <script src="~/js/account_emaildrop.js"></script>
     <script src="~/js/account_phonedrop.js"></script>
+    <script src="~/js/change_style.js"></script>
 </body>
 </html>

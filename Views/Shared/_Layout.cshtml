@@ -43,7 +43,7 @@
                         <a asp-controller="MessengerCreate" asp-action="Index">
                             <button class="menu-item top-item" id="messengers">
                                 <p>Сервисы</p>
-                                <img src="@Url.Content("~/content/images/account/messenger.png")" alt="messengers" />
+                                <img src="@Url.Content("/content/images/account/messenger.png")" alt="messengers" />
                             </button>
                         </a>
                         <hr />
@@ -80,6 +80,6 @@
             @RenderBody()
         </main>
     </div>
-    <script src="/js/change_style.js"></script>
+    <script src="~/js/change_style.js"></script>
 </body>
 </html>
