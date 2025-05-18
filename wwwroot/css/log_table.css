@@ -7,24 +7,26 @@
     margin-left: 1%;
     display: block;
     max-height: 40%;
+    table-layout: fixed;
+    line-height: 1;
 }
 
 
 
     .user_table tbody {
-        height: 68%; /* Устанавливаем фиксированную высоту тела таблицы */
+        height: 80.5%; /* Устанавливаем фиксированную высоту тела таблицы */
         overflow-y: scroll; /* Включаем вертикальную прокрутку */
         display: block;
     }
 
     .user_table th {
-        padding: 2%;
+        padding: 1%;
         border: 2px solid #08a652;
         word-wrap: break-word;
     }
 
     .user_table td {
-        padding: 2%;
+        padding: 1%;
         border: 2px solid #08a652;
         word-wrap: break-word;
         border-bottom: 1px;

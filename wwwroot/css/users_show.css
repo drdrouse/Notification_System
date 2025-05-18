@@ -37,6 +37,7 @@ body.light-mode .main-data hr {
     border-radius: var(--radius-item);
     width: 99%;
     margin-top: 1%;
+    table-layout: fixed;
 }
 
     .user_table th {
