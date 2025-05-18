@@ -91,19 +91,41 @@ body.light-mode .active p {
 .messenger-button {
     width: 100%;
     margin-top: 20px;
-    background-color: var(--background-item);
-    border-radius: var(--radius-item);
+
     display: flex;
-    flex-direction: column;
+
+    align-items: center;
+    gap: 8px;
+}
+
+
+.service-icon {
+    width: 50px;
+    height: 50px;
+    min-height: 50px; /* Минимальная высота (как у кнопки) */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--background-item);
+    border-radius: var(--radius-item);
+    padding: 4px;
+    box-sizing: border-box;
     box-shadow: var(--shadow);
 }
 
-body.light-mode .messenger-button {
-    background-color: var(--background-item-light);
+    .service-icon img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+
+body.light-mode .service-icon {
+    background: var(--background-item-light);
     box-shadow: var(--shadow-light);
 }
 
 .messenger-menu {
+    flex-grow: 1;
     background-color: var(--background-item);
     color: var(--text-color);
     height: 50px;
@@ -115,6 +137,7 @@ body.light-mode .messenger-button {
     cursor: pointer;
     width: 100%;
     transition: background-color 0.3s;
+    box-shadow: var(--shadow);
 }
 
     .messenger-menu:hover {
@@ -131,6 +154,7 @@ body.light-mode .messenger-button {
 body.light-mode .messenger-menu {
     background-color: var(--background-item-light);
     color: var(--text-color-light);
+    box-shadow: var(--shadow-light);
 }
 
     body.light-mode .messenger-menu:hover {
