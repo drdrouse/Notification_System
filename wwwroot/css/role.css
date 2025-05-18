@@ -74,9 +74,11 @@ body.light-mode .role p {
     margin-bottom: 1.5%;
 }
 
-    .user_roles label {
-        
-    }
+body.light-mode .user_roles {
+    background-color: var(--background-item-light);
+    color: var(--text-color-light);
+    box-shadow: var(--shadow-light);
+}
 
 .p_role {
     text-align: justify;
@@ -86,6 +88,10 @@ body.light-mode .role p {
     margin-left: 1%;
     font-size: 20px;
     font-weight: bold;
+}
+
+body.light-mode .p_role {
+    color: var(--text-color-light);
 }
 
 .button_role {
@@ -103,6 +109,11 @@ body.light-mode .role p {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+body.light-mode .button_role {
+    background-color: var(--background-item-light);
+    color: var(--text-color-light);
 }
 
 .button_role:hover {

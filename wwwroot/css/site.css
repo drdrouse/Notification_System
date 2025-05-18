@@ -38,7 +38,7 @@ body {
 }
 
     body.light-mode {
-        background: var(--background-account-light);
+        background: var(--background-account-light) no-repeat center center fixed;
     }
 
 /* Контейнер для сайдбара и контента */

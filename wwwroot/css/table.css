@@ -9,10 +9,12 @@
     max-height: 90%;
 }
 
-
-
+body.light-mode .user_table {
+    background: var(--background-item-light);
+    box-shadow: var(--shadow-light);
+}
     .user_table tbody {
-        height: 85%; /* Устанавливаем фиксированную высоту тела таблицы */
+        height: 85.5%; /* Устанавливаем фиксированную высоту тела таблицы */
         overflow-y: scroll; /* Включаем вертикальную прокрутку */
         display: block;
     }
@@ -23,6 +25,10 @@
         word-wrap: break-word;
     }
 
+body.light-mode .user_table th {
+    border: 2px solid #6c6767;
+    word-wrap: break-word;
+}
     .user_table td {
         padding: 2%;
         border: 2px solid #08a652;
@@ -60,30 +66,42 @@
         border-bottom: none;
     }
 
-body.light-mode .user_table {
-    background: var(--background-item-light);
-    box-shadow: var(--shadow-light);
+body.light-mode .user_table td {
+    border: 2px solid #6c6767;
+    word-wrap: break-word;
+    border-bottom: 1px;
 }
 
-    body.light-mode .user_table th {
-        border: 2px solid #6c6767;
-    }
+/* Убираем внешние границы */
+body.light-mode .user_table th:first-child {
+    border-left: none;
+}
 
-        body.light-mode .user_table th:first-child {
-            border-left: none;
-        }
+body.light-mode .user_table th:last-child {
+    border-right: none;
+}
 
-        body.light-mode .user_table th:last-child {
-            border-right: none;
-        }
+body.light-mode .user_table td:first-child {
+    border-left: none;
+}
 
-    body.light-mode .user_table tr:first-child th {
-        border-top: none;
-    }
+body.light-mode .user_table td:last-child {
+    border-right: none;
+}
 
-    body.light-mode .user_table tr:last-child th {
-        border-bottom: none;
-    }
+body.light-mode .user_table tr:first-child th {
+    border-top: none;
+}
+
+body.light-mode .user_table tr:first-child td {
+    border-top: none;
+}
+
+
+body.light-mode .user_table tr:last-child td {
+    border-bottom: none;
+}
+
 
 
 tr {

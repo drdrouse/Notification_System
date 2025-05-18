@@ -167,12 +167,20 @@ body.light-mode .messanger-data-visible {
     border: none;
 }
     /* Стили текстового блока */
+body.light-mode .messanger-data-hidden {
+    background-color: var(--background-item-light);
+    box-shadow: var(--shadow-light);
+}
 
 .hidden-content p {
     margin: 8px 0;
     padding-left: 10px;
     color: var(--text-color);
     font-family: var(--font);
+}
+
+body.light-mode .hidden-content p {
+    color: var(--text-color-light);
 }
 
 /* Стили блока с кнопками */
@@ -182,7 +190,10 @@ body.light-mode .messanger-data-visible {
     background-color: var(--background-item); /* Цвет фона области */
     border-radius: var(--radius-item);
     overflow: hidden;
+}
 
+body.light-mode .hidden-buttons {
+    background-color: var(--background-item-light); /* Цвет фона области */
 }
 
 .flat-btn {
@@ -218,4 +229,15 @@ body.light-mode .messanger-data-visible {
     /* Убираем стандартный outline */
     .flat-btn:focus {
         outline: none;
+    }
+
+body.light-mode .flat-btn {
+    color: var(--text-color-light);
+}
+    body.light-mode .flat-btn:not(:last-child)::after {
+        background-color: var(--hr-color-light);
+    }
+
+    body.light-mode .flat-btn:hover {
+        background-color: #c2c2c2;
     }
