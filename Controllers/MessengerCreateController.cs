@@ -7,6 +7,8 @@ using DataAccessLibrary;
 using System.Text.Json;
 using ServiceLibrary;
 using System.Net.Mail;
+using ComputerMetricsLibrary;
+using System.Text;
 
 namespace Notification_System.Controllers
 {
@@ -129,7 +131,7 @@ namespace Notification_System.Controllers
         [HttpPost]
         public async Task<IActionResult> SendTestEmail(Guid serviceID)
         {
-            await SendEmailAsync(serviceID);
+            await TestSendAsync(serviceID);
             Log_Creater.Create(Guid.Parse(User.Identity.Name), "Send", $"User  {Log_Creater.TabNum(Guid.Parse(User.Identity.Name))} sent a test message to the service");
             return RedirectToAction("Index", "MessengerCreate");
         }
@@ -212,6 +214,99 @@ namespace Notification_System.Controllers
             }
         }
         private async Task SendEmailAsync(Guid serviceID)
+        {
+            NotificationSystemContext context = null;
+            try
+            {
+                context = new NotificationSystemContext();
+                var service = await context.Services
+                    .FirstOrDefaultAsync(s => s.ServiceId == serviceID);
+
+                if (service == null)
+                {
+                    // Логирование ошибки
+                    Log_Creater.Create(Guid.Parse(User.Identity.Name), "Send_Error", $"Service not found");
+                    return;
+                }
+
+                Dictionary<string, string> setting;
+                try
+                {
+                    setting = DataHelper.DictToString.ReturnString(service.ServiceSettings);
+                }
+                catch (Exception ex)
+                {
+                    // Логирование ошибки парсинга настроек
+                    Log_Creater.Create(Guid.Parse(User.Identity.Name), "Send_Error", ex.ToString());
+                    return;
+                }
+
+                // Проверка наличия всех необходимых ключей
+                var requiredKeys = new[] { "SmtpServer", "SmtpPort", "Username", "Password", "FromEmail", "EnableSsl" };
+                if (requiredKeys.Any(key => !setting.ContainsKey(key)))
+                {
+                    // Логирование отсутствия ключей
+                    Log_Creater.Create(Guid.Parse(User.Identity.Name), "Send_Error", $"Not all settings found");
+                    return;
+                }
+
+                EmailServiceSettings emailSettings;
+                try
+                {
+                    emailSettings = new EmailServiceSettings
+                    {
+                        SmtpServer = setting["SmtpServer"],
+                        SmtpPort = int.Parse(setting["SmtpPort"]),
+                        Username = setting["Username"],
+                        Password = setting["Password"],
+                        FromEmail = setting["FromEmail"],
+                        EnableSsl = bool.Parse(setting["EnableSsl"])
+                    };
+                }
+                catch (FormatException ex)
+                {
+                    // Логирование ошибки формата данных
+                    Log_Creater.Create(Guid.Parse(User.Identity.Name), "Send_Error", ex.ToString());
+                    return;
+                }
+
+                var emailService = new EmailService(emailSettings);
+                var collector = new ComputerMetricsCollector();
+
+                Dictionary<string, string> metricsDict = collector.GetMetricsAsString();
+
+                string metricsString = ConvertDictionaryToString(metricsDict);
+
+                var testMessage = new EmailMessageData
+                {
+                    Destination = emailSettings.Username,
+                    Message = metricsString
+                };
+
+                try
+                {
+                    SendResult result = await emailService.SendAsync(testMessage);
+                    // Логирование успешной отправки (при необходимости)
+                    // _logger.LogInformation($"Тестовое письмо для сервиса {serviceID} отправлено");
+                }
+                catch (SmtpException ex)
+                {
+                    // Логирование ошибки SMTP
+                    Log_Creater.Create(Guid.Parse(User.Identity.Name), "Send_Error", ex.ToString());
+                }
+                catch (Exception ex)
+                {
+                    // Логирование общей ошибки отправки
+                    Log_Creater.Create(Guid.Parse(User.Identity.Name), "Send_Error", ex.ToString());
+                }
+            }
+            finally
+            {
+                context?.Dispose();
+            }
+        }
+
+        private async Task TestSendAsync(Guid serviceID)
         {
             NotificationSystemContext context = null;
             try
@@ -354,6 +449,26 @@ namespace Notification_System.Controllers
         {
             HttpContext.Session.Clear(); // Очищаем всю сессию
             return RedirectToAction("Index", "MessengerCreate"); // Редирект на главную страницу сервисов
+        }
+
+        private string ConvertDictionaryToString(Dictionary<string, string> metricsDict)
+        {
+            var sb = new StringBuilder();
+
+            foreach (var kvp in metricsDict)
+            {
+                // Пропускаем разделительные элементы ("===")
+                if (kvp.Value == "===")
+                {
+                    sb.AppendLine(kvp.Key);
+                }
+                else
+                {
+                    sb.AppendLine($"{kvp.Key}: {kvp.Value}");
+                }
+            }
+
+            return sb.ToString();
         }
     }
 }

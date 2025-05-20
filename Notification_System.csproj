@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ComputerMetricsLibrary\ComputerMetricsLibrary.csproj" />
     <ProjectReference Include="..\DataAccessLibrary\DataAccessLibrary.csproj" />
     <ProjectReference Include="..\DataHelper\DataHelper.csproj" />
     <ProjectReference Include="..\Email\Email.csproj" />

@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceLibrary", "..\Servic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Email", "..\Email\Email.csproj", "{AC62EAAB-5749-44A0-BEC2-60373D0FA0A7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComputerMetricsLibrary", "..\ComputerMetricsLibrary\ComputerMetricsLibrary.csproj", "{EE107BE3-3A2D-47A3-9169-2DCAB9C5C3C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{AC62EAAB-5749-44A0-BEC2-60373D0FA0A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC62EAAB-5749-44A0-BEC2-60373D0FA0A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC62EAAB-5749-44A0-BEC2-60373D0FA0A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE107BE3-3A2D-47A3-9169-2DCAB9C5C3C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE107BE3-3A2D-47A3-9169-2DCAB9C5C3C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE107BE3-3A2D-47A3-9169-2DCAB9C5C3C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE107BE3-3A2D-47A3-9169-2DCAB9C5C3C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
