@@ -1,4 +1,7 @@
 ﻿@model IEnumerable<DataAccessLibrary.Models.Account>
+@{
+    var posts = (List<DataAccessLibrary.Models.Post>)ViewBag.Posts;
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -44,12 +47,15 @@
                 }
             </table>
         </div>
-        @*Форма добавления новой роли*@
-        <div id="modalForm" class="modal">
-            <div class="modal-content">
-                <a href="@Url.Action("ClearSession", "UserCreate")" id="closeFormButton" class="close">&times;</a>
-                <h2>Форма добавления нового пользователя</h2>
-                <form method="post" asp-controller="UserCreate" asp-action="CreateUser">
+        @*Форма добавления нового пользовтеля*@
+    <div id="modalForm" class="modal">
+        <div class="modal-content">
+            <a href="@Url.Action("ClearSession", "UserCreate")" id="closeFormButton" class="close">&times;</a>
+            <h2>Форма добавления нового пользователя</h2>
+            <form method="post" asp-controller="UserCreate" asp-action="CreateUser">
+                <!-- Блок персональных данных -->
+                <div class="form-block">
+                    <h3>Персональные данные</h3>
                     <label for="Surname">Фамилия:</label>
                     <input type="text" id="Surname" name="Surname" required
                            class="@Context.Session.GetString("SurnameValid")">
@@ -61,14 +67,72 @@
                     <label for="Patronymic">Отчество:</label>
                     <input type="text" id="Patronymic" name="Patronymic" required
                            class="@Context.Session.GetString("PatronymicValid")">
-                    <div id="messageArea" class="alert @Context.Session.GetString("MessageType")">
-                        <pre>@Context.Session.GetString("Message")</pre>
-                    </div>
-                    @* Кнопка добавление новых полей *@
-                    <button class="newUser_button" id="addUser">Сохранить</button>
-                </form>
-            </div>
+
+                    <label for="CorporatePhone">Корпоративный телефон:</label>
+                    <input type="tel" id="CorporatePhone" name="CorporatePhone"
+                           class="@Context.Session.GetString("CorporatePhoneValid")">
+
+                    <label for="CorporateEmail">Корпоративная почта:</label>
+                    <input type="email" id="CorporateEmail" name="CorporateEmail"
+                           class="@Context.Session.GetString("CorporateEmailValid")">
+                </div>
+
+                <!-- Блок корпоративной информации -->
+                <div class="form-block">
+                    <h3>Корпоративная информация</h3>
+                    <label for="EmployeeNumber">Табельный номер:</label>
+                    <input type="number" id="EmployeeNumber" name="EmployeeNumber" required
+                           pattern="\d{7}" title="Введите табельный номер"
+                           class="@Context.Session.GetString("EmployeeNumberValid")">
+
+                    <label for="Position">Должность:</label>
+                    <select id="Position" name="Position" required
+                            class="@Context.Session.GetString("PositionValid")">
+                        <option value="">-- Выберите должность --</option>
+                        @foreach (var post in posts)
+                        {
+                            <option value="@post.PostName">@post.PostName</option>
+                        }
+                    </select>
+                     </select>
+                </div>
+
+                <!-- Выпадающий список ролей -->
+                <div class="form-block">
+                    <h3>Роль пользователя</h3>
+                    <label for="Role">Роль:</label>
+                    <select id="Role" name="Role" required
+                            class="@Context.Session.GetString("RoleValid")">
+                        <option value="">-- Выберите роль --</option>
+                        @foreach (var role in Model.SelectMany(p => p.RoleAssignments)
+                      .Select(ra => ra.Role)
+                      .Distinct())
+                        {
+                            @if (role.RoleName == "Admin" && User.IsInRole("Admin"))
+                            {
+                                <option value="@role.RoleName">@role.RoleName</option>
+                            }
+                            @if (role.RoleName == "Admin" && !User.IsInRole("Admin"))
+                            {
+
+                            }
+                            @if (role.RoleName != "Admin")
+                            {
+                                <option value="@role.RoleName">@role.RoleName</option>
+                            }
+                            
+                        }
+                    </select>
+                </div>
+
+                <div id="messageArea" class="alert @Context.Session.GetString("MessageType")">
+                    <pre>@Context.Session.GetString("Message")</pre>
+                </div>
+
+                <button class="newUser_button" id="addUser">Сохранить</button>
+            </form>
         </div>
+    </div>
     </div>
     @if (Context.Session.GetString("OpenModal") == "true")
     {
