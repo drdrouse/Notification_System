@@ -177,7 +177,8 @@ body.light-mode .item {
 }
 
     .schedule-table thead {
-        border-radius: var(--radius-item);
+        border-radius: var(--radius-item); /* Скругление для всего заголовка */
+        overflow: hidden; /* Важно: скрывает углы, выходящие за границы */
     }
 
     .schedule-table th {
@@ -194,10 +195,12 @@ body.light-mode .item {
 
         .schedule-table th:first-child {
             border-left: none;
+            border-top-left-radius: var(--radius-item);
         }
 
         .schedule-table th:last-child {
             border-right: none;
+            border-top-right-radius: var(--radius-item);
         }
 
     .schedule-table td {
@@ -232,7 +235,7 @@ body.light-mode .item {
 }
 
 .day-off {
-    background-color: #FF8000;
+    background-color: #CC0000;
     color: white;
     font-weight: bold;
 }
