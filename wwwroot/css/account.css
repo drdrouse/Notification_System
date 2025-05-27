@@ -193,6 +193,14 @@ body.light-mode .item {
         border-bottom: 1px solid var(--line-color);
     }
 
+body.light-mode .schedule-table th {
+    background-color: var(--background-item-light);
+    color: var(--text-color-light);
+    border-color: var(--line-color-light);
+    border-right: 1px solid var(--line-color-light);
+    border-bottom: 1px solid var(--line-color-light);
+}
+
         .schedule-table th:first-child {
             border-left: none;
             border-top-left-radius: var(--radius-item);
@@ -215,6 +223,13 @@ body.light-mode .item {
         border-radius: var(--radius-item);
     }
 
+body.light-mode .schedule-table td {
+    border-color: var(--line-color-light);
+    color: var(--text-color-light);
+    border-right: 1px solid var(--line-color-light);
+    border-bottom: 1px solid var(--line-color-light);
+}
+
         .schedule-table td:first-child {
             border-left: none;
         }
@@ -234,20 +249,23 @@ body.light-mode .item {
     font-weight: bold;
 }
 
+ody.light-mode .work-day {
+    background-color: #21BA72;
+}
+
 .day-off {
     background-color: #CC0000;
     color: white;
     font-weight: bold;
 }
 
-body.light-mode .schedule-table th {
-    background-color: var(--background-item-light);
-    color: var(--text-color-light);
-    border-color: var(--line-color-light);
+body.light-mode .day-off {
+    background-color: #FF8000;
 }
 
-body.light-mode .schedule-table td {
-    border-color: var(--line-color-light);
-}
+
+
+
+
 
 
