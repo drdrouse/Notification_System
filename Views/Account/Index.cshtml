@@ -69,7 +69,67 @@
             </div>
             @*Нижняя часть информационной области*@
             <div class="bottom-part">
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th>Дата</th>
+                            <th>Пн</th>
+                            <th>Вт</th>
+                            <th>Ср</th>
+                            <th>Чт</th>
+                            <th>Пт</th>
+                            <th>Сб</th>
+                            <th>Вс</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Генерация календаря на текущий месяц -->
+                        @{
+                            var now = DateTime.Now;
+                            var year = now.Year;
+                            var month = now.Month;
+                            var daysInMonth = DateTime.DaysInMonth(year, month);
+                            var firstDay = new DateTime(year, month, 1);
+                            var startingDay = (int)firstDay.DayOfWeek;
+                            startingDay = startingDay == 0 ? 7 : startingDay; // Воскресенье = 7
+                            
+                            var dayCounter = 1;
+                            var isWorkDay = true; // Начинаем с рабочего дня (график 2/2)
+                            
+                            for (int i = 0; i < 6; i++)
+                            {
+                                if (dayCounter > daysInMonth) break;
+                                
+                                <tr>
+                                    <td>Неделя @(i+1)</td>
+                                    @for (int j = 1; j <= 7; j++)
+                                    {
+                                        if ((i == 0 && j < startingDay) || dayCounter > daysInMonth)
+                                        {
+                                            <td></td>
+                                        }
+                                        else
+                                        {
+                                            var currentDate = new DateTime(year, month, dayCounter);
+                                            var isToday = currentDate.Date == DateTime.Now.Date;
+                                            
+                                            <td class="@(isToday ? "current-day" : "") @(isWorkDay ? "work-day" : "day-off")">
+                                                @dayCounter<br>
+                                                @(isWorkDay ? "12ч" : "Вых")
+                                            </td>
+                                            
+                                            // Меняем статус дня для графика 2/2
+                                            if (j % 2 == 0) isWorkDay = !isWorkDay;
+                                            dayCounter++;
+                                        }
+                                    }
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
             </div>
+
         </div>
     </div>
     <script src="~/js/account_emaildrop.js"></script>
