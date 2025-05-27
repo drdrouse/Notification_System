@@ -46,6 +46,8 @@ namespace Notification_System.Controllers
                     .Include(a => a.AccountStatus)
                     .Include(a => a.Profile).ThenInclude(p => p.Logs).ThenInclude(e => e.EventCode)
                     .Include(a => a.RoleAssignments).ThenInclude(ra => ra.Role)
+                    .Include(a => a.Profile).ThenInclude(or => or.OrganizationUnits).ThenInclude(s => s.Subdivision)
+                    .Include(a => a.Profile).ThenInclude(or => or.OrganizationUnits).ThenInclude(p => p.Post)
                     .ToList();
 
                 ViewBag.Statuses = statuses;

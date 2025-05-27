@@ -43,6 +43,10 @@ namespace Notification_System.Controllers
                         .ThenInclude(tmail => tmail.TypeMail)
                     .Include(phone => phone.Phones)
                         .ThenInclude(tphone => tphone.TypePhone)
+                    .Include(or => or.OrganizationUnits)
+                        .ThenInclude(p => p.Post)
+                    .Include(or => or.OrganizationUnits)
+                        .ThenInclude(p => p.Subdivision)
                     .FirstOrDefault(prof => prof.ProfileId == account.ProfileId);
 
                 return View(profile);

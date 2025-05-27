@@ -14,7 +14,7 @@
             <div class="top-part">
                 @*Аватарка пользователя*@
                 <div class="avatar-container" id="photo">
-                    <img src="/content/images/account/avatar-placeholder.png" alt="photo" class="avatar"/>
+                    <img src="/content/images/account/avatar-placeholder.png" alt="photo" class="avatar" />
                 </div>
                 <div class="person-data">
                     @*Плашка с данными*@
@@ -27,11 +27,17 @@
                             <span class="text-1">Табельный номер:</span>
                             <span class="text-2" id="tabnum">@Model.ProfileTabNum</span>
                         </div>
-                        <hr />
-                        @*Место работы*@
-                        <div class="text-container">
-                            <span class="text-1">Место работы:</span>
-                            <span class="text-2" id="tabnum">Дальневосточный банк/Управления внутреннего аудита по ДВБ</span>
+                    </div>
+                    @*Место работы*@
+                    <div class="datadrop">
+                        <button onclick="myFunctionPosition()" class="add-item">
+                            <div class="button-text">Место работы</div>
+                        </button>
+                        <div id="positionDrop" class="datadrop-content">
+                            <div class="item">
+                                @Model.OrganizationUnits?.FirstOrDefault()?.Subdivision?.SubdivisionPath
+                                @Model.OrganizationUnits?.FirstOrDefault()?.Post?.PostName
+                            </div>
                         </div>
                     </div>
                     @*Список emails*@
@@ -68,6 +74,7 @@
     </div>
     <script src="~/js/account_emaildrop.js"></script>
     <script src="~/js/account_phonedrop.js"></script>
+    <script src="~/js/account_positiondrop.js"></script>
     <script src="~/js/change_style.js"></script>
 </body>
 </html>

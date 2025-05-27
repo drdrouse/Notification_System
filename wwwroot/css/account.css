@@ -60,7 +60,7 @@ body.light-mode .avatar{
     box-shadow: var(--shadow);
     margin-top: var(--margin-size);
     width: 100%;
-    height: 165px;
+    height: 118px;
 }
     .info-box p {
         margin-bottom: 0rem;
@@ -115,7 +115,7 @@ body.light-mode .text-2 {
 
 .add-item {
     width: 100%;
-    height: 57.5px;
+    height: 51px;
     background: var(--background-item);
     margin-top: 10px;
     border-radius: var(--radius-item);

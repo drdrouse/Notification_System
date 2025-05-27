@@ -25,19 +25,19 @@
                     <label for="status">Статус пользователя:</label>
                     <select id="status" name="status" form="statusForm">
                         <option value="@Model.FirstOrDefault().AccountStatus.AccountStatusName">@Model.FirstOrDefault().AccountStatus.AccountStatusName</option>
-                        
+
                         @if ((Model.FirstOrDefault().RoleAssignments.Select(ra => ra.Role.RoleName).ToList().Contains("Admin")
-                        && !User.IsInRole("Admin")) || (Guid.Parse(User.Identity.Name) == Model.FirstOrDefault().AccountId))
+                       && !User.IsInRole("Admin")) || (Guid.Parse(User.Identity.Name) == Model.FirstOrDefault().AccountId))
                         { }
                         else
                         {
                             @foreach (var status in statuses)
                             {
                                 @if (status.AccountStatusName != Model.FirstOrDefault().AccountStatus.AccountStatusName)
-                            {
-                                <option value="@status.AccountStatusName">@status.AccountStatusName</option>
+                                {
+                                    <option value="@status.AccountStatusName">@status.AccountStatusName</option>
 
-                            }
+                                }
                             }
                         }
                     </select>
@@ -63,6 +63,18 @@
                         <div class="text-container">
                             <span class="text-1">Место работы:</span>
                             <span class="text-2" id="tabnum">ПАО СБЕРБАНК/ДВ/</span>
+                        </div>
+                    </div>
+                    @*Место работы*@
+                    <div class="datadrop">
+                        <button onclick="myFunctionPosition()" class="add-item">
+                            <div class="button-text">Место работы</div>
+                        </button>
+                        <div id="positionDrop" class="datadrop-content">
+                            <div class="item">
+                                @Model.FirstOrDefault().Profile.OrganizationUnits?.FirstOrDefault()?.Subdivision?.SubdivisionPath
+                                @Model.FirstOrDefault().Profile.OrganizationUnits?.FirstOrDefault()?.Post?.PostName
+                            </div>
                         </div>
                     </div>
                     @*Список emails*@
@@ -152,7 +164,7 @@
                     <button class="back_button">Сохранить</button>
                 </form>
             </div>
-            <input type="hidden" name="tabnummner" value="@Model.FirstOrDefault().Profile.ProfileTabNum" form="statusForm"/>
+            <input type="hidden" name="tabnummner" value="@Model.FirstOrDefault().Profile.ProfileTabNum" form="statusForm" />
         </div>
         @*Форма добавления новой роли*@
         <div id="modalForm" class="modal">
@@ -188,6 +200,7 @@
     </div>
     <script src="~/js/account_emaildrop.js"></script>
     <script src="~/js/account_phonedrop.js"></script>
+    <script src="~/js/account_positiondrop.js"></script>
     <script src="~/js/open_role_form.js"></script>
     <script src="~/js/zeroing_checkbox.js"></script>
 </body>
