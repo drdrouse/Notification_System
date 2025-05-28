@@ -1,4 +1,4 @@
-﻿@model List<DataAccessLibrary.Models.Log>
+﻿ @model List<DataAccessLibrary.Models.Log>
 
 @{
     var statuses = (List<DataAccessLibrary.Models.EventCode>)ViewBag.Event;
@@ -14,10 +14,19 @@
 </head>
 <body>
     <div class="container">
-
         <div class="main-data">
             <h1>События</h1>
             <hr />
+
+            <!-- Контейнер с кнопками -->
+            <div class="button-container">
+                <button class="action-button" id="filter_user">Фильтр "Пользователь"</button>
+                <button class="action-button" id="filter_data">Фильтр "Дата"</button>
+                <button class="action-button" id="filter_action">Фильтр "События"</button>
+                <button class="action-button" onclick="location.href='@Url.Action("ClearFilter", "LogView")'">Сбросить фильтры</button>
+                <button class="action-button">Отчёт</button>
+            </div>
+
             <table border="0" class="user_table">
                 <thead>
                     <tr>
@@ -39,9 +48,115 @@
                     }
                 </tbody>
             </table>
-
-
         </div>
+        <div id="modalForm_user_filter" class="modal">
+            <div class="modal-content">
+                <a href="@Url.Action("ClearSession", "LogView")" id="closeFormButton" class="close">&times;</a>
+
+                <h2>Фильтр пользователь</h2>
+                <form method="post" asp-controller="LogView" asp-action="UserFilter">
+                    @* Выпадающий список *@
+                    <div class="form-group">
+                        <label for="userFilter">Выберите пользователя:</label>
+                        <select class="form-control" id="userFilter" name="selectedUser">
+                            <option value="">-- Все пользователи --</option>
+                            @foreach (var user in Model.Select(p => p.Profile)
+                      .GroupBy(p => p.ProfileTabNum)
+                      .Select(g => g.First())
+                      .OrderBy(u => u.ProfileSurname)
+                      .ThenBy(u => u.ProfileName))
+                            {
+                                <option value="@user.ProfileTabNum">@user.ProfileTabNum: @user.ProfileSurname  @user.ProfileName  @user.ProfilePatronymic</option>
+                            }
+                        </select>
+                    </div>
+                    <!-- Область для вывода сообщений -->
+                    <div id="messageArea" class="alert @Context.Session.GetString("UserMessageType")">
+                        <pre>@Context.Session.GetString("UserMessage")</pre>
+                    </div>
+
+                    @* Кнопка отправки *@
+                    <button type="submit" class="btn btn-success">Применить</button>
+                </form>
+            </div>
+        </div>
+        @*Фильтр по дате*@
+        <div id="modalForm_data_filter" class="modal">
+            <div class="modal-content">
+                <a href="@Url.Action("ClearSession", "LogView")" id="closeFormButton" class="close">&times;</a>
+
+                <h2>Фильтр по дате</h2>
+                <form method="post" asp-controller="LogView" asp-action="DataFilter">
+                    @* Поле для начальной даты *@
+                    <div class="form-group">
+                        <label for="startDate">Начальная дата:</label>
+                        <input type="text" class="@Context.Session.GetString("StrartDate")"
+                               id="startDate" name="startDate"
+                               placeholder="дд.мм.гггг"
+                               title="Введите дату в формате дд.мм.гггг (28.05.2026)">
+                    </div>
+
+                    @* Поле для конечной даты *@
+                    <div class="form-group">
+                        <label for="endDate">Конечная дата:</label>
+                        <input type="text" class="@Context.Session.GetString("EndDate")"
+                               id="endDate" name="endDate"
+                               placeholder="дд.мм.гггг"
+                               title="Введите дату в формате дд.мм.гггг (28.05.2026)">
+                    </div>
+                    <!-- Область для вывода сообщений -->
+                    <div id="messageArea" class="alert @Context.Session.GetString("DateMessageType")">
+                        <pre>@Context.Session.GetString("DateMessage")</pre>
+                    </div>
+                    @* Кнопка отправки *@
+                    <button type="submit" class="btn btn-success">Применить</button>
+                </form>
+            </div>
+        </div>
+        @*Фильтр по событию*@
+        <div id="modalForm_action_filter" class="modal">
+            <div class="modal-content">
+                <a href="@Url.Action("ClearSession", "LogView")" id="closeFormButton" class="close">&times;</a>
+
+                <h2>Фильтр по событию</h2>
+                <form method="post" asp-controller="LogView" asp-action="ActionFilter">
+                    <div class="form-group">
+                        <label for="actionFilter">Выберите пользователя:</label>
+                        <select class="form-control" id="actionFilter" name="selectedAction">
+                            <option value="">-- Все события --</option>
+                            @foreach (var action in Model.Select(ac => ac.EventCode)
+                               .GroupBy(ec => ec.EventCodeName)
+                               .Select(g => g.First()))
+                            {
+                                <option value="@action.EventCodeName">@action.EventCodeName: @action.EventCodeDescription</option>
+                            }
+                        </select>
+                    </div>
+                    <div id="messageArea" class="alert @Context.Session.GetString("ActionMessageType")">
+                        <pre>@Context.Session.GetString("ActionMessage")</pre>
+                    </div>
+                    @* Кнопка отправки *@
+                    <button type="submit" class="btn btn-success">Применить</button>
+                </form>
+            </div>
+        </div>
+
     </div>
+
+    @if (Context.Session.GetString("OpenModalUser") == "true")
+    {
+        <script src="~/js/open_user_filter.js"></script>
+    }
+    @if (Context.Session.GetString("OpenModalData") == "true")
+    {
+        <script src="~/js/open_data_filter.js"></script>
+    }
+    @if (Context.Session.GetString("OpenModalAction") == "true")
+    {
+        <script src="~/js/open_event_filter.js"></script>
+    }
+    <script src="~/js/add_user_filter.js"></script>
+    <script src="~/js/add_data_filter.js"></script>
+    <script src="~/js/add_action_filter.js"></script>
 </body>
 </html>
