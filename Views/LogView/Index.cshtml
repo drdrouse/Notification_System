@@ -23,7 +23,9 @@
                 <button class="action-button" id="filter_user">Фильтр "Пользователь"</button>
                 <button class="action-button" id="filter_data">Фильтр "Дата"</button>
                 <button class="action-button" id="filter_action">Фильтр "События"</button>
-                <button class="action-button" onclick="location.href='@Url.Action("ClearFilter", "LogView")'">Сбросить фильтры</button>
+                <form asp-controller="LogView" asp-action="ClearFilters" method="post" class="clear_form">
+                    <button type="submit" class="action-button">Сбросить фильтры</button>
+                </form>
                 <button class="action-button">Отчёт</button>
             </div>
 

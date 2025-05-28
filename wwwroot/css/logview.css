@@ -178,4 +178,10 @@ form {
     border: 2px solid #28a745 !important;
 }
 
+.clear_form {
+    width: 14.5%;
+    display: inline;
+}
+
+
 

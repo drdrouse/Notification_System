@@ -4,6 +4,7 @@ using DataHelper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
+using System.Globalization;
 
 namespace Notification_System.Controllers
 {
@@ -15,26 +16,54 @@ namespace Notification_System.Controllers
         {
             _notificationSystemContext = notificationSystemContext;
         }
-        public IActionResult Index()
+               public IActionResult Index()
         {
-            try
-            {
+                try
+                {
                 ViewData["ShowSideBarBlock"] = true;
 
-                var log = _notificationSystemContext.Logs
+                // Получаем базовый запрос
+                IQueryable<Log> query = _notificationSystemContext.Logs
                     .Include(p => p.Profile)
                     .Include(e => e.EventCode)
-                    .OrderByDescending(l => l.LogDateTime) // предполагаем, что есть свойство Date
-                    .ToList();
+                    .OrderByDescending(l => l.LogDateTime);
+
+                // Применяем фильтр по пользователю (если установлен)
+                string userFilter = HttpContext.Session.GetString("UserFilter");
+                if (!string.IsNullOrEmpty(userFilter))
+                {
+                    query = query.Where(l => l.Profile.ProfileTabNum == int.Parse(userFilter));
+                }
+
+                // Применяем фильтр по дате (если установлен)
+                string startDateStr = HttpContext.Session.GetString("StartDateFilter");
+                string endDateStr = HttpContext.Session.GetString("EndDateFilter");
+        
+                if (DateTime.TryParseExact(startDateStr, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startDate))
+                {
+                    query = query.Where(l => l.LogDateTime >= startDate);
+                }
+        
+                if (DateTime.TryParseExact(endDateStr, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime endDate))
+                {
+                    query = query.Where(l => l.LogDateTime <= endDate.AddDays(1)); // Добавляем день для включения всей конечной даты
+                }
+
+                // Применяем фильтр по событию (если установлен)
+                string actionFilter = HttpContext.Session.GetString("ActionFilter");
+                if (!string.IsNullOrEmpty(actionFilter))
+                {
+                    query = query.Where(l => l.EventCode.EventCodeName == actionFilter);
+                }
+
+                var log = query.ToList();
                 Log_Creater.Create(Guid.Parse(User.Identity.Name), "Log_Open", $"User {Log_Creater.TabNum(Guid.Parse(User.Identity.Name))} opened the logs tab");
+        
                 return View(log);
             }
             catch (Exception ex)
             {
-                // Логирование ошибки (можно добавить ваш логгер)
                 Log_Creater.Create(Guid.Parse(User.Identity.Name), "Log_Lost", ex.ToString());
-
-                // В случае ошибки возвращаем пустой список и сохраняем функциональность
                 ViewData["ShowSideBarBlock"] = true;
                 return View(new List<Log>());
             }
@@ -43,98 +72,149 @@ namespace Notification_System.Controllers
         [HttpPost]
         public IActionResult UserFilter(string selectedUser)
         {
-            HttpContext.Session.Clear();
+            // Очищаем только связанные с этим фильтром сессии
+            HttpContext.Session.Remove("UserMessageType");
+            HttpContext.Session.Remove("UserMessage");
+            HttpContext.Session.Remove("UserFilter");
 
             if (string.IsNullOrEmpty(selectedUser) || selectedUser == "-- Все пользователи --")
             {
-                HttpContext.Session.SetString("UserMessageType", "alert-error");
-                HttpContext.Session.SetString("UserMessage", "Чтобы применть фильтр, необходимо выбрать значение");
+                HttpContext.Session.SetString("UserMessageType", "alert-info");
+                HttpContext.Session.SetString("UserMessage", "Фильтр по пользователям сброшен");
             }
             else
             {
                 HttpContext.Session.SetString("UserMessageType", "alert-success");
                 HttpContext.Session.SetString("UserMessage", "Фильтр по пользователям успешно применён");
+                HttpContext.Session.SetString("UserFilter", selectedUser);
             }
 
-           HttpContext.Session.SetString("OpenModalUser", "true");
-            return RedirectToAction("Index", "LogView");
+            HttpContext.Session.SetString("OpenModalUser", "true");
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
         public IActionResult DataFilter(string startDate, string endDate)
         {
-            HttpContext.Session.Clear();
+            // Очищаем только связанные с этим фильтром сессии
+            HttpContext.Session.Remove("DateMessage");
+            HttpContext.Session.Remove("DateMessageType");
+            HttpContext.Session.Remove("StartDateFilter");
+            HttpContext.Session.Remove("EndDateFilter");
+            HttpContext.Session.Remove("StrartDate");
+            HttpContext.Session.Remove("EndDate");
+
             string result_error = "";
 
-            if (string.IsNullOrEmpty(startDate))
-            {
-                result_error += "Поле для ввода начальной даты не может быть пустым\n";
-                HttpContext.Session.SetString("StrartDate", "input-error");
-            }
-            if (string.IsNullOrEmpty(endDate))
-            {
-                result_error += "Поле для ввода конечной даты не может быть пустым";
-                HttpContext.Session.SetString("EndDate", "input-error");
-            }
+            // Валидация дат
             if (!string.IsNullOrEmpty(startDate) && !LogHelper.IsDateInCorrectFormat(startDate))
             {
                 result_error += "Начальная дата имеет неверный формат\n";
                 HttpContext.Session.SetString("StrartDate", "input-error");
             }
+    
             if (!string.IsNullOrEmpty(endDate) && !LogHelper.IsDateInCorrectFormat(endDate))
             {
                 result_error += "Конечная дата имеет неверный формат\n";
                 HttpContext.Session.SetString("EndDate", "input-error");
             }
+
             if (!string.IsNullOrEmpty(result_error))
             {
                 HttpContext.Session.SetString("DateMessage", result_error);
                 HttpContext.Session.SetString("DateMessageType", "alert-error");
                 HttpContext.Session.SetString("OpenModalData", "true");
-                return RedirectToAction("Index", "LogView");
-            }
-            else
-            {
-                HttpContext.Session.SetString("DateMessage", "Фильтр по дате применён");
-                HttpContext.Session.SetString("DateMessageType", "alert-success");
+                return RedirectToAction("Index");
             }
 
+            // Сохраняем фильтры
+            if (!string.IsNullOrEmpty(startDate))
+            {
+                HttpContext.Session.SetString("StartDateFilter", startDate);
+            }
+    
+            if (!string.IsNullOrEmpty(endDate))
+            {
+                HttpContext.Session.SetString("EndDateFilter", endDate);
+            }
+
+            HttpContext.Session.SetString("DateMessage", "Фильтр по дате применён");
+            HttpContext.Session.SetString("DateMessageType", "alert-success");
             HttpContext.Session.SetString("OpenModalData", "true");
-            return RedirectToAction("Index", "LogView");
+
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
         public IActionResult ActionFilter(string selectedAction)
         {
-
-            HttpContext.Session.Clear();
+            // Очищаем только связанные с этим фильтром сессии
+            HttpContext.Session.Remove("ActionMessageType");
+            HttpContext.Session.Remove("ActionMessage");
+            HttpContext.Session.Remove("ActionFilter");
 
             if (string.IsNullOrEmpty(selectedAction) || selectedAction == "-- Все события --")
             {
-                HttpContext.Session.SetString("ActionMessageType", "alert-error");
-                HttpContext.Session.SetString("ActionMessage", "Чтобы применть фильтр, необходимо выбрать значение");
+                HttpContext.Session.SetString("ActionMessageType", "alert-info");
+                HttpContext.Session.SetString("ActionMessage", "Фильтр по событиям сброшен");
             }
             else
             {
                 HttpContext.Session.SetString("ActionMessageType", "alert-success");
                 HttpContext.Session.SetString("ActionMessage", "Фильтр по событиям успешно применён");
+                HttpContext.Session.SetString("ActionFilter", selectedAction);
             }
+
             HttpContext.Session.SetString("OpenModalAction", "true");
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult ClearFilters()
+        {
+            // Очищаем все фильтры
+            HttpContext.Session.Remove("UserFilter");
+            HttpContext.Session.Remove("StartDateFilter");
+            HttpContext.Session.Remove("EndDateFilter");
+            HttpContext.Session.Remove("ActionFilter");
+    
+            // Очищаем все сообщения
+            HttpContext.Session.Remove("UserMessage");
+            HttpContext.Session.Remove("UserMessageType");
+            HttpContext.Session.Remove("DateMessage");
+            HttpContext.Session.Remove("DateMessageType");
+            HttpContext.Session.Remove("ActionMessage");
+            HttpContext.Session.Remove("ActionMessageType");
+    
+            // Очищаем стили полей
+            HttpContext.Session.Remove("StrartDate");
+            HttpContext.Session.Remove("EndDate");
+
             return RedirectToAction("Index", "LogView");
         }
 
-
-        //[HttpPost]
-        //public IActionResult ClearFilter()
-        //{
-        //    // Обработка выбранного значения
-        //    // ...
-        //}
-
         public IActionResult ClearSession()
         {
-            HttpContext.Session.Clear(); // Очищаем всю сессию
-            return RedirectToAction("Index", "LogView"); // Редирект на главную страницу настроек
+            // Очищаем только служебные данные сессии, но сохраняем фильтры
+            HttpContext.Session.Remove("UserMessage");
+            HttpContext.Session.Remove("UserMessageType");
+            HttpContext.Session.Remove("DateMessage");
+            HttpContext.Session.Remove("DateMessageType");
+            HttpContext.Session.Remove("ActionMessage");
+            HttpContext.Session.Remove("ActionMessageType");
+            HttpContext.Session.Remove("OpenModalUser");
+            HttpContext.Session.Remove("OpenModalData");
+            HttpContext.Session.Remove("OpenModalAction");
+            HttpContext.Session.Remove("StrartDate");
+            HttpContext.Session.Remove("EndDate");
+
+            // Но НЕ очищаем сами фильтры:
+            // HttpContext.Session.Remove("UserFilter");
+            // HttpContext.Session.Remove("StartDateFilter");
+            // HttpContext.Session.Remove("EndDateFilter");
+            // HttpContext.Session.Remove("ActionFilter");
+
+            return RedirectToAction("Index", "LogView");
         }
     }
 }
