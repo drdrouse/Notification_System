@@ -99,7 +99,7 @@ namespace Notification_System.Controllers
             {
                 // Логирование ошибки
                 Log_Creater.Create(Guid.Parse(User.Identity.Name), "Filter_Error",
-                    $"Ошибка в UserFilter: {ex.Message}\nПараметр: {selectedUser}\n{ex.StackTrace}");
+                    $"Error UserFilter: {ex.Message}\nParameter: {selectedUser}\n{ex.StackTrace}");
 
                 // Устанавливаем сообщение об ошибке для пользователя
                 HttpContext.Session.SetString("UserMessageType", "alert-danger");
@@ -182,7 +182,7 @@ namespace Notification_System.Controllers
             {
                 // Логирование ошибки
                 Log_Creater.Create(Guid.Parse(User.Identity.Name), "Filter_Error",
-                    $"Ошибка в DataFilter: {ex.Message}\nПараметры: startDate={startDate}, endDate={endDate}\n{ex.StackTrace}");
+                    $"Error в DataFilter: {ex.Message}\nParameter: startDate={startDate}, endDate={endDate}\n{ex.StackTrace}");
 
                 // Устанавливаем сообщение об ошибке для пользователя
                 HttpContext.Session.SetString("DateMessageType", "alert-danger");
@@ -212,7 +212,8 @@ namespace Notification_System.Controllers
                 HttpContext.Session.SetString("ActionMessage", "Фильтр по событиям успешно применён");
                 HttpContext.Session.SetString("ActionFilter", selectedAction);
             }
-
+            Log_Creater.Create(Guid.Parse(User.Identity.Name), "Filter_Error",
+                    $"Error в DataFilter: {ex.Message}\nParameter: startDate={startDate}, endDate={endDate}\n{ex.StackTrace}");
             HttpContext.Session.SetString("OpenModalAction", "true");
             return RedirectToAction("Index");
         }
@@ -254,6 +255,11 @@ namespace Notification_System.Controllers
             }
             catch (Exception ex)
             {
+                Log_Creater.Create(
+                    Guid.Parse(User.Identity.Name),
+                    "Error_Report",
+                    $"Error: {ex.ToString()}.\nWhen creating a report in report format: {reportFormat} "
+                );
                 HttpContext.Session.SetString("ReportMessageType", "alert-error");
                 HttpContext.Session.SetString("ReportMessage", $"Ошибка при формировании отчёта: {ex.Message}");
             }
@@ -265,25 +271,40 @@ namespace Notification_System.Controllers
         [HttpPost]
         public IActionResult ClearFilters()
         {
-            // Очищаем все фильтры
-            HttpContext.Session.Remove("UserFilter");
-            HttpContext.Session.Remove("StartDateFilter");
-            HttpContext.Session.Remove("EndDateFilter");
-            HttpContext.Session.Remove("ActionFilter");
-    
-            // Очищаем все сообщения
-            HttpContext.Session.Remove("UserMessage");
-            HttpContext.Session.Remove("UserMessageType");
-            HttpContext.Session.Remove("DateMessage");
-            HttpContext.Session.Remove("DateMessageType");
-            HttpContext.Session.Remove("ActionMessage");
-            HttpContext.Session.Remove("ActionMessageType");
-    
-            // Очищаем стили полей
-            HttpContext.Session.Remove("StrartDate");
-            HttpContext.Session.Remove("EndDate");
+            try
+            {
+                // Очищаем все фильтры
+                HttpContext.Session.Remove("UserFilter");
+                HttpContext.Session.Remove("StartDateFilter");
+                HttpContext.Session.Remove("EndDateFilter");
+                HttpContext.Session.Remove("ActionFilter");
 
-            return RedirectToAction("Index", "LogView");
+                // Очищаем все сообщения
+                HttpContext.Session.Remove("UserMessage");
+                HttpContext.Session.Remove("UserMessageType");
+                HttpContext.Session.Remove("DateMessage");
+                HttpContext.Session.Remove("DateMessageType");
+                HttpContext.Session.Remove("ActionMessage");
+                HttpContext.Session.Remove("ActionMessageType");
+
+                // Очищаем стили полей
+                HttpContext.Session.Remove("StrartDate");
+                HttpContext.Session.Remove("EndDate");
+
+                return RedirectToAction("Index", "LogView");
+            }
+            catch (Exception ex)
+            {
+                // Логирование ошибки
+                Log_Creater.Create(
+                    Guid.Parse(User.Identity.Name),
+                    "Filter_Clear_Error",
+                    $"Error when resetting filters: {ex.Message}\n" +
+                    $"Stack Trace: {ex.StackTrace}"
+                );
+
+                return RedirectToAction("Index", "LogView");
+            }
         }
 
         public IActionResult ClearSession()
@@ -303,13 +324,6 @@ namespace Notification_System.Controllers
             HttpContext.Session.Remove("OpenReportForm");
             HttpContext.Session.Remove("StrartDate");
             HttpContext.Session.Remove("EndDate");
-
-
-            // Но НЕ очищаем сами фильтры:
-            // HttpContext.Session.Remove("UserFilter");
-            // HttpContext.Session.Remove("StartDateFilter");
-            // HttpContext.Session.Remove("EndDateFilter");
-            // HttpContext.Session.Remove("ActionFilter");
 
             return RedirectToAction("Index", "LogView");
         }
