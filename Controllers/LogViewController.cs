@@ -196,26 +196,56 @@ namespace Notification_System.Controllers
         [HttpPost]
         public IActionResult ActionFilter(string selectedAction)
         {
-            // Очищаем только связанные с этим фильтром сессии
-            HttpContext.Session.Remove("ActionMessageType");
-            HttpContext.Session.Remove("ActionMessage");
-            HttpContext.Session.Remove("ActionFilter");
+            try
+            {
+                // Очищаем только связанные с этим фильтром сессии
+                HttpContext.Session.Remove("ActionMessageType");
+                HttpContext.Session.Remove("ActionMessage");
+                HttpContext.Session.Remove("ActionFilter");
 
-            if (string.IsNullOrEmpty(selectedAction) || selectedAction == "-- Все события --")
-            {
-                HttpContext.Session.SetString("ActionMessageType", "alert-error");
-                HttpContext.Session.SetString("ActionMessage", "Для применения фильтра должно быть выбрано значение");
+                if (string.IsNullOrEmpty(selectedAction) || selectedAction == "-- Все события --")
+                {
+                    HttpContext.Session.SetString("ActionMessageType", "alert-info"); // Изменено на info для единообразия
+                    HttpContext.Session.SetString("ActionMessage", "Фильтр по событиям сброшен");
+                    HttpContext.Session.Remove("ActionFilter"); // Явно удаляем фильтр
+                }
+                else
+                {
+                    // Дополнительная проверка существования действия
+                    if (!_notificationSystemContext.EventCodes.Any(e => e.EventCodeName == selectedAction))
+                    {
+                        HttpContext.Session.SetString("ActionMessageType", "alert-warning");
+                        HttpContext.Session.SetString("ActionMessage", "Выбранное событие не найдено");
+                    }
+                    else
+                    {
+                        HttpContext.Session.SetString("ActionMessageType", "alert-success");
+                        HttpContext.Session.SetString("ActionMessage", $"Фильтр по событию '{selectedAction}' успешно применён");
+                        HttpContext.Session.SetString("ActionFilter", selectedAction);
+                    }
+                }
+
+                HttpContext.Session.SetString("OpenModalAction", "true");
+                return RedirectToAction("Index");
             }
-            else
+            catch (Exception ex)
             {
-                HttpContext.Session.SetString("ActionMessageType", "alert-success");
-                HttpContext.Session.SetString("ActionMessage", "Фильтр по событиям успешно применён");
-                HttpContext.Session.SetString("ActionFilter", selectedAction);
+                // Логирование ошибки
+                Log_Creater.Create(
+                    Guid.Parse(User.Identity.Name),
+                    "Filter_Error",
+                    $"Error ActionFilter: {ex.Message}\n" +
+                    $"Selected action: {selectedAction}\n" +
+                    $"Stack Trace: {ex.StackTrace}"
+                );
+
+                // Устанавливаем сообщение об ошибке для пользователя
+                HttpContext.Session.SetString("ActionMessageType", "alert-danger");
+                HttpContext.Session.SetString("ActionMessage", "Произошла ошибка при обработке фильтра событий");
+                HttpContext.Session.SetString("OpenModalAction", "true");
+
+                return RedirectToAction("Index");
             }
-            Log_Creater.Create(Guid.Parse(User.Identity.Name), "Filter_Error",
-                    $"Error в DataFilter: {ex.Message}\nParameter: startDate={startDate}, endDate={endDate}\n{ex.StackTrace}");
-            HttpContext.Session.SetString("OpenModalAction", "true");
-            return RedirectToAction("Index");
         }
 
         [HttpPost]
