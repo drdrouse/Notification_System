@@ -6,8 +6,7 @@
     margin-top: 1%;
     margin-left: 1%;
     display: block;
-    max-height: 82%;
-    
+    max-height: 78.5%;
 }
 
 body.light-mode .user_table {
@@ -15,7 +14,7 @@ body.light-mode .user_table {
     box-shadow: var(--shadow-light);
 }
     .user_table tbody {
-        height: 84%; /* Устанавливаем фиксированную высоту тела таблицы */
+        height: 83.5%; /* Устанавливаем фиксированную высоту тела таблицы */
         overflow-y: scroll; /* Включаем вертикальную прокрутку */
         display: block;
     }
