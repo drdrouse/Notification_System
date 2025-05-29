@@ -218,6 +218,51 @@ namespace Notification_System.Controllers
         }
 
         [HttpPost]
+        public IActionResult CreateReport(string reportFormat)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(reportFormat) || reportFormat== "-- Выберите формат --")
+                {
+                    HttpContext.Session.SetString("ReportMessageType", "alert-error");
+                    HttpContext.Session.SetString("ReportMessage", "Необходимо выбрать формат отчёта");
+                }
+                else
+                {
+                    // Логика генерации отчёта в выбранном формате
+                    switch (reportFormat.ToUpper())
+                    {
+                        case "XML":
+                            // Генерация XML
+                            break;
+                        case "JSON":
+                            // Генерация JSON
+                            break;
+                        case "CSV":
+                            // Генерация CSV
+                            break;
+                        case "PARQUET":
+                            // Генерация Parquet
+                            break;
+                        default:
+                            throw new ArgumentException("Неподдерживаемый формат отчёта");
+                    }
+                }
+
+                HttpContext.Session.SetString("ReportMessageType", "alert-success");
+                HttpContext.Session.SetString("ReportMessage", $"Отчёт в формате {reportFormat} успешно сформирован");
+            }
+            catch (Exception ex)
+            {
+                HttpContext.Session.SetString("ReportMessageType", "alert-error");
+                HttpContext.Session.SetString("ReportMessage", $"Ошибка при формировании отчёта: {ex.Message}");
+            }
+
+            HttpContext.Session.SetString("OpenReportForm", "true");
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
         public IActionResult ClearFilters()
         {
             // Очищаем все фильтры
@@ -250,11 +295,15 @@ namespace Notification_System.Controllers
             HttpContext.Session.Remove("DateMessageType");
             HttpContext.Session.Remove("ActionMessage");
             HttpContext.Session.Remove("ActionMessageType");
+            HttpContext.Session.Remove("ReportMessage");
+            HttpContext.Session.Remove("ReportMessageType");
             HttpContext.Session.Remove("OpenModalUser");
             HttpContext.Session.Remove("OpenModalData");
             HttpContext.Session.Remove("OpenModalAction");
+            HttpContext.Session.Remove("OpenReportForm");
             HttpContext.Session.Remove("StrartDate");
             HttpContext.Session.Remove("EndDate");
+
 
             // Но НЕ очищаем сами фильтры:
             // HttpContext.Session.Remove("UserFilter");

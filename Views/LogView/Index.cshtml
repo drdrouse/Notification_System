@@ -26,7 +26,7 @@
                 <form asp-controller="LogView" asp-action="ClearFilters" method="post" class="clear_form">
                     <button type="submit" class="action-button">Сбросить фильтры</button>
                 </form>
-                <button class="action-button">Отчёт</button>
+                <button class="action-button" id="report">Отчёт</button>
             </div>
 
             <table border="0" class="user_table">
@@ -63,10 +63,10 @@
                         <select class="form-control" id="userFilter" name="selectedUser">
                             <option value="">-- Все пользователи --</option>
                             @foreach (var user in Model.Select(p => p.Profile)
-                      .GroupBy(p => p.ProfileTabNum)
-                      .Select(g => g.First())
-                      .OrderBy(u => u.ProfileSurname)
-                      .ThenBy(u => u.ProfileName))
+                   .GroupBy(p => p.ProfileTabNum)
+                   .Select(g => g.First())
+                   .OrderBy(u => u.ProfileSurname)
+                   .ThenBy(u => u.ProfileName))
                             {
                                 <option value="@user.ProfileTabNum">@user.ProfileTabNum: @user.ProfileSurname  @user.ProfileName  @user.ProfilePatronymic</option>
                             }
@@ -127,8 +127,8 @@
                         <select class="form-control" id="actionFilter" name="selectedAction">
                             <option value="">-- Все события --</option>
                             @foreach (var action in Model.Select(ac => ac.EventCode)
-                               .GroupBy(ec => ec.EventCodeName)
-                               .Select(g => g.First()))
+                            .GroupBy(ec => ec.EventCodeName)
+                            .Select(g => g.First()))
                             {
                                 <option value="@action.EventCodeName">@action.EventCodeName: @action.EventCodeDescription</option>
                             }
@@ -139,6 +139,34 @@
                     </div>
                     @* Кнопка отправки *@
                     <button type="submit" class="btn btn-success">Применить</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="modalForm_create_report" class="modal">
+            <div class="modal-content">
+                <a href="@Url.Action("ClearSession", "LogView")" id="closeFormButton" class="close">&times;</a>
+
+                <h2>Формат создаваемого отчёта</h2>
+                <form method="post" asp-controller="LogView" asp-action="CreateReport">
+                    <!-- Выпадающий список для выбора формата -->
+                    <div class="form-group">
+                        <label for="reportFormat">Выберите формат отчёта:</label>
+                        <select class="form-control" id="reportFormat" name="reportFormat" required>
+                            <option value="">-- Выберите формат --</option>
+                            <option value="XML">XML</option>
+                            <option value="JSON">JSON</option>
+                            <option value="CSV">CSV</option>
+                            <option value="Parquet">Parquet</option>
+                        </select>
+                    </div>
+
+                    <div id="messageArea" class="alert @Context.Session.GetString("ReportMessageType")">
+                        <pre>@Context.Session.GetString("ReportMessage")</pre>
+                    </div>
+
+                    <!-- Кнопка отправки -->
+                    <button type="submit" class="btn btn-success">Сформировать отчёт</button>
                 </form>
             </div>
         </div>
@@ -157,8 +185,13 @@
     {
         <script src="~/js/open_event_filter.js"></script>
     }
+    @if (Context.Session.GetString("OpenReportForm") == "true")
+    {
+        <script src="~/js/open_report_form.js"></script>
+    }
     <script src="~/js/add_user_filter.js"></script>
     <script src="~/js/add_data_filter.js"></script>
     <script src="~/js/add_action_filter.js"></script>
+    <script src="~/js/report_form.js"></script>
 </body>
 </html>
