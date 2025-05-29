@@ -1,10 +1,16 @@
-﻿using DataAccessLibrary;
+﻿using CsvHelper;
+using DataAccessLibrary;
 using DataAccessLibrary.Models;
 using DataHelper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
+using System.Formats.Asn1;
 using System.Globalization;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Xml.Linq;
 
 namespace Notification_System.Controllers
 {
@@ -69,7 +75,7 @@ namespace Notification_System.Controllers
             }
         }
 
-        [HttpPost]
+
         [HttpPost]
         public IActionResult UserFilter(string selectedUser)
         {
@@ -109,7 +115,6 @@ namespace Notification_System.Controllers
             }
         }
 
-        [HttpPost]
         [HttpPost]
         public IActionResult DataFilter(string startDate, string endDate)
         {
@@ -253,50 +258,92 @@ namespace Notification_System.Controllers
         {
             try
             {
-                if (string.IsNullOrEmpty(reportFormat) || reportFormat== "-- Выберите формат --")
+                if (string.IsNullOrEmpty(reportFormat) || reportFormat == "-- Выберите формат --")
                 {
                     HttpContext.Session.SetString("ReportMessageType", "alert-error");
                     HttpContext.Session.SetString("ReportMessage", "Необходимо выбрать формат отчёта");
-                }
-                else
-                {
-                    // Логика генерации отчёта в выбранном формате
-                    switch (reportFormat.ToUpper())
-                    {
-                        case "XML":
-                            // Генерация XML
-                            break;
-                        case "JSON":
-                            // Генерация JSON
-                            break;
-                        case "CSV":
-                            // Генерация CSV
-                            break;
-                        case "PARQUET":
-                            // Генерация Parquet
-                            break;
-                        default:
-                            throw new ArgumentException("Неподдерживаемый формат отчёта");
-                    }
+                    HttpContext.Session.SetString("OpenReportForm", "true");
+                    return RedirectToAction("Index");
                 }
 
-                HttpContext.Session.SetString("ReportMessageType", "alert-success");
-                HttpContext.Session.SetString("ReportMessage", $"Отчёт в формате {reportFormat} успешно сформирован");
+                // Получаем отфильтрованные данные (аналогично методу Index)
+                IQueryable<Log> query = _notificationSystemContext.Logs
+                    .Include(p => p.Profile)
+                    .Include(e => e.EventCode)
+                    .OrderByDescending(l => l.LogDateTime);
+
+                // Применяем фильтр по пользователю
+                string userFilter = HttpContext.Session.GetString("UserFilter");
+                if (!string.IsNullOrEmpty(userFilter) && int.TryParse(userFilter, out int userId))
+                {
+                    query = query.Where(l => l.Profile.ProfileTabNum == userId);
+                }
+
+                // Применяем фильтр по дате
+                string startDateStr = HttpContext.Session.GetString("StartDateFilter");
+                string endDateStr = HttpContext.Session.GetString("EndDateFilter");
+
+                if (DateTime.TryParseExact(startDateStr, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startDate))
+                {
+                    query = query.Where(l => l.LogDateTime >= startDate);
+                }
+
+                if (DateTime.TryParseExact(endDateStr, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime endDate))
+                {
+                    query = query.Where(l => l.LogDateTime <= endDate.AddDays(1));
+                }
+
+                // Применяем фильтр по событию
+                string actionFilter = HttpContext.Session.GetString("ActionFilter");
+                if (!string.IsNullOrEmpty(actionFilter))
+                {
+                    query = query.Where(l => l.EventCode.EventCodeName == actionFilter);
+                }
+
+                var filteredData = query.ToList();
+
+                // Генерация отчёта в выбранном формате
+                byte[] reportBytes;
+                string contentType;
+                string fileExtension;
+
+                switch (reportFormat.ToUpper())
+                {
+                    case "XML":
+                        (reportBytes, contentType, fileExtension) = GenerateXmlReport(filteredData);
+                        break;
+                    case "JSON":
+                        (reportBytes, contentType, fileExtension) = GenerateJsonReport(filteredData);
+                        break;
+                    case "CSV":
+                        (reportBytes, contentType, fileExtension) = GenerateCsvReport(filteredData);
+                        break;
+                    case "PARQUET":
+                        (reportBytes, contentType, fileExtension) = GenerateParquetReport(filteredData);
+                        break;
+                    default:
+                        throw new ArgumentException("Неподдерживаемый формат отчёта");
+                }
+
+                // Возвращаем файл для скачивания
+                string fileName = $"Отчет_{DateTime.Now:yyyyMMdd_HHmmss}{fileExtension}";
+                return File(reportBytes, contentType, fileName);
+
             }
             catch (Exception ex)
             {
                 Log_Creater.Create(
                     Guid.Parse(User.Identity.Name),
                     "Error_Report",
-                    $"Error: {ex.ToString()}.\nWhen creating a report in report format: {reportFormat} "
+                    $"Error: {ex}.\nWhen creating a report in format: {reportFormat}"
                 );
                 HttpContext.Session.SetString("ReportMessageType", "alert-error");
-                HttpContext.Session.SetString("ReportMessage", $"Ошибка при формировании отчёта: {ex.Message}");
+                HttpContext.Session.SetString("ReportMessage", $"Error during report generation: {ex.Message}");
+                HttpContext.Session.SetString("OpenReportForm", "true");
+                return RedirectToAction("Index");
             }
-
-            HttpContext.Session.SetString("OpenReportForm", "true");
-            return RedirectToAction("Index");
         }
+
 
         [HttpPost]
         public IActionResult ClearFilters()
@@ -356,6 +403,63 @@ namespace Notification_System.Controllers
             HttpContext.Session.Remove("EndDate");
 
             return RedirectToAction("Index", "LogView");
+        }
+
+        private (byte[], string, string) GenerateXmlReport(List<Log> data)
+        {
+            // Создаем XML документ
+            XDocument xmlDocument = new XDocument(
+                new XElement("Logs",
+                    from log in data
+                    select new XElement("Log",
+                        new XElement("Id", log.LogId),
+                        new XElement("DateTime", log.LogDateTime),
+                        new XElement("User",
+                            new XElement("TabNum", log.Profile?.ProfileTabNum),
+                            new XElement("Name", $"{log.Profile?.ProfileSurname} {log.Profile?.ProfileName}")
+                        ),
+                        new XElement("Event", log.EventCode?.EventCodeName),
+                        new XElement("Description", log.EventCode?.EventCodeDescription)
+                    )
+                )
+            );
+
+            // Конвертируем в массив байтов
+            using (var memoryStream = new MemoryStream())
+            {
+                xmlDocument.Save(memoryStream);
+                return (memoryStream.ToArray(), "application/xml", ".xml");
+            }
+        }
+
+        private (byte[], string, string) GenerateJsonReport(List<Log> data)
+        {
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+            };
+            var json = JsonSerializer.Serialize(data, options);
+            return (Encoding.UTF8.GetBytes(json), "application/json", ".json");
+        }
+
+        private (byte[], string, string) GenerateCsvReport(List<Log> data)
+        {
+            using (var memoryStream = new MemoryStream())
+            using (var writer = new StreamWriter(memoryStream, Encoding.UTF8))
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                csv.WriteRecords(data);
+                writer.Flush();
+                return (memoryStream.ToArray(), "text/csv", ".csv");
+            }
+        }
+
+        private (byte[], string, string) GenerateParquetReport(List<Log> data)
+        {
+            // Реализация для Parquet будет сложнее, может потребоваться дополнительная библиотека
+            // Например, используя Parquet.Net
+            throw new NotImplementedException("Parquet generation not implemented yet");
         }
     }
 }
