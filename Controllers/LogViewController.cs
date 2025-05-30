@@ -266,39 +266,8 @@ namespace Notification_System.Controllers
                     return RedirectToAction("Index");
                 }
 
-                // Получаем отфильтрованные данные (аналогично методу Index)
-                IQueryable<Log> query = _notificationSystemContext.Logs
-                    .Include(p => p.Profile)
-                    .Include(e => e.EventCode)
-                    .OrderByDescending(l => l.LogDateTime);
-
-                // Применяем фильтр по пользователю
-                string userFilter = HttpContext.Session.GetString("UserFilter");
-                if (!string.IsNullOrEmpty(userFilter) && int.TryParse(userFilter, out int userId))
-                {
-                    query = query.Where(l => l.Profile.ProfileTabNum == userId);
-                }
-
-                // Применяем фильтр по дате
-                string startDateStr = HttpContext.Session.GetString("StartDateFilter");
-                string endDateStr = HttpContext.Session.GetString("EndDateFilter");
-
-                if (DateTime.TryParseExact(startDateStr, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startDate))
-                {
-                    query = query.Where(l => l.LogDateTime >= startDate);
-                }
-
-                if (DateTime.TryParseExact(endDateStr, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime endDate))
-                {
-                    query = query.Where(l => l.LogDateTime <= endDate.AddDays(1));
-                }
-
-                // Применяем фильтр по событию
-                string actionFilter = HttpContext.Session.GetString("ActionFilter");
-                if (!string.IsNullOrEmpty(actionFilter))
-                {
-                    query = query.Where(l => l.EventCode.EventCodeName == actionFilter);
-                }
+                // Получаем отфильтрованные данные
+                IQueryable<Log> query = ApplyFilters(_notificationSystemContext.Logs); // Вынесено в метод
 
                 var filteredData = query.ToList();
 
@@ -306,11 +275,23 @@ namespace Notification_System.Controllers
                 byte[] reportBytes;
                 string contentType;
                 string fileExtension;
+                string downloadsPath = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                    "Downloads"
+                );
+
+                if (!Directory.Exists(downloadsPath))
+                {
+                    Directory.CreateDirectory(downloadsPath);
+                }
 
                 switch (reportFormat.ToUpper())
                 {
                     case "XML":
                         (reportBytes, contentType, fileExtension) = GenerateXmlReport(filteredData);
+                        // Сохраняем файл на сервере
+                        string serverFileName = Path.Combine(downloadsPath, $"Отчет_{DateTime.Now:yyyyMMdd_HHmmss}{fileExtension}");
+                        System.IO.File.WriteAllBytesAsync(serverFileName, reportBytes);
                         break;
                     case "JSON":
                         (reportBytes, contentType, fileExtension) = GenerateJsonReport(filteredData);
@@ -325,10 +306,9 @@ namespace Notification_System.Controllers
                         throw new ArgumentException("Неподдерживаемый формат отчёта");
                 }
 
-                // Возвращаем файл для скачивания
-                string fileName = $"Отчет_{DateTime.Now:yyyyMMdd_HHmmss}{fileExtension}";
-                return File(reportBytes, contentType, fileName);
-
+                HttpContext.Session.SetString("ReportMessageType", "alert-success");
+                HttpContext.Session.SetString("ReportMessage", "Отчет успешно создан");
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
@@ -342,6 +322,44 @@ namespace Notification_System.Controllers
                 HttpContext.Session.SetString("OpenReportForm", "true");
                 return RedirectToAction("Index");
             }
+        }
+
+        private IQueryable<Log> ApplyFilters(IQueryable<Log> query)
+        {
+            query = query
+                .Include(p => p.Profile)
+                .Include(e => e.EventCode)
+                .OrderByDescending(l => l.LogDateTime);
+
+            // Фильтр по пользователю
+            string userFilter = HttpContext.Session.GetString("UserFilter");
+            if (!string.IsNullOrEmpty(userFilter) && int.TryParse(userFilter, out int userId))
+            {
+                query = query.Where(l => l.Profile.ProfileTabNum == userId);
+            }
+
+            // Фильтр по дате
+            string startDateStr = HttpContext.Session.GetString("StartDateFilter");
+            string endDateStr = HttpContext.Session.GetString("EndDateFilter");
+
+            if (DateTime.TryParseExact(startDateStr, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startDate))
+            {
+                query = query.Where(l => l.LogDateTime >= startDate);
+            }
+
+            if (DateTime.TryParseExact(endDateStr, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime endDate))
+            {
+                query = query.Where(l => l.LogDateTime <= endDate.AddDays(1));
+            }
+
+            // Фильтр по событию
+            string actionFilter = HttpContext.Session.GetString("ActionFilter");
+            if (!string.IsNullOrEmpty(actionFilter))
+            {
+                query = query.Where(l => l.EventCode.EventCodeName == actionFilter);
+            }
+
+            return query;
         }
 
 
