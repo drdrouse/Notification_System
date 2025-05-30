@@ -290,8 +290,7 @@ namespace Notification_System.Controllers
                     case "XML":
                         (reportBytes, contentType, fileExtension) = GenerateXmlReport(filteredData);
                         // Сохраняем файл на сервере
-                        string serverFileName = Path.Combine(downloadsPath, $"Отчет_{DateTime.Now:yyyyMMdd_HHmmss}{fileExtension}");
-                        System.IO.File.WriteAllBytesAsync(serverFileName, reportBytes);
+                        
                         break;
                     case "JSON":
                         (reportBytes, contentType, fileExtension) = GenerateJsonReport(filteredData);
@@ -305,6 +304,9 @@ namespace Notification_System.Controllers
                     default:
                         throw new ArgumentException("Неподдерживаемый формат отчёта");
                 }
+
+                string serverFileName = Path.Combine(downloadsPath, $"Отчет_{DateTime.Now:yyyyMMdd_HHmmss}{fileExtension}");
+                System.IO.File.WriteAllBytesAsync(serverFileName, reportBytes);
 
                 HttpContext.Session.SetString("ReportMessageType", "alert-success");
                 HttpContext.Session.SetString("ReportMessage", "Отчет успешно создан");
@@ -452,25 +454,16 @@ namespace Notification_System.Controllers
 
         private (byte[], string, string) GenerateJsonReport(List<Log> data)
         {
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = true,
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-            };
-            var json = JsonSerializer.Serialize(data, options);
-            return (Encoding.UTF8.GetBytes(json), "application/json", ".json");
+            // Реализация для Parquet будет сложнее, может потребоваться дополнительная библиотека
+            // Например, используя Parquet.Net
+            throw new NotImplementedException("Parquet generation not implemented yet");
         }
 
         private (byte[], string, string) GenerateCsvReport(List<Log> data)
         {
-            using (var memoryStream = new MemoryStream())
-            using (var writer = new StreamWriter(memoryStream, Encoding.UTF8))
-            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-            {
-                csv.WriteRecords(data);
-                writer.Flush();
-                return (memoryStream.ToArray(), "text/csv", ".csv");
-            }
+            // Реализация для Parquet будет сложнее, может потребоваться дополнительная библиотека
+            // Например, используя Parquet.Net
+            throw new NotImplementedException("Parquet generation not implemented yet");
         }
 
         private (byte[], string, string) GenerateParquetReport(List<Log> data)
