@@ -481,9 +481,23 @@ namespace Notification_System.Controllers
 
         private (byte[], string, string) GenerateCsvReport(List<Log> data)
         {
-            // Реализация для Parquet будет сложнее, может потребоваться дополнительная библиотека
-            // Например, используя Parquet.Net
-            throw new NotImplementedException("Parquet generation not implemented yet");
+            var sb = new StringBuilder();
+
+            // Заголовки
+            sb.AppendLine("Id,DateTime,TabNum,UserName,Event,Description");
+
+            // Данные
+            foreach (var log in data)
+            {
+                var tabNum = log.Profile?.ProfileTabNum.ToString() ?? "";
+                var userName = $"{log.Profile?.ProfileSurname} {log.Profile?.ProfileName}";
+                var eventName = log.EventCode?.EventCodeName ?? "";
+                var description = log.EventCode?.EventCodeDescription ?? "";
+
+                sb.AppendLine($"\"{log.LogId}\",\"{log.LogDateTime}\",\"{tabNum}\",\"{userName}\",\"{eventName}\",\"{description}\"");
+            }
+
+            return (Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", ".csv");
         }
 
         private (byte[], string, string) GenerateParquetReport(List<Log> data)
