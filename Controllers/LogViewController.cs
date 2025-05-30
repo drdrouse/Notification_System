@@ -14,6 +14,7 @@ using System.Xml.Linq;
 using Parquet;
 using Parquet.Schema;
 using Parquet.Data;
+using System.Threading.Tasks;
 
 namespace Notification_System.Controllers
 {
@@ -29,46 +30,46 @@ namespace Notification_System.Controllers
         {
             try
             {
-            ViewData["ShowSideBarBlock"] = true;
+                ViewData["ShowSideBarBlock"] = true;
 
-            // Получаем базовый запрос
-            IQueryable<Log> query = _notificationSystemContext.Logs
-                .Include(p => p.Profile)
-                .Include(e => e.EventCode)
-                .OrderByDescending(l => l.LogDateTime);
+                // Получаем базовый запрос
+                IQueryable<Log> query = _notificationSystemContext.Logs
+                    .Include(p => p.Profile)
+                    .Include(e => e.EventCode)
+                    .OrderByDescending(l => l.LogDateTime);
 
-            // Применяем фильтр по пользователю (если установлен)
-            string userFilter = HttpContext.Session.GetString("UserFilter");
-            if (!string.IsNullOrEmpty(userFilter))
-            {
-                query = query.Where(l => l.Profile.ProfileTabNum == int.Parse(userFilter));
-            }
+                // Применяем фильтр по пользователю (если установлен)
+                string userFilter = HttpContext.Session.GetString("UserFilter");
+                if (!string.IsNullOrEmpty(userFilter))
+                {
+                    query = query.Where(l => l.Profile.ProfileTabNum == int.Parse(userFilter));
+                }
 
-            // Применяем фильтр по дате (если установлен)
-            string startDateStr = HttpContext.Session.GetString("StartDateFilter");
-            string endDateStr = HttpContext.Session.GetString("EndDateFilter");
-        
-            if (DateTime.TryParseExact(startDateStr, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startDate))
-            {
-                query = query.Where(l => l.LogDateTime >= startDate);
-            }
-        
-            if (DateTime.TryParseExact(endDateStr, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime endDate))
-            {
-                query = query.Where(l => l.LogDateTime <= endDate.AddDays(1)); // Добавляем день для включения всей конечной даты
-            }
+                // Применяем фильтр по дате (если установлен)
+                string startDateStr = HttpContext.Session.GetString("StartDateFilter");
+                string endDateStr = HttpContext.Session.GetString("EndDateFilter");
 
-            // Применяем фильтр по событию (если установлен)
-            string actionFilter = HttpContext.Session.GetString("ActionFilter");
-            if (!string.IsNullOrEmpty(actionFilter))
-            {
-                query = query.Where(l => l.EventCode.EventCodeName == actionFilter);
-            }
+                if (DateTime.TryParseExact(startDateStr, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startDate))
+                {
+                    query = query.Where(l => l.LogDateTime >= startDate);
+                }
 
-            var log = query.ToList();
-            Log_Creater.Create(Guid.Parse(User.Identity.Name), "Log_Open", $"User {Log_Creater.TabNum(Guid.Parse(User.Identity.Name))} opened the logs tab");
-        
-            return View(log);
+                if (DateTime.TryParseExact(endDateStr, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime endDate))
+                {
+                    query = query.Where(l => l.LogDateTime <= endDate.AddDays(1)); // Добавляем день для включения всей конечной даты
+                }
+
+                // Применяем фильтр по событию (если установлен)
+                string actionFilter = HttpContext.Session.GetString("ActionFilter");
+                if (!string.IsNullOrEmpty(actionFilter))
+                {
+                    query = query.Where(l => l.EventCode.EventCodeName == actionFilter);
+                }
+
+                var log = query.ToList();
+                Log_Creater.Create(Guid.Parse(User.Identity.Name), "Log_Open", $"User {Log_Creater.TabNum(Guid.Parse(User.Identity.Name))} opened the logs tab");
+
+                return View(log);
             }
             catch (Exception ex)
             {
@@ -182,7 +183,7 @@ namespace Notification_System.Controllers
                     HttpContext.Session.SetString("EndDateFilter", endDate);
                 }
 
-                
+
 
                 return RedirectToAction("Index");
             }
@@ -257,7 +258,7 @@ namespace Notification_System.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateReport(string reportFormat)
+        public async Task<IActionResult> CreateReport(string reportFormat)
         {
             try
             {
@@ -293,7 +294,7 @@ namespace Notification_System.Controllers
                     case "XML":
                         (reportBytes, contentType, fileExtension) = GenerateXmlReport(filteredData);
                         // Сохраняем файл на сервере
-                        
+
                         break;
                     case "JSON":
                         (reportBytes, contentType, fileExtension) = GenerateJsonReport(filteredData);
@@ -302,7 +303,7 @@ namespace Notification_System.Controllers
                         (reportBytes, contentType, fileExtension) = GenerateCsvReport(filteredData);
                         break;
                     case "PARQUET":
-                        (reportBytes, contentType, fileExtension) = GenerateParquetReport(filteredData);
+                        (reportBytes, contentType, fileExtension) = await GenerateParquetReport(filteredData);
                         break;
                     default:
                         throw new ArgumentException("Неподдерживаемый формат отчёта");
@@ -500,12 +501,45 @@ namespace Notification_System.Controllers
             return (Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", ".csv");
         }
 
-        private (byte[], string, string) GenerateParquetReport(List<Log> data)
+        private async Task<(byte[], string, string)> GenerateParquetReport(List<Log> data)
         {
+            // 1. Создаем схему с правильными типами данных
+            var schema = new ParquetSchema(
+                new DataField<Guid>("Id"), // Изменено с int на Guid
+                new DataField<DateTime?>("DateTime"),
+                new DataField<int?>("TabNum", nullable: true),
+                new DataField<string>("UserName", nullable: true),
+                new DataField<string>("Event", nullable: true),
+                new DataField<string>("Description", nullable: true)
+            );
 
-            // Реализация для Parquet будет сложнее, может потребоваться дополнительная библиотека
-            // Например, используя Parquet.Net
-            throw new NotImplementedException("Parquet generation not implemented yet");
+            // 2. Подготавливаем данные с правильными типами
+            var columns = new DataColumn[]
+            {
+                new DataColumn(schema.GetDataFields()[0], data.Select(l => l.LogId).ToArray()), // Теперь Guid
+                new DataColumn(schema.GetDataFields()[1], data.Select(l => l.LogDateTime).ToArray()),
+                new DataColumn(schema.GetDataFields()[2], data.Select(l => l.Profile?.ProfileTabNum).ToArray()),
+                new DataColumn(schema.GetDataFields()[3], data.Select(l => $"{l.Profile?.ProfileSurname} {l.Profile?.ProfileName}").ToArray()),
+                new DataColumn(schema.GetDataFields()[4], data.Select(l => l.EventCode?.EventCodeName).ToArray()),
+                new DataColumn(schema.GetDataFields()[5], data.Select(l => l.EventCode?.EventCodeDescription).ToArray())
+            };
+
+            // 3. Сохраняем в MemoryStream
+            using (var stream = new MemoryStream())
+            {
+                using (var parquetWriter = await ParquetWriter.CreateAsync(schema, stream))
+                {
+                    using (var rowGroupWriter = parquetWriter.CreateRowGroup())
+                    {
+                        foreach (var column in columns)
+                        {
+                            rowGroupWriter.WriteColumnAsync(column);
+                        }
+                    }
+                }
+
+                return (stream.ToArray(), "application/octet-stream", ".parquet");
+            }
         }
     }
 }
