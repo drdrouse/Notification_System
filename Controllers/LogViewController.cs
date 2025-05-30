@@ -11,6 +11,9 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Xml.Linq;
+using Parquet;
+using Parquet.Schema;
+using Parquet.Data;
 
 namespace Notification_System.Controllers
 {
@@ -454,9 +457,26 @@ namespace Notification_System.Controllers
 
         private (byte[], string, string) GenerateJsonReport(List<Log> data)
         {
-            // Реализация для Parquet будет сложнее, может потребоваться дополнительная библиотека
-            // Например, используя Parquet.Net
-            throw new NotImplementedException("Parquet generation not implemented yet");
+            var jsonData = data.Select(log => new
+            {
+                Id = log.LogId,
+                DateTime = log.LogDateTime,
+                User = new
+                {
+                    TabNum = log.Profile?.ProfileTabNum,
+                    Name = $"{log.Profile?.ProfileSurname} {log.Profile?.ProfileName}"
+                },
+                Event = log.EventCode?.EventCodeName,
+                Description = log.EventCode?.EventCodeDescription
+            });
+
+            string json = JsonSerializer.Serialize(new { Logs = jsonData }, new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+            });
+
+            return (Encoding.UTF8.GetBytes(json), "application/json", ".json");
         }
 
         private (byte[], string, string) GenerateCsvReport(List<Log> data)
@@ -468,6 +488,7 @@ namespace Notification_System.Controllers
 
         private (byte[], string, string) GenerateParquetReport(List<Log> data)
         {
+
             // Реализация для Parquet будет сложнее, может потребоваться дополнительная библиотека
             // Например, используя Parquet.Net
             throw new NotImplementedException("Parquet generation not implemented yet");
