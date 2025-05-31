@@ -1,5 +1,5 @@
-﻿function toggleHiddenArea() {
-    const hiddenArea = document.getElementById('hiddenArea');
+﻿function toggleHiddenArea(serviceId) {
+    const hiddenArea = document.getElementById(serviceId);
     if (hiddenArea.style.display === 'none') {
         hiddenArea.style.display = 'block';
     } else {

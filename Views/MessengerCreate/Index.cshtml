@@ -40,11 +40,11 @@
                             </div>
                         }
                         <!-- Само поле (кнопка) -->
-                        <button class="messenger-menu" onclick="toggleHiddenArea()">
-                            <p>@service.ServiceDisplayName</p>
-                        </button>
+                    <button class="messenger-menu" onclick="toggleHiddenArea('@service.ServiceDisplayName')">
+                        <p>@service.ServiceDisplayName</p>
+                    </button>
                     </div>
-                    <div class="messanger-data-hidden" id="hiddenArea" style="display: none;">
+                    <div class="messanger-data-hidden" id="@service.ServiceDisplayName" style="display: none;">
                         <div class="hidden-content">
                             <p>Создатель: @service.Account.Profile.ProfileSurname @service.Account.Profile.ProfileName @service.Account.Profile.ProfilePatronymic</p>
                             <hr />
@@ -161,8 +161,6 @@
                 <label for="service_displayname">Полное наименование:</label>
                 <input type="text" id="service_displayname" name="dispalyName" required>
 
-                @*<label for="service_link">Ссылка на сервис:</label>
-                    <input type="text" id="service_link" name="link" required>*@
 
                 @*Контейнер для полей с настройками*@
                 <div id="fieldsContainer" class="service-fields-container">

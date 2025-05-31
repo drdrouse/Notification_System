@@ -16,7 +16,7 @@ namespace Notification_System.Controllers
     {
         private readonly NotificationSystemContext _notificationSystemContext;
         private static CancellationTokenSource _cts = null;
-
+        private int PeriodTime = 1;
         public MessengerCreateController(NotificationSystemContext notificationSystemContext)
         {
             _notificationSystemContext = notificationSystemContext;
@@ -72,6 +72,7 @@ namespace Notification_System.Controllers
                     var password = Request.Form["Password"];
                     var fromEmail = Request.Form["FromEmail"];
                     var enableSsl = bool.Parse(Request.Form["EnableSsl"]);
+                    var sendPeriod = int.Parse(Request.Form["SendPeriod"]);
 
                     // Создаем и тестируем сервис
                     var emailSettings = new EmailServiceSettings
@@ -81,7 +82,8 @@ namespace Notification_System.Controllers
                         Username = username,
                         Password = password,
                         FromEmail = fromEmail,
-                        EnableSsl = enableSsl
+                        EnableSsl = enableSsl,
+                        SendTime = sendPeriod
                     };
 
                     var emailService = new EmailService(emailSettings);
@@ -106,7 +108,7 @@ namespace Notification_System.Controllers
                     }
 
                     if (await AddService.AddEmail(dispalyName, Guid.Parse(User.Identity.Name),
-                        smtpServer, smtpPort, username, password, fromEmail, enableSsl))
+                        smtpServer, smtpPort, username, password, fromEmail, enableSsl, sendPeriod))
                     {
                         Log_Creater.Create(Guid.Parse(User.Identity.Name), "Create_Email_Success", $"User {Log_Creater.TabNum(Guid.Parse(User.Identity.Name))} successfully added email service");
                         HttpContext.Session.SetString("OpenModal", "true");
@@ -260,7 +262,8 @@ namespace Notification_System.Controllers
                         Username = setting["Username"],
                         Password = setting["Password"],
                         FromEmail = setting["FromEmail"],
-                        EnableSsl = bool.Parse(setting["EnableSsl"])
+                        EnableSsl = bool.Parse(setting["EnableSsl"]),
+                        SendTime = int.Parse(setting["SendTime"])
                     };
                 }
                 catch (FormatException ex)
@@ -269,7 +272,7 @@ namespace Notification_System.Controllers
                     Log_Creater.Create(Guid.Parse(User.Identity.Name), "Send_Error", ex.ToString());
                     return;
                 }
-
+                PeriodTime = emailSettings.SendTime;
                 var emailService = new EmailService(emailSettings);
                 var collector = new ComputerMetricsCollector();
 
@@ -416,7 +419,7 @@ namespace Notification_System.Controllers
                     await SendEmailAsync(serviceID);
 
                     // Ожидаем с проверкой отмены
-                    await Task.Delay(TimeSpan.FromMinutes(1), token);
+                    await Task.Delay(TimeSpan.FromMinutes(1*PeriodTime), token);
                 }
                 catch (OperationCanceledException)
                 {

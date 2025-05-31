@@ -7,6 +7,16 @@ function loadServiceFields() {
         container.innerHTML = `
                 <h4>Настройки Email-сервиса</h4>
                 <div class="form-group">
+                    <label>Период отправки:</label>
+                    <select name="SendPeriod" class="form-control">
+                        <option value="1" selected>Минута</option>
+                        <option value="5">Пять минут</option>
+                        <option value="10">Десять минут</option>
+                        <option value="30">Пол часа</option>
+                        <option value="60">Час</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label>SMTP Сервер:</label>
                     <input type="text" name="SmtpServer" class="form-control" required>
                 </div>
