@@ -9,6 +9,7 @@ using ServiceLibrary;
 using System.Net.Mail;
 using ComputerMetricsLibrary;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Notification_System.Controllers
 {
@@ -16,7 +17,6 @@ namespace Notification_System.Controllers
     {
         private readonly NotificationSystemContext _notificationSystemContext;
         private static CancellationTokenSource _cts = null;
-        private int PeriodTime = 1;
         public MessengerCreateController(NotificationSystemContext notificationSystemContext)
         {
             _notificationSystemContext = notificationSystemContext;
@@ -244,7 +244,7 @@ namespace Notification_System.Controllers
                 }
 
                 // Проверка наличия всех необходимых ключей
-                var requiredKeys = new[] { "SmtpServer", "SmtpPort", "Username", "Password", "FromEmail", "EnableSsl" };
+                var requiredKeys = new[] { "SmtpServer", "SmtpPort", "Username", "Password", "FromEmail", "EnableSsl", "SendTime" };
                 if (requiredKeys.Any(key => !setting.ContainsKey(key)))
                 {
                     // Логирование отсутствия ключей
@@ -272,7 +272,7 @@ namespace Notification_System.Controllers
                     Log_Creater.Create(Guid.Parse(User.Identity.Name), "Send_Error", ex.ToString());
                     return;
                 }
-                PeriodTime = emailSettings.SendTime;
+
                 var emailService = new EmailService(emailSettings);
                 var collector = new ComputerMetricsCollector();
 
@@ -419,7 +419,7 @@ namespace Notification_System.Controllers
                     await SendEmailAsync(serviceID);
 
                     // Ожидаем с проверкой отмены
-                    await Task.Delay(TimeSpan.FromMinutes(1*PeriodTime), token);
+                    await Task.Delay(TimeSpan.FromMinutes(1*GetTime(serviceID).Result), token);
                 }
                 catch (OperationCanceledException)
                 {
@@ -448,6 +448,21 @@ namespace Notification_System.Controllers
             }
         }
 
+
+        private async Task<int> GetTime(Guid serviceID)
+        {
+            int SendPeriod = 1;
+
+            NotificationSystemContext context = new NotificationSystemContext();
+            var service = await context.Services
+                .FirstOrDefaultAsync(s => s.ServiceId == serviceID);
+
+            Dictionary<string, string> setting;
+            setting = DataHelper.DictToString.ReturnString(service.ServiceSettings);       
+
+            SendPeriod = int.Parse(setting["SendTime"]);
+            return SendPeriod;
+        }
         public IActionResult ClearSession()
         {
             HttpContext.Session.Clear(); // Очищаем всю сессию
