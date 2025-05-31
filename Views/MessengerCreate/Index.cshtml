@@ -104,9 +104,11 @@
                 @if (service.ServiceIsBlocked)
                 {
                     <div class="messenger-button">
-                        <button class="messenger-menu" onclick="toggleHiddenArea()"><p>@service.ServiceDisplayName</p></button>
+                        <button class="messenger-menu" onclick="toggleHiddenArea('@service.ServiceDisplayName')">
+                            <p>@service.ServiceDisplayName</p>
+                        </button>
                     </div>
-                    <div class="messanger-data-hidden" id="hiddenArea" style="display: none;">
+                    <div class="messanger-data-hidden" id="@service.ServiceDisplayName" style="display: none;">
                         <div class="hidden-content">
                             <p>Создатель: @service.Account.Profile.ProfileSurname @service.Account.Profile.ProfileName @service.Account.Profile.ProfilePatronymic</p>
                             <hr />

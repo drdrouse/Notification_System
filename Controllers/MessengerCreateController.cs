@@ -1,14 +1,15 @@
-﻿using DataAccessLibrary.Models;
+﻿using ComputerMetricsLibrary;
+using DataAccessLibrary;
+using DataAccessLibrary.Models;
 using Email;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DataAccessLibrary;
-using System.Text.Json;
 using ServiceLibrary;
+using System.Collections.Concurrent;
 using System.Net.Mail;
-using ComputerMetricsLibrary;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Notification_System.Controllers
@@ -16,7 +17,8 @@ namespace Notification_System.Controllers
     public class MessengerCreateController : Controller
     {
         private readonly NotificationSystemContext _notificationSystemContext;
-        private static CancellationTokenSource _cts = null;
+        private static readonly ConcurrentDictionary<Guid, CancellationTokenSource> _serviceCancellationTokens =
+            new ConcurrentDictionary<Guid, CancellationTokenSource>();
         public MessengerCreateController(NotificationSystemContext notificationSystemContext)
         {
             _notificationSystemContext = notificationSystemContext;
@@ -165,24 +167,31 @@ namespace Notification_System.Controllers
         {
             try
             {
-                // Находим сервис
                 var service = await _notificationSystemContext.Services
                     .FirstOrDefaultAsync(s => s.ServiceId == serviceID);
 
                 if (service == null)
                     return NotFound();
 
-                // Обработка включения/выключения сервиса
                 if (service.ServiseIsDisable)
                 {
                     // Включаем сервис
                     service.ServiseIsDisable = false;
                     await _notificationSystemContext.SaveChangesAsync();
 
+                    // Останавливаем предыдущую задачу, если она была
+                    if (_serviceCancellationTokens.TryRemove(serviceID, out var existingCts))
+                    {
+                        existingCts.Cancel();
+                        existingCts.Dispose();
+                    }
+
+                    // Создаем новый CTS для этого сервиса
+                    var newCts = new CancellationTokenSource();
+                    _serviceCancellationTokens.TryAdd(serviceID, newCts);
+
                     // Запускаем фоновую задачу
-                    _cts?.Dispose(); // Освобождаем предыдущий токен, если был
-                    _cts = new CancellationTokenSource();
-                    _ = Task.Run(() => BackgroundSendLoop(serviceID, _cts.Token));
+                    _ = Task.Run(() => BackgroundSendLoop(serviceID, newCts.Token));
                 }
                 else
                 {
@@ -191,28 +200,19 @@ namespace Notification_System.Controllers
                     await _notificationSystemContext.SaveChangesAsync();
 
                     // Останавливаем фоновую задачу
-                    _cts?.Cancel();
+                    if (_serviceCancellationTokens.TryRemove(serviceID, out var cts))
+                    {
+                        cts.Cancel();
+                        cts.Dispose();
+                    }
                 }
 
                 return RedirectToAction("Index");
             }
-            catch (DbUpdateException dbEx)
-            {
-                // Логирование ошибки базы данных
-                Log_Creater.Create(Guid.Parse(User.Identity.Name), "Send_Error", dbEx.ToString());
-                return StatusCode(StatusCodes.Status500InternalServerError, "Ошибка при сохранении изменений в базе данных");
-            }
-            catch (OperationCanceledException ocEx)
-            {
-                // Логирование отмены задачи
-                Log_Creater.Create(Guid.Parse(User.Identity.Name), "Send_Error", ocEx.ToString());
-                return RedirectToAction("Index");
-            }
             catch (Exception ex)
             {
-                // Логирование неожиданных ошибок
                 Log_Creater.Create(Guid.Parse(User.Identity.Name), "Send_Error", ex.ToString());
-                return StatusCode(StatusCodes.Status500InternalServerError, "Произошла непредвиденная ошибка");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Произошла ошибка");
             }
         }
         private async Task SendEmailAsync(Guid serviceID)
@@ -399,52 +399,37 @@ namespace Notification_System.Controllers
 
         private async Task BackgroundSendLoop(Guid serviceID, CancellationToken token)
         {
-            while (!token.IsCancellationRequested)
+            try
             {
-                NotificationSystemContext context = null;
-                try
+                while (!token.IsCancellationRequested)
                 {
-                    context = new NotificationSystemContext();
-
-                    // Получаем сервис с проверкой отмены
-                    var service = await context.Services
-                        .AsNoTracking() // Добавляем для оптимизации
-                        .FirstOrDefaultAsync(s => s.ServiceId == serviceID, token);
-
-                    // Проверяем условия выхода
-                    if (service == null || service.ServiseIsDisable)
-                        break;
-
-                    // Вызываем метод отправки письма
-                    await SendEmailAsync(serviceID);
-
-                    // Ожидаем с проверкой отмены
-                    await Task.Delay(TimeSpan.FromMinutes(1*GetTime(serviceID).Result), token);
-                }
-                catch (OperationCanceledException)
-                {
-                    // Нормальное завершение при отмене
-                    break;
-                }
-                catch (Exception ex)
-                {
-                    // Логирование ошибки (раскомментировать при необходимости)
-                    // _logger.LogError(ex, $"Ошибка в фоновом процессе для сервиса {serviceID}");
-                    Log_Creater.Create(Guid.Parse(User.Identity.Name), "Send_Error", ex.ToString());
-                    // Делаем паузу перед повторной попыткой
-                    try
+                    using (var context = new NotificationSystemContext())
                     {
-                        await Task.Delay(TimeSpan.FromMinutes(1), token);
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        break;
+                        var service = await context.Services
+                            .AsNoTracking()
+                            .FirstOrDefaultAsync(s => s.ServiceId == serviceID, token);
+
+                        if (service == null || service.ServiseIsDisable)
+                            break;
+
+                        await SendEmailAsync(serviceID);
+
+                        var delayTime = TimeSpan.FromMinutes(1 * await GetTime(serviceID));
+                        await Task.Delay(delayTime, token);
                     }
                 }
-                finally
-                {
-                    context?.Dispose();
-                }
+            }
+            catch (OperationCanceledException)
+            {
+                // Нормальное завершение
+            }
+            catch (Exception ex)
+            {
+                Log_Creater.Create(Guid.Parse(User.Identity.Name), "Send_Error", ex.ToString());
+            }
+            finally
+            {
+                _serviceCancellationTokens.TryRemove(serviceID, out _);
             }
         }
 
