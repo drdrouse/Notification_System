@@ -147,8 +147,8 @@ namespace Notification_System.Controllers
         {
             try
             {
-                const string resultError = "Телефон введён в неверном формате.";
-                const string resultSuccess = "Телефон успешно добавлен.";
+                const string resultError = "Телефон введён в неверном формате";
+                const string resultSuccess = "Телефон успешно добавлен";
 
                 HttpContext.Session.Clear();
 

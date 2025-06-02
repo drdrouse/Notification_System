@@ -167,7 +167,7 @@ namespace Notification_System.Controllers
                 }
                 else
                 {
-                    HttpContext.Session.SetString("DateMessage", "Фильтр по дате применён");
+                    HttpContext.Session.SetString("DateMessage", "Фильтр по дате применён успешно");
                     HttpContext.Session.SetString("DateMessageType", "alert-success");
                     HttpContext.Session.SetString("OpenModalData", "true");
                 }
@@ -215,7 +215,7 @@ namespace Notification_System.Controllers
                 if (string.IsNullOrEmpty(selectedAction) || selectedAction == "-- Все события --")
                 {
                     HttpContext.Session.SetString("ActionMessageType", "alert-info"); // Изменено на info для единообразия
-                    HttpContext.Session.SetString("ActionMessage", "Фильтр по событиям сброшен");
+                    HttpContext.Session.SetString("ActionMessage", "Для применения фильтра должно быть выбрано значение");
                     HttpContext.Session.Remove("ActionFilter"); // Явно удаляем фильтр
                 }
                 else
