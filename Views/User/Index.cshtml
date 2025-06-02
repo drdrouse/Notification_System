@@ -34,8 +34,12 @@
                             @foreach (var status in statuses)
                             {
                                 @if (status.AccountStatusName != Model.FirstOrDefault().AccountStatus.AccountStatusName)
-                                {
-                                    <option value="@status.AccountStatusName">@status.AccountStatusName</option>
+                                {   @if (!User.IsInRole("Admin") && status.AccountStatusName == "Удалён")
+                                    { }
+                                    else
+                                    {
+                                        <option value="@status.AccountStatusName">@status.AccountStatusName</option>
+                                    }
 
                                 }
                             }
