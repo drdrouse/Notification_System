@@ -163,6 +163,25 @@ namespace Notification_System.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> DeleteService(Guid serviceID)
+        {
+            using (var context = new NotificationSystemContext())
+            {
+                var service = context.Services.Where(s => s.ServiceId == serviceID).FirstOrDefault();
+
+                string serviceName = service.ServiceDisplayName;
+
+                if (await AddService.Delete(serviceID))
+                {
+                    Log_Creater.Create(Guid.Parse(User.Identity.Name), "Delete_Service", $"User {Log_Creater.TabNum(Guid.Parse(User.Identity.Name))} delete service {serviceName}");
+                    return RedirectToAction("Index", "MessengerCreate");
+                }
+            }
+                
+            return RedirectToAction("Index", "MessengerCreate");
+        }
+
+        [HttpPost]
         public async Task<IActionResult> StartStopSend(Guid serviceID)
         {
             try
