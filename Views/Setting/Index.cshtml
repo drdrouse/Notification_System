@@ -139,6 +139,30 @@
                 </form>
             </div>
         </div>
+
+        @*Форма добавления фото*@
+        <div id="modalForm_photo" class="modal">
+            <div class="modal-content">
+                <a href="@Url.Action("ClearSession", "Setting")" id="closeFormButton_phone" class="close">&times;</a>
+
+                <h2>Форма добавления фото профиля</h2>
+                <form method="post" asp-controller="Setting" asp-action="AddPhoto" enctype="multipart/form-data">
+
+
+                    <!-- Поле для загрузки изображения -->
+                    <div class="form-group">
+                        <label for="profileImage">Выберите изображение:</label>
+                        <input type="file" id="profileImage" name="profileImage" accept="image/*" class="form-control" />
+                    </div>
+                    <div id="messageArea" class="alert @Context.Session.GetString("PhotoMessage")">
+                        <pre>@Context.Session.GetString("Photo")</pre>
+                    </div>
+
+                    @* Кнопка отправки паролей *@
+                    <button type="submit" class="btn btn-success">Сохранить</button>
+                </form>
+            </div>
+        </div>
     </div>
 
     @if (Context.Session.GetString("OpenModal") == "true")
@@ -153,8 +177,13 @@
     {
         <script src="~/js/open_mail_form.js"></script>
     }
+    @if (Context.Session.GetString("OpenModalPhoto") == "true")
+    {
+        <script src="~/js/open_photo_form.js"></script>
+    }
     <script src="~/js/change_password.js"></script>
     <script src="~/js/add_phone.js"></script>
     <script src="~/js/add_mail.js"></script>
+    <script src="~/js/add_photo.js"></script>
 </body>
 </html>
