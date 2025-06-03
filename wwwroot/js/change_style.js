@@ -14,6 +14,7 @@ function toggleTheme() {
     const mailImage = document.querySelector('#add_mail img');
     const undisableImage = document.querySelector('#undisable img');
     const disableImage = document.querySelector('#disable img');
+    const addPhotoImage = document.querySelector('#add_photo img');
     // Переключаем класс light-mode для изменения темы
     body.classList.toggle('light-mode');
 
@@ -32,6 +33,7 @@ function toggleTheme() {
         if (mailImage) mailImage.src = '/content/images/account/mail-lite.png'; 
         if (undisableImage) undisableImage.src = '/content/images/account/undisable-lite.png';
         if (disableImage) disableImage.src = '/content/images/account/disable-lite.png';
+        if (addPhotoImage) addPhotoImage.src = 'content/images/account/add_photo-lite.png';
         localStorage.setItem('theme', 'light');
     } else {
         settingImage.src = '/content/images/account/setting.png'; // Путь к изображению для тёмной темы
@@ -48,6 +50,7 @@ function toggleTheme() {
         if (mailImage) mailImage.src = '/content/images/account/mail.png'; 
         if (undisableImage) undisableImage.src = '/content/images/account/undisable.png';
         if (disableImage) disableImage.src = '/content/images/account/disable.png';
+        if (addPhotoImage) addPhotoImage.src = 'content/images/account/add_photo.png';
     }
 }
 
@@ -67,6 +70,7 @@ window.onload = () => {
     const mailImage = document.querySelector('#add_mail img');
     const undisableImage = document.querySelector('#undisable img');
     const disableImage = document.querySelector('#disable img');
+    const addPhotoImage = document.querySelector('#add_photo img');
     if (savedTheme === 'light') {
         document.body.classList.add('light-mode');
         settingImage.src = '/content/images/account/setting-lite.png'; // Путь к изображению для светлой темы
@@ -82,6 +86,7 @@ window.onload = () => {
         if (mailImage) mailImage.src = '/content/images/account/mail-lite.png';
         if (undisableImage) undisableImage.src = '/content/images/account/undisable-lite.png';
         if (disableImage) disableImage.src = '/content/images/account/disable-lite.png'
+        if (addPhotoImage) addPhotoImage.src = 'content/images/account/add_photo-lite.png';
     } else if (savedTheme === 'dark') {
         document.body.classList.remove('light-mode');
         settingImage.src = '/content/images/account/setting.png'; // Путь к изображению для тёмной темы
@@ -97,5 +102,6 @@ window.onload = () => {
         if (mailImage) mailImage.src = '/content/images/account/mail.png'; 
         if (undisableImage) undisableImage.src = '/content/images/account/undisable.png';
         if (disableImage) disableImage.src = '/content/images/account/disable.png';
+        if (addPhotoImage) addPhotoImage.src = 'content/images/account/add_photo.png';
     }
 };
