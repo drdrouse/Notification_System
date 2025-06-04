@@ -13,9 +13,18 @@
         <div class="main-data">
             <div class="top-part">
                 @*Аватарка пользователя*@
-                <div class="avatar-container" id="photo">
-                    <img src="/content/images/account/avatar-placeholder.png" alt="photo" class="avatar" />
-                </div>
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="avatar-container" id="photo">
+                        <img src="/content/images/account/avatar.png" class="avatar" />
+                    </div>
+                }
+                else
+                {
+                    <div class="avatar-container" id="photo">
+                        <img src="/content/images/account/avatar-placeholder.png" alt="photo" class="avatar" />
+                    </div>
+                }
                 <div class="person-data">
                     @*Плашка с данными*@
                     <div class="info-box">

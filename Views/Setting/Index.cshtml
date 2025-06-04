@@ -146,14 +146,15 @@
                 <a href="@Url.Action("ClearSession", "Setting")" id="closeFormButton_phone" class="close">&times;</a>
 
                 <h2>Форма добавления фото профиля</h2>
-                <form method="post" asp-controller="Setting" asp-action="AddPhoto" enctype="multipart/form-data">
+                <form enctype="multipart/form-data"  method="post" asp-controller="Setting" asp-action="AddPhoto" >
 
 
-                    <!-- Поле для загрузки изображения -->
+                    <!-- Добавленное поле для загрузки файла -->
                     <div class="form-group">
                         <label for="profileImage">Выберите изображение:</label>
-                        <input type="file" id="profileImage" name="profileImage" accept="image/*" class="form-control" />
+                        <input type="file" id="profileImage" name="profileImage" accept="image/*" class="form-control" required />
                     </div>
+
                     <div id="messageArea" class="alert @Context.Session.GetString("PhotoMessage")">
                         <pre>@Context.Session.GetString("Photo")</pre>
                     </div>

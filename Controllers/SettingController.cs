@@ -292,31 +292,10 @@ namespace Notification_System.Controllers
         [HttpPost]
         public IActionResult AddPhoto(IFormFile profileImage)
         {
-            if (profileImage == null || profileImage.Length == 0)
-            {
-                HttpContext.Session.SetString("PhotoMessage", "alert-error");
-                HttpContext.Session.SetString("Photo", "Ошибка: файл пустой или его не существует");
-                HttpContext.Session.SetString("OpenModalPhoto", "true");
-                return RedirectToAction("Index"); // или вернуть PartialView
-            }
 
-            // Проверка типа файла (например, только изображения)
-            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
-            var fileExtension = Path.GetExtension(profileImage.FileName).ToLower();
 
-            if (!allowedExtensions.Contains(fileExtension))
-            {
-                HttpContext.Session.SetString("PhotoMessage", "alert-error");
-                HttpContext.Session.SetString("Photo", "Ошибка: разрешены только JPG, PNG, GIF.");
-                return RedirectToAction("Index");
-            }
-
-            
-
-            // Сохранение пути в БД (если нужно)
-            // _userService.UpdateProfilePhoto(User.Identity.Name, uniqueFileName);
-
-            TempData["PhotoMessage"] = "Фото успешно загружено!";
+            HttpContext.Session.SetString("Photo", "Фото успешно загружено");
+            HttpContext.Session.SetString("PhotoMessage", "alert-success");
             HttpContext.Session.SetString("OpenModalPhoto", "true");
             return RedirectToAction("Index");
         }
